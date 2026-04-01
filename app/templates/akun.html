@@ -1,1 +1,36 @@
 <!-- Halaman akun -->
+
+{% extends 'base.html' %}
+
+{% block title %}Akun - MyFinance{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Daftar Akun</h1>
+    <button class="btn btn-primary" id="btn-tambah-akun">+ Tambah Akun</button>
+</div>
+
+<div class="cards-container">
+    <div class="card account-card">
+        <div class="card-header">
+            <h3>BCA</h3>
+            <button class="btn-edit-small">Edit</button>
+        </div>
+        <div class="card-body">
+            <p class="account-type">Bank</p>
+            <h2 class="account-balance">Rp 5.000.000</h2>
+        </div>
+    </div>
+
+    <div class="card account-card">
+        <div class="card-header">
+            <h3>Gopay</h3>
+            <button class="btn-edit-small">Edit</button>
+        </div>
+        <div class="card-body">
+            <p class="account-type">E-Wallet</p>
+            <h2 class="account-balance">Rp 250.000</h2>
+        </div>
+    </div>
+</div>
+{% endblock %}

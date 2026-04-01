@@ -1,1 +1,44 @@
 <!-- Halaman settings -->
+
+{% extends 'base.html' %}
+
+{% block title %}Settings - MyFinance{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Pengaturan Kategori</h1>
+    <div class="header-actions">
+        <button class="btn btn-primary">+ Tambah Kategori</button>
+        <button class="btn btn-secondary">+ Tambah Sub-Kategori</button>
+    </div>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Kategori</th>
+                <th>Jenis (Pemasukan/Pengeluaran)</th>
+                <th>Sub-Kategori</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Makanan</td>
+                <td>Pengeluaran</td>
+                <td>
+                    <ul>
+                        <li>Restoran</li>
+                        <li>Groceries</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Gaji</td>
+                <td>Pemasukan</td>
+                <td><span class="text-muted">Tidak Ada Sub-Kategori</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

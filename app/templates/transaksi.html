@@ -1,1 +1,54 @@
 <!-- Halaman transaksi -->
+
+{% extends 'base.html' %}
+
+{% block title %}Transaksi - MyFinance{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Histori Transaksi</h1>
+    <button class="btn btn-primary" id="btn-tambah-transaksi">+ Tambah Transaksi</button>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Nama Akun</th>
+                <th>Kategori</th>
+                <th>Sub-Kategori</th>
+                <th>Detail</th>
+                <th>Tanggal</th>
+                <th>Nominal</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>BCA</td>
+                <td>Makanan</td>
+                <td>Restoran</td>
+                <td>Makan siang</td>
+                <td>2026-04-01</td>
+                <td>Rp 50.000</td>
+                <td>
+                    <button class="btn-edit">Edit</button>
+                    <button class="btn-hapus">Hapus</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="modal-transaksi" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Tambah Transaksi Baru</h2>
+        <form action="#" method="POST">
+            <label for="amount">Nominal:</label>
+            <input type="number" id="amount" name="amount" required>
+            <button type="submit" class="btn btn-success">Simpan</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
