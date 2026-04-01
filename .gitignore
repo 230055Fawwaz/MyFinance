@@ -1,5 +1,5 @@
 # Byte-compiled / optimized / DLL files
-
+__pycache__/
 
 # Environments
 .env 
@@ -7,3 +7,6 @@ venv/
 
 # VS Code Config
 .vscode
+
+# Database
+myfinance.db 
