@@ -1,0 +1,2 @@
+# Skema SQLite
+
