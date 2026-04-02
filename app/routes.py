@@ -1,7 +1,7 @@
 # URL
 
 from flask import Flask, render_template
-from app.models import db
+from app.models import db, Category
 import os
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -28,4 +28,8 @@ def akun():
 
 @app.route('/settings')
 def settings():
-    return render_template('settings.html') #
+    # Mengambil semua data kategori dari database
+    kategori_induk = Category.query.all() 
+    
+    # Mengirimkan variabel 'kategori_induk' ke settings.html
+    return render_template('settings.html', categories=kategori_induk)

@@ -68,8 +68,11 @@
         <form action="#" method="POST">
             <label for="parent_kategori">Kategori Induk:</label>
             <select id="parent_kategori" name="category_id" class="form-select" required style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; margin-top: 5px;">
-                <option value="1">Makanan</option>
-                <option value="2">Transportasi</option>
+                <option value="" disabled selected>-- Pilih Kategori Induk --</option>
+                
+                {% for kat in categories %}
+                    <option value="{{ kat.id }}">{{ kat.nama }}</option>
+                {% endfor %}
             </select>
 
             <label for="nama_subkategori">Nama Sub-Kategori:</label>
