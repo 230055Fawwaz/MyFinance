@@ -9,7 +9,7 @@ class Category(db.Model):
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
     nama = db.Column(db.String(20), nullable=False)
-    type = db.Column(db.Enum('income', 'expense', name='category_types'), nullable=False)
+    type = db.Column(db.Enum('income', 'expense'), nullable=False)  # Fix 1: removed name='category_types'
     subcategories = db.relationship('SubCategory', backref='category', lazy=True)
 
 class SubCategory(db.Model):
@@ -43,3 +43,7 @@ class Transfer(db.Model):
     fee = db.Column(db.Numeric(10, 2), default=0.00)
     date = db.Column(db.DateTime, default=datetime.utcnow)
     note = db.Column(db.Text)
+
+    # Fix 2: explicit foreign_keys to resolve ambiguity on self-referencing table
+    from_account = db.relationship('Account', foreign_keys=[from_account_id])
+    to_account = db.relationship('Account', foreign_keys=[to_account_id])
