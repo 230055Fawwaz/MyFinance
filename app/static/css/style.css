@@ -288,3 +288,44 @@ form input, form select, form textarea {
 form button[type="submit"] {
     margin-top: 20px;
 }
+
+/* =========================================
+   7. STYLE UNTUK PENGATURAN KATEGORI
+========================================= */
+
+/* Warna Tipe Kategori */
+.teks-pemasukan {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.teks-pengeluaran {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Flexbox untuk List Sub-Kategori */
+.subkategori-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.subkategori-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Hilangkan garis bawah di item terakhir */
+.subkategori-item:last-child {
+    border-bottom: none;
+}
+
+/* Grup tombol di dalam list sub-kategori */
+.action-buttons {
+    display: flex;
+    gap: 5px; /* Memberi jarak antar tombol edit dan hapus */
+}

@@ -18,8 +18,9 @@
         <thead>
             <tr>
                 <th>Kategori</th>
-                <th>Jenis (Pemasukan/Pengeluaran)</th>
-                <th>Sub-Kategori</th>
+                <th>Jenis</th>
+                <th>Aksi Kategori</th>
+                <th>Sub-Kategori & Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -29,17 +30,28 @@
                 
                 <td>
                     {% if category.type == 'income' %}
-                        Pemasukan
+                        <span class="teks-pemasukan">Pemasukan</span>
                     {% elif category.type == 'expense' %}
-                        Pengeluaran
+                        <span class="teks-pengeluaran">Pengeluaran</span>
                     {% endif %}
+                </td>
+
+                <td>
+                    <button class="btn-edit">Edit</button>
+                    <button class="btn-hapus">Hapus</button>
                 </td>
                 
                 <td>
                     {% if category.subcategories %}
-                        <ul>
+                        <ul class="subkategori-list">
                             {% for sub in category.subcategories %}
-                                <li>{{ sub.nama }}</li>
+                                <li class="subkategori-item">
+                                    <span>{{ sub.nama }}</span>
+                                    <div class="action-buttons">
+                                        <button class="btn-edit">Edit</button>
+                                        <button class="btn-hapus">Hapus</button>
+                                    </div>
+                                </li>
                             {% endfor %}
                         </ul>
                     {% else %}
@@ -49,7 +61,7 @@
             </tr>
             {% else %}
             <tr>
-                <td colspan="3" style="text-align: center;">Belum ada data kategori.</td>
+                <td colspan="4" style="text-align: center;">Belum ada data kategori.</td>
             </tr>
             {% endfor %}
         </tbody>
