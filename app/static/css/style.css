@@ -251,6 +251,12 @@ body {
     max-width: 400px;
     position: relative;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+    /* --- Tambahkan kode di bawah ini untuk menengahkan --- */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .close-btn {
