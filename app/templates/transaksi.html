@@ -45,9 +45,38 @@
         <span class="close-btn">&times;</span>
         <h2>Tambah Transaksi Baru</h2>
         <form action="#" method="POST">
-            <label for="amount">Nominal:</label>
-            <input type="number" id="amount" name="amount" required>
-            <button type="submit" class="btn btn-success">Simpan</button>
+            
+            <label for="account_id">Nama Akun:</label>
+            <select id="account_id" name="account_id" required>
+                <option value="" disabled selected>-- Pilih Akun --</option>
+                <option value="1">BCA</option>
+                <option value="2">Gopay</option>
+            </select>
+
+            <label for="kategori">Kategori:</label>
+            <select id="kategori" name="kategori" required>
+                <option value="" disabled selected>-- Pilih Kategori --</option>
+                <option value="1">Makanan</option>
+                <option value="2">Transportasi</option>
+            </select>
+
+            <label for="subcategory_id">Sub-Kategori:</label>
+            <select id="subcategory_id" name="subcategory_id" required>
+                <option value="" disabled selected>-- Pilih Sub-Kategori --</option>
+                <option value="1">Restoran</option>
+                <option value="2">Groceries</option>
+            </select>
+
+            <label for="amount">Nominal (Rp):</label>
+            <input type="number" id="amount" name="amount" required placeholder="Misal: 50000">
+
+            <label for="date">Tanggal:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="note">Detail / Catatan:</label>
+            <textarea id="note" name="note" rows="2" placeholder="Misal: Makan siang di warteg"></textarea>
+
+            <button type="submit" class="btn btn-success">Simpan Transaksi</button>
         </form>
     </div>
 </div>
