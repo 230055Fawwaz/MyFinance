@@ -204,3 +204,34 @@ def edit_transaksi(id):
     db.session.commit()
     
     return redirect(url_for('transaksi'))
+
+# ==========================================
+# ROUTE UNTUK HAPUS & EDIT AKUN
+# ==========================================
+
+@app.route('/akun/hapus/<int:id>', methods=['POST'])
+def hapus_akun(id):
+    akun = Account.query.get_or_404(id)
+    
+    # PERHATIAN: Jika akun dihapus, transaksi yang menggunakan foreign key akun ini 
+    # bisa menyebabkan error (IntegrityError) kecuali dikonfigurasi 'cascade delete'.
+    # Pastikan akun yang dihapus sedang tidak memiliki transaksi, 
+    # atau ubah kode ini jika ingin menghapus transaksi terkait juga.
+    
+    db.session.delete(akun)
+    db.session.commit()
+    
+    return redirect(url_for('akun'))
+
+@app.route('/akun/edit/<int:id>', methods=['POST'])
+def edit_akun(id):
+    akun = Account.query.get_or_404(id)
+    
+    # Update data berdasarkan input dari form modal
+    akun.nama = request.form.get('nama')
+    akun.type = request.form.get('type')
+    akun.balance = Decimal(request.form.get('balance'))
+    
+    db.session.commit()
+    
+    return redirect(url_for('akun'))
