@@ -11,34 +11,29 @@
 </div>
 
 <div class="cards-container">
+    {% for account in accounts %}
     <div class="card account-card">
         <div class="card-header">
-            <h3>BCA</h3>
+            <h3>{{ account.nama }}</h3>
             <button class="btn-edit-small">Edit</button>
         </div>
         <div class="card-body">
-            <p class="account-type">Bank</p>
-            <h2 class="account-balance">Rp 5.000.000</h2>
+            <p class="account-type">{{ account.type }}</p>
+            <h2 class="account-balance">Rp {{ "{:,.0f}".format(account.balance | float).replace(',', '.') }}</h2>
         </div>
     </div>
-
-    <div class="card account-card">
-        <div class="card-header">
-            <h3>Gopay</h3>
-            <button class="btn-edit-small">Edit</button>
-        </div>
-        <div class="card-body">
-            <p class="account-type">E-Wallet</p>
-            <h2 class="account-balance">Rp 250.000</h2>
-        </div>
+    {% else %}
+    <div class="empty-state">
+        <p>Belum ada akun. Silakan tambah akun baru.</p>
     </div>
+    {% endfor %}
 </div>
 
 <div id="modal-akun" class="modal">
     <div class="modal-content">
         <span class="close-btn">&times;</span>
         <h2>Tambah Akun Baru</h2>
-        <form action="#" method="POST">
+        <form action="/akun/tambah" method="POST">
             <label for="nama_akun">Nama Akun:</label>
             <input type="text" id="nama_akun" name="nama" required placeholder="Misal: BCA, Gopay">
 
@@ -46,7 +41,7 @@
             <input type="text" id="tipe_akun" name="type" required placeholder="Misal: Bank, E-Wallet">
 
             <label for="saldo">Saldo Awal:</label>
-            <input type="number" id="saldo" name="balance" required value="0">
+            <input type="number" id="saldo" name="balance" required value="0" step="0.01">
 
             <button type="submit" class="btn btn-success">Simpan</button>
         </form>

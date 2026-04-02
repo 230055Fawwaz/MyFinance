@@ -23,21 +23,35 @@
             </tr>
         </thead>
         <tbody>
+            {% for category in categories %}
             <tr>
-                <td>Makanan</td>
-                <td>Pengeluaran</td>
+                <td>{{ category.nama }}</td>
+                
                 <td>
-                    <ul>
-                        <li>Restoran</li>
-                        <li>Groceries</li>
-                    </ul>
+                    {% if category.type == 'income' %}
+                        Pemasukan
+                    {% elif category.type == 'expense' %}
+                        Pengeluaran
+                    {% endif %}
+                </td>
+                
+                <td>
+                    {% if category.subcategories %}
+                        <ul>
+                            {% for sub in category.subcategories %}
+                                <li>{{ sub.nama }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <span class="text-muted">Tidak Ada Sub-Kategori</span>
+                    {% endif %}
                 </td>
             </tr>
+            {% else %}
             <tr>
-                <td>Gaji</td>
-                <td>Pemasukan</td>
-                <td><span class="text-muted">Tidak Ada Sub-Kategori</span></td>
+                <td colspan="3" style="text-align: center;">Belum ada data kategori.</td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
@@ -46,7 +60,7 @@
     <div class="modal-content">
         <span class="close-btn">&times;</span>
         <h2>Tambah Kategori Baru</h2>
-        <form action="#" method="POST">
+        <form action="/settings/kategori/tambah" method="POST">
             <label for="nama_kategori">Nama Kategori:</label>
             <input type="text" id="nama_kategori" name="nama" required placeholder="Misal: Makanan, Gaji">
 
@@ -65,7 +79,7 @@
     <div class="modal-content">
         <span class="close-btn">&times;</span>
         <h2>Tambah Sub-Kategori Baru</h2>
-        <form action="#" method="POST">
+        <form action="/settings/subkategori/tambah" method="POST">
             <label for="parent_kategori">Kategori Induk:</label>
             <select id="parent_kategori" name="category_id" class="form-select" required style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; margin-top: 5px;">
                 <option value="" disabled selected>-- Pilih Kategori Induk --</option>

@@ -50,4 +50,27 @@ document.addEventListener('DOMContentLoaded', function() {
     setupModal('btn-tambah-kategori', 'modal-kategori');
     setupModal('btn-tambah-subkategori', 'modal-subkategori');
 
+    /* =========================================
+       3. Logika 
+    ========================================= */
+    const kategoriSelect = document.getElementById('kategori');
+    const subkategoriSelect = document.getElementById('subcategory_id');
+    const subOptions = subkategoriSelect.querySelectorAll('.sub-option');
+
+    kategoriSelect.addEventListener('change', function() {
+        const selectedCategoryId = this.value;
+        
+        // Reset pilihan sub-kategori
+        subkategoriSelect.value = "";
+        
+        // Tampilkan hanya sub-kategori yang sesuai dengan kategori induknya
+        subOptions.forEach(function(opt) {
+            if (opt.getAttribute('data-category') === selectedCategoryId) {
+                opt.style.display = 'block';
+            } else {
+                opt.style.display = 'none';
+            }
+        });
+    });
+
 });

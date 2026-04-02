@@ -34,6 +34,10 @@ class Transaction(db.Model):
     date = db.Column(db.DateTime, default=datetime.utcnow)
     note = db.Column(db.Text)
 
+    # Tambahkan 2 baris ini agar mudah diakses via Jinja2:
+    account = db.relationship('Account', backref='transactions')
+    subcategory = db.relationship('SubCategory', backref='transactions')
+
 class Transfer(db.Model):
     __tablename__ = 'transfers'
     id = db.Column(db.Integer, primary_key=True)
