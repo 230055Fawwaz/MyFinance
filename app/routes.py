@@ -235,3 +235,51 @@ def edit_akun(id):
     db.session.commit()
     
     return redirect(url_for('akun'))
+
+# ==========================================
+# ROUTE UNTUK HAPUS & EDIT KATEGORI
+# ==========================================
+
+@app.route('/settings/kategori/hapus/<int:id>', methods=['POST'])
+def hapus_kategori(id):
+    kategori = Category.query.get_or_404(id)
+    
+    # Catatan: Sama seperti akun, menghapus kategori yang masih memiliki sub-kategori
+    # atau transaksi bisa menyebabkan error database (jika foreign key diaktifkan).
+    db.session.delete(kategori)
+    db.session.commit()
+    
+    return redirect(url_for('settings'))
+
+@app.route('/settings/kategori/edit/<int:id>', methods=['POST'])
+def edit_kategori(id):
+    kategori = Category.query.get_or_404(id)
+    
+    kategori.nama = request.form.get('nama')
+    kategori.type = request.form.get('type')
+    
+    db.session.commit()
+    return redirect(url_for('settings'))
+
+# ==========================================
+# ROUTE UNTUK HAPUS & EDIT SUB-KATEGORI
+# ==========================================
+
+@app.route('/settings/subkategori/hapus/<int:id>', methods=['POST'])
+def hapus_subkategori(id):
+    subkategori = SubCategory.query.get_or_404(id)
+    
+    db.session.delete(subkategori)
+    db.session.commit()
+    
+    return redirect(url_for('settings'))
+
+@app.route('/settings/subkategori/edit/<int:id>', methods=['POST'])
+def edit_subkategori(id):
+    subkategori = SubCategory.query.get_or_404(id)
+    
+    subkategori.nama = request.form.get('nama')
+    subkategori.category_id = request.form.get('category_id') # Memungkinkan ganti induk kategori
+    
+    db.session.commit()
+    return redirect(url_for('settings'))
