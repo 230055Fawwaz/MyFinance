@@ -132,3 +132,154 @@ def tambah_transaksi():
     db.session.commit()
 
     return redirect(url_for('transaksi'))
+
+# ==========================================
+# ROUTE UNTUK HAPUS & EDIT TRANSAKSI
+# ==========================================
+
+@app.route('/transaksi/hapus/<int:id>', methods=['POST'])
+def hapus_transaksi(id):
+    # Cari transaksi berdasarkan ID, jika tidak ada kembalikan 404
+    trx = Transaction.query.get_or_404(id)
+    
+    # Ambil data akun dan tipe kategori transaksi yang akan dihapus
+    akun = trx.account
+    kategori_tipe = trx.subcategory.category.type
+    
+    # LOGIKA REVERSAL SALDO
+    # Jika transaksi aslinya pengeluaran, uangnya harus dikembalikan ke akun (+)
+    # Jika transaksi aslinya pemasukan, uangnya harus ditarik dari akun (-)
+    if kategori_tipe == 'expense':
+        akun.balance += trx.amount
+    elif kategori_tipe == 'income':
+        akun.balance -= trx.amount
+        
+    # Hapus transaksi dari database
+    db.session.delete(trx)
+    db.session.commit()
+    
+    return redirect(url_for('transaksi'))
+
+
+@app.route('/transaksi/edit/<int:id>', methods=['POST'])
+def edit_transaksi(id):
+    trx = Transaction.query.get_or_404(id)
+    
+    # ---------------------------------------------------------
+    # FASE 1: REVERSAL SALDO LAMA
+    # Batalkan efek dari transaksi lama sebelum data diperbarui
+    # ---------------------------------------------------------
+    tipe_lama = trx.subcategory.category.type
+    akun_lama = trx.account
+    
+    if tipe_lama == 'expense':
+        akun_lama.balance += trx.amount
+    elif tipe_lama == 'income':
+        akun_lama.balance -= trx.amount
+
+    # ---------------------------------------------------------
+    # FASE 2: UPDATE DATA TRANSAKSI
+    # Masukkan data baru dari form modal
+    # ---------------------------------------------------------
+    trx.account_id = request.form.get('account_id')
+    trx.subcategory_id = request.form.get('subcategory_id')
+    trx.amount = Decimal(request.form.get('amount'))
+    trx.note = request.form.get('note')
+    trx.date = datetime.strptime(request.form.get('date'), '%Y-%m-%d')
+    
+    # ---------------------------------------------------------
+    # FASE 3: TERAPKAN SALDO BARU
+    # Potong/tambah saldo akun berdasarkan data yang baru diedit
+    # ---------------------------------------------------------
+    akun_baru = Account.query.get(trx.account_id)
+    subkategori_baru = SubCategory.query.get(trx.subcategory_id)
+    tipe_baru = subkategori_baru.category.type
+    
+    if tipe_baru == 'expense':
+        akun_baru.balance -= trx.amount
+    elif tipe_baru == 'income':
+        akun_baru.balance += trx.amount
+        
+    # Simpan semua perubahan (update transaksi & update saldo akun)
+    db.session.commit()
+    
+    return redirect(url_for('transaksi'))
+
+# ==========================================
+# ROUTE UNTUK HAPUS & EDIT AKUN
+# ==========================================
+
+@app.route('/akun/hapus/<int:id>', methods=['POST'])
+def hapus_akun(id):
+    akun = Account.query.get_or_404(id)
+    
+    # PERHATIAN: Jika akun dihapus, transaksi yang menggunakan foreign key akun ini 
+    # bisa menyebabkan error (IntegrityError) kecuali dikonfigurasi 'cascade delete'.
+    # Pastikan akun yang dihapus sedang tidak memiliki transaksi, 
+    # atau ubah kode ini jika ingin menghapus transaksi terkait juga.
+    
+    db.session.delete(akun)
+    db.session.commit()
+    
+    return redirect(url_for('akun'))
+
+@app.route('/akun/edit/<int:id>', methods=['POST'])
+def edit_akun(id):
+    akun = Account.query.get_or_404(id)
+    
+    # Update data berdasarkan input dari form modal
+    akun.nama = request.form.get('nama')
+    akun.type = request.form.get('type')
+    akun.balance = Decimal(request.form.get('balance'))
+    
+    db.session.commit()
+    
+    return redirect(url_for('akun'))
+
+# ==========================================
+# ROUTE UNTUK HAPUS & EDIT KATEGORI
+# ==========================================
+
+@app.route('/settings/kategori/hapus/<int:id>', methods=['POST'])
+def hapus_kategori(id):
+    kategori = Category.query.get_or_404(id)
+    
+    # Catatan: Sama seperti akun, menghapus kategori yang masih memiliki sub-kategori
+    # atau transaksi bisa menyebabkan error database (jika foreign key diaktifkan).
+    db.session.delete(kategori)
+    db.session.commit()
+    
+    return redirect(url_for('settings'))
+
+@app.route('/settings/kategori/edit/<int:id>', methods=['POST'])
+def edit_kategori(id):
+    kategori = Category.query.get_or_404(id)
+    
+    kategori.nama = request.form.get('nama')
+    kategori.type = request.form.get('type')
+    
+    db.session.commit()
+    return redirect(url_for('settings'))
+
+# ==========================================
+# ROUTE UNTUK HAPUS & EDIT SUB-KATEGORI
+# ==========================================
+
+@app.route('/settings/subkategori/hapus/<int:id>', methods=['POST'])
+def hapus_subkategori(id):
+    subkategori = SubCategory.query.get_or_404(id)
+    
+    db.session.delete(subkategori)
+    db.session.commit()
+    
+    return redirect(url_for('settings'))
+
+@app.route('/settings/subkategori/edit/<int:id>', methods=['POST'])
+def edit_subkategori(id):
+    subkategori = SubCategory.query.get_or_404(id)
+    
+    subkategori.nama = request.form.get('nama')
+    subkategori.category_id = request.form.get('category_id') # Memungkinkan ganti induk kategori
+    
+    db.session.commit()
+    return redirect(url_for('settings'))

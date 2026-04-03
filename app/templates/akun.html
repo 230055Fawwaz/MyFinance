@@ -15,8 +15,12 @@
     <div class="card account-card">
         <div class="card-header">
             <h3>{{ account.nama }}</h3>
-            <button class="btn-edit">Edit</button>
-            <button class="btn-hapus">Hapus</button>
+            
+            <button class="btn-edit" onclick="document.getElementById('modal-edit-{{ account.id }}').style.display='block'">Edit</button>
+            
+            <form action="{{ url_for('hapus_akun', id=account.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah kamu yakin ingin menghapus akun ini?');">
+                <button type="submit" class="btn-hapus">Hapus</button>
+            </form>
         </div>
         <div class="card-body">
             <p class="account-type">{{ account.type }}</p>
@@ -48,4 +52,34 @@
         </form>
     </div>
 </div>
+
+{% for account in accounts %}
+<div id="modal-edit-{{ account.id }}" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close-btn" onclick="document.getElementById('modal-edit-{{ account.id }}').style.display='none'">&times;</span>
+        
+        <h2>Edit Akun</h2>
+        
+        <form method="POST" action="{{ url_for('edit_akun', id=account.id) }}">
+            <div>
+                <label>Nama Akun:</label><br>
+                <input type="text" name="nama" value="{{ account.nama }}" required>
+            </div>
+            <br>
+            <div>
+                <label>Tipe Akun:</label><br>
+                <input type="text" name="type" value="{{ account.type }}" required>
+            </div>
+            <br>
+            <div>
+                <label>Saldo Awal:</label><br>
+                <input type="number" step="any" name="balance" value="{{ account.balance }}" required>
+            </div>
+            <br>
+            
+            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+        </form>
+    </div>
+</div>
+{% endfor %}
 {% endblock %}
