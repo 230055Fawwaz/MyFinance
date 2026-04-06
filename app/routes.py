@@ -2,7 +2,7 @@
 
 from decimal import Decimal # Tambahkan ini
 from flask import Flask, render_template, request, redirect, url_for
-from app.models import db, Category, Account, Transaction, SubCategory
+from app.models import db, Category, Account, Transaction, SubCategory, Transfer
 from datetime import datetime
 import os
 
@@ -234,6 +234,57 @@ def edit_akun(id):
     
     db.session.commit()
     
+    return redirect(url_for('akun'))
+
+# ==========================================
+# ROUTE UNTUK TRANSFER ANTAR AKUN
+# ==========================================
+
+@app.route('/transfer', methods=['POST'])
+def proses_transfer():
+    from_account_id = request.form.get('from_account_id')
+    to_account_id = request.form.get('to_account_id')
+    
+    amount = Decimal(request.form.get('amount', 0))
+    fee = Decimal(request.form.get('fee', 0))
+    note = request.form.get('note', '')
+
+    # 1. Validasi Dasar: Jika akun sama atau jumlah <= 0, langsung kembali
+    if from_account_id == to_account_id or amount <= 0:
+        return redirect(url_for('akun'))
+
+    from_account = Account.query.get(from_account_id)
+    to_account = Account.query.get(to_account_id)
+
+    if not from_account or not to_account:
+        return redirect(url_for('akun'))
+
+    # 2. Validasi Saldo: Jika saldo kurang, batalkan dan kembali ke akun
+    total_deduction = amount + fee
+    if from_account.balance < total_deduction:
+        return redirect(url_for('akun'))
+
+    # 3. Proses Eksekusi Database
+    try:
+        from_account.balance -= total_deduction
+        to_account.balance += amount
+
+        new_transfer = Transfer(
+            from_account_id=from_account_id,
+            to_account_id=to_account_id,
+            amount=amount,
+            fee=fee,
+            note=note
+        )
+        db.session.add(new_transfer)
+        db.session.commit()
+
+    except Exception as e:
+        db.session.rollback()
+        # Print error ke terminal untuk kebutuhan debugging kamu
+        print(f"Error proses transfer: {e}") 
+
+    # 4. Sukses: Kembali ke halaman akun
     return redirect(url_for('akun'))
 
 # ==========================================
