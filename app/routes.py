@@ -1,7 +1,7 @@
 # URL
 
 from decimal import Decimal # Tambahkan ini
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 from app.models import db, Category, Account, Transaction, SubCategory, Transfer
 from datetime import datetime
 import os
