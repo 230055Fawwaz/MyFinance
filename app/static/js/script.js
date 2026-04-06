@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inisialisasi semua modal yang ada di aplikasi
     setupModal('btn-tambah-transaksi', 'modal-transaksi');
     setupModal('btn-tambah-akun', 'modal-akun');
+    setupModal('btn-transfer', 'modal-transfer');
     setupModal('btn-tambah-kategori', 'modal-kategori');
     setupModal('btn-tambah-subkategori', 'modal-subkategori');
 
