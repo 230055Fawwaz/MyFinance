@@ -46,9 +46,9 @@ def akun():
     # Kirim variabel 'accounts' ke akun.html
     return render_template('akun.html', accounts=daftar_akun)
 
-@app.route('/settings')
-def settings():
-    return render_template('settings.html')
+@app.route('/laporan')
+def laporan():
+    return render_template('laporan.html')
 
 @app.route('/settings')
 def settings():
