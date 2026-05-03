@@ -1,8 +1,12 @@
 <!-- Halaman settings -->
 
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}Settings - MyFinance{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+{% endblock %}
 
 {% block content %}
 <div class="content-header">
@@ -169,4 +173,9 @@
     </div>
     {% endfor %}
 {% endfor %}
+{% endblock %}
+
+{# 4. Menambah JS khusus halaman transaksi saja #}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
 {% endblock %}

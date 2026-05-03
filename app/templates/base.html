@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MyFinance{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Blok untuk CSS tambahan khusus per halaman -->
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <div class="app-container">
@@ -31,5 +34,8 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
+    <!-- Blok untuk JS tambahan khusus per halaman -->
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

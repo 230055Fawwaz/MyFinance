@@ -1,7 +1,7 @@
 /* Pengaturan tampilan */
 
 /* =========================================
-   1. Variabel Global & Reset
+   Variabel Global & Reset
 ========================================= */
 :root {
     --primary-color: #4F46E5;
@@ -32,14 +32,13 @@ body {
 }
 
 /* =========================================
-   2. Layout Utama (Sidebar & Konten)
+   Layout Utama (Sidebar & Konten)
 ========================================= */
 .app-container {
     display: flex;
     min-height: 100vh;
 }
 
-/* Sidebar Styles */
 .sidebar {
     width: var(--sidebar-width);
     background-color: var(--sidebar-bg);
@@ -61,20 +60,18 @@ body {
     padding: 20px;
     border-bottom: 1px solid #374151;
     white-space: nowrap;
-    overflow: hidden; /* Mencegah elemen meluber */
+    overflow: hidden;
 }
 
 .sidebar-header h2 {
     font-size: 1.5rem;
 }
 
-/* Memusatkan tombol saat sidebar menyusut */
 .sidebar.collapsed .sidebar-header {
     justify-content: center;
     padding: 20px 0;
 }
 
-/* Menyembunyikan teks H2 agar tidak mendorong tombol */
 .sidebar.collapsed .sidebar-header h2 {
     display: none; 
 }
@@ -106,232 +103,12 @@ body {
     color: white;
 }
 
-/* Tambahan: Sembunyikan teks menu saat sidebar ditutup agar lebih rapi */
 .sidebar.collapsed .sidebar-nav li a {
     color: transparent;
 }
 
-/* Main Content Area */
 .main-content {
     flex: 1;
     padding: 30px;
     overflow-y: auto;
-}
-
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-/* =========================================
-   3. Komponen Tombol (Buttons)
-========================================= */
-.btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: background 0.2s;
-}
-
-.btn-primary { background-color: var(--primary-color); color: white; }
-.btn-primary:hover { background-color: var(--primary-hover); }
-
-.btn-secondary { background-color: var(--secondary-color); color: white; }
-.btn-success { background-color: var(--success-color); color: white; width: 100%; margin-top: 15px;}
-
-.btn-edit, .btn-hapus, .btn-edit-small {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    color: white;
-}
-
-.btn-edit, .btn-edit-small { background-color: #F59E0B; }
-.btn-hapus { background-color: var(--danger-color); }
-
-/* =========================================
-   4. Tabel Data (Transaksi & Settings)
-========================================= */
-.table-container {
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    overflow: hidden;
-}
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.data-table th, .data-table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.data-table th {
-    background-color: #F9FAFB;
-    font-weight: 600;
-    color: var(--secondary-color);
-}
-
-.data-table tbody tr:hover {
-    background-color: #F3F4F6;
-}
-
-.data-table ul {
-    padding-left: 20px;
-}
-
-/* =========================================
-   5. Card (Halaman Akun)
-========================================= */
-.cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.card {
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    padding: 20px;
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
-}
-
-.account-type {
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-}
-
-.account-balance {
-    font-size: 1.8rem;
-    color: var(--primary-color);
-}
-
-/* =========================================
-   6. Modal Pop-up (Input Form) 
-========================================= */
-.modal {
-    display: none; /* Sembunyikan secara default */
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5); /* Latar belakang transparan */
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    background-color: var(--card-bg);
-    padding: 30px;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 400px;
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-
-    /* --- Tambahkan kode di bawah ini untuk menengahkan --- */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.close-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--secondary-color);
-}
-
-.close-btn:hover {
-    color: var(--danger-color);
-}
-
-/* Form Styles */
-form label {
-    display: block;
-    margin-bottom: 8px;
-    margin-top: 15px;
-    font-weight: 500;
-}
-
-form input, form select, form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 1rem;
-    background-color: white; /* Memastikan dropdown tidak transparan */
-    font-family: inherit; /* Menyamakan font textarea dengan body */
-    resize: vertical; /* Mengizinkan user memperbesar textarea hanya ke arah bawah */
-}
-
-form button[type="submit"] {
-    margin-top: 20px;
-}
-
-/* =========================================
-   7. STYLE UNTUK PENGATURAN KATEGORI
-========================================= */
-
-/* Warna Tipe Kategori */
-.teks-pemasukan {
-    color: #28a745;
-    font-weight: bold;
-}
-
-.teks-pengeluaran {
-    color: #dc3545;
-    font-weight: bold;
-}
-
-/* Flexbox untuk List Sub-Kategori */
-.subkategori-list {
-    list-style-type: none;
-    padding-left: 0;
-    margin: 0;
-}
-
-.subkategori-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-}
-
-/* Hilangkan garis bawah di item terakhir */
-.subkategori-item:last-child {
-    border-bottom: none;
-}
-
-/* Grup tombol di dalam list sub-kategori */
-.action-buttons {
-    display: flex;
-    gap: 5px; /* Memberi jarak antar tombol edit dan hapus */
 }
