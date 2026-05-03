@@ -1,8 +1,12 @@
 <!-- Halaman transaksi -->
 
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}Transaksi - MyFinance{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/transaksi.css') }}">
+{% endblock %}
 
 {% block content %}
 <div class="content-header">
@@ -155,4 +159,8 @@
 </div>
 {% endfor %}
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/transaksi.js') }}"></script>
 {% endblock %}

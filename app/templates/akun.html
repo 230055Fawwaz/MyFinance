@@ -1,8 +1,12 @@
 <!-- Halaman akun -->
 
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}Akun - MyFinance{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/akun.css') }}">
+{% endblock %}
 
 {% block content %}
 <div class="content-header">
@@ -120,4 +124,9 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{# 4. Menambah JS khusus halaman transaksi saja #}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/akun.js') }}"></script>
 {% endblock %}
