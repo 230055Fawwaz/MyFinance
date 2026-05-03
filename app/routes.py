@@ -44,7 +44,11 @@ def akun():
     # Ambil semua data akun dari database
     daftar_akun = Account.query.all()
     # Kirim variabel 'accounts' ke akun.html
-    return render_template('akun.html', accounts=daftar_akun) 
+    return render_template('akun.html', accounts=daftar_akun)
+
+@app.route('/laporan')
+def laporan():
+    return render_template('laporan.html')
 
 @app.route('/settings')
 def settings():
