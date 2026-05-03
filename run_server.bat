@@ -11,6 +11,6 @@ timeout /t 2 /nobreak >nul
 start http://127.0.0.1:5000
 
 :: 4. Jalankan server Flask
-py run.py
+python run.py
 
 pause
