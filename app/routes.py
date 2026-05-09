@@ -1,24 +1,10 @@
 # URL
 
-from decimal import Decimal # Tambahkan ini
+from decimal import Decimal 
 from flask import Flask, render_template, request, redirect, url_for
 from app.models import db, Category, Account, Transaction, SubCategory, Transfer
+from app import app
 from datetime import datetime
-import os
-
-app = Flask(__name__, template_folder='templates', static_folder='static')
-
-# Konfigurasi SQLite
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, '..', 'myfinance.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db.init_app(app)
-
-# Membuat tabel database jika belum ada
-with app.app_context():
-    db.create_all()
-
 
 # ==========================================
 # ROUTE UNTUK MENAMPILKAN HALAMAN WEB
