@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from app.models import db, Category, Account, Transaction, SubCategory, Transfer
 from app import app
 from datetime import datetime
+from sqlalchemy import func
 
 # ==========================================
 # ROUTE UNTUK MENAMPILKAN HALAMAN WEB
@@ -324,3 +325,21 @@ def edit_subkategori(id):
     
     db.session.commit()
     return redirect(url_for('dropdown'))
+
+# ==========================================
+# ROUTE 
+# ==========================================
+
+@app.route('/dashboard')
+def dashboard():
+    # Mengambil total pengeluaran per subkategori
+    report_data = db.session.query(
+        SubCategory.nama, 
+        func.sum(Transaction.amount)
+    ).join(Transaction).group_by(SubCategory.nama).all()
+
+    # Pisahkan label dan data untuk Chart.js
+    labels = [row[0] for row in report_data]
+    values = [float(row[1]) for row in report_data]
+
+    return render_template('dashboard.html', labels=labels, values=values)

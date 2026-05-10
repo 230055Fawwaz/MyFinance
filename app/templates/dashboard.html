@@ -2,17 +2,50 @@
 
 {% extends "base.html" %}
 
-{% block title %}Akun - MyFinance{% endblock %}
+{% block title %}Dashboard - MyFinance{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Dashboard Keuangan</h2>
+    
+    <div class="row">
+        <!-- Kartu Statistik Utama (Contoh KPI Card) -->
+        <div class="col-md-4 mb-4">
+            <div class="card bg-primary text-white shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-uppercase mb-1">Total Pengeluaran</div>
+                    <div class="h5 mb-0 font-weight-bold">Rp {{ "{:,.0f}".format(values|sum) }}</div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Grafik Donut (Dibatasi ukurannya) -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Proporsi Sub-Kategori</h6>
+                </div>
+                <div class="card-body">
+                    <!-- Ukuran dikontrol oleh div pembungkus ini -->
+                    <div class="chart-area" style="position: relative; height: 300px;">
+                        <canvas id="subCategoryChart" 
+                                data-labels='{{ labels | tojson }}' 
+                                data-values='{{ values | tojson }}'>
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
-{# 4. Menambah JS khusus halaman transaksi saja #}
 {% block extra_js %}
+<!-- Gunakan link yang lengkap dan resmi dari cdnjs -->
+<script src="{{ url_for('static', filename='js/chart.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}
