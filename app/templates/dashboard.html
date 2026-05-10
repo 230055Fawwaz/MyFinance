@@ -1,11 +1,11 @@
-<!-- Halaman laporan -->
+<!-- Halaman dashboard -->
 
 {% extends "base.html" %}
 
 {% block title %}Akun - MyFinance{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/laporan.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -14,5 +14,5 @@
 
 {# 4. Menambah JS khusus halaman transaksi saja #}
 {% block extra_js %}
-<script src="{{ url_for('static', filename='js/laporan.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}
