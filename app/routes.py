@@ -36,10 +36,10 @@ def akun():
 def laporan():
     return render_template('laporan.html')
 
-@app.route('/settings')
-def settings():
+@app.route('/dropdown')
+def dropdown():
     kategori_induk = Category.query.all() 
-    return render_template('settings.html', categories=kategori_induk)
+    return render_template('dropdown.html', categories=kategori_induk)
 
 
 # ==========================================
@@ -61,7 +61,7 @@ def tambah_akun():
 
 
 # 2. Simpan Kategori Baru
-@app.route('/settings/kategori/tambah', methods=['POST'])
+@app.route('/dropdown/kategori/tambah', methods=['POST'])
 def tambah_kategori():
     nama_kategori = request.form.get('nama')
     tipe_kategori = request.form.get('type') # 'income' atau 'expense'
@@ -70,11 +70,11 @@ def tambah_kategori():
     db.session.add(kategori_baru)
     db.session.commit()
 
-    return redirect(url_for('settings'))
+    return redirect(url_for('dropdown'))
 
 
 # 3. Simpan Sub-Kategori Baru
-@app.route('/settings/subkategori/tambah', methods=['POST'])
+@app.route('/dropdown/subkategori/tambah', methods=['POST'])
 def tambah_subkategori():
     nama_subkategori = request.form.get('nama')
     kategori_induk_id = request.form.get('category_id')
@@ -83,7 +83,7 @@ def tambah_subkategori():
     db.session.add(sub_baru)
     db.session.commit()
 
-    return redirect(url_for('settings'))
+    return redirect(url_for('dropdown'))
 
 
 # 4. Simpan Transaksi Baru & Update Saldo
@@ -281,7 +281,7 @@ def proses_transfer():
 # ROUTE UNTUK HAPUS & EDIT KATEGORI
 # ==========================================
 
-@app.route('/settings/kategori/hapus/<int:id>', methods=['POST'])
+@app.route('/dropdown/kategori/hapus/<int:id>', methods=['POST'])
 def hapus_kategori(id):
     kategori = Category.query.get_or_404(id)
     
@@ -290,9 +290,9 @@ def hapus_kategori(id):
     db.session.delete(kategori)
     db.session.commit()
     
-    return redirect(url_for('settings'))
+    return redirect(url_for('dropdown'))
 
-@app.route('/settings/kategori/edit/<int:id>', methods=['POST'])
+@app.route('/dropdown/kategori/edit/<int:id>', methods=['POST'])
 def edit_kategori(id):
     kategori = Category.query.get_or_404(id)
     
@@ -300,22 +300,22 @@ def edit_kategori(id):
     kategori.type = request.form.get('type')
     
     db.session.commit()
-    return redirect(url_for('settings'))
+    return redirect(url_for('dropdown'))
 
 # ==========================================
 # ROUTE UNTUK HAPUS & EDIT SUB-KATEGORI
 # ==========================================
 
-@app.route('/settings/subkategori/hapus/<int:id>', methods=['POST'])
+@app.route('/dropdown/subkategori/hapus/<int:id>', methods=['POST'])
 def hapus_subkategori(id):
     subkategori = SubCategory.query.get_or_404(id)
     
     db.session.delete(subkategori)
     db.session.commit()
     
-    return redirect(url_for('settings'))
+    return redirect(url_for('dropdown'))
 
-@app.route('/settings/subkategori/edit/<int:id>', methods=['POST'])
+@app.route('/dropdown/subkategori/edit/<int:id>', methods=['POST'])
 def edit_subkategori(id):
     subkategori = SubCategory.query.get_or_404(id)
     
@@ -323,4 +323,4 @@ def edit_subkategori(id):
     subkategori.category_id = request.form.get('category_id') # Memungkinkan ganti induk kategori
     
     db.session.commit()
-    return redirect(url_for('settings'))
+    return redirect(url_for('dropdown'))
