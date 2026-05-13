@@ -1,3 +1,12 @@
+// ==========================================
+// Nama File: settings.js
+// Deskripsi: JS khusus halaman dropdown
+// Penulis:   Fawwaz Yaqzhan
+// Tanggal:   10-05-2026
+// Catatan:
+//   - Mengatur interaksi user di halaman dropdown
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', function() {
 
     /* =========================================

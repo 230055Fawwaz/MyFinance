@@ -1,3 +1,12 @@
+/* ==========================================
+   Nama File: dropdown.css
+   Deskripsi: CSS khusus halaan dropdown
+   Penulis:   Fawwaz Yaqzhan
+   Tanggal:   10-05-2026
+   Catatan:
+     - Mengatur tampilan halaman dashboard
+   ========================================== */
+
 .content-header {
     display: flex;
     justify-content: space-between;

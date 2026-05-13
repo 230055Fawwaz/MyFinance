@@ -1,3 +1,12 @@
+// ==========================================
+// Nama File: transaksi.js
+// Deskripsi: JS khusus halaman transaksi
+// Penulis:   Fawwaz Yaqzhan
+// Tanggal:   06-05-2026
+// Catatan:
+//   - Mengatur interaksi user di halaman transaksi
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', function() {
 
     /* =========================================

@@ -1,4 +1,14 @@
-# Skema SQLite
+# ==========================================
+# Nama File: models.py
+# Deskripsi: Skema SQLite
+# Penulis:   Fawwaz Yaqzhan
+# Tanggal:   01-04-2026
+# Catatan:
+#   - SubCategory bergantung pada Category
+#   - Account menyimpan sumber dana
+#   - Transaksi menyimpan data transaksi yang dilakukan
+#   - Transfer mengatur perpindahan uang antar akun
+# ==========================================
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime

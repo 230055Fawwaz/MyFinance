@@ -1,3 +1,12 @@
+// ==========================================
+// Nama File: script.js
+// Deskripsi: JS bagi bse.html
+// Penulis:   Fawwaz Yaqzhan
+// Tanggal:   01-04-2026
+// Catatan:
+//   - Mengatur interkasi user di base.html
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', function() {
     
     /* =========================================
