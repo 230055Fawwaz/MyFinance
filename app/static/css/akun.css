@@ -1,3 +1,12 @@
+/* ==========================================
+   Nama File: akun.css
+   Deskripsi: CSS khusus halaman akun
+   Penulis:   Fawwaz Yaqzhan
+   Tanggal:   06-05-2026
+   Catatan:
+     - Mengatur tampilan halaman akun
+   ========================================== */
+
 .content-header {
     display: flex;
     justify-content: space-between;

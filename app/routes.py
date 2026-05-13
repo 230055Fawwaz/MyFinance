@@ -1,4 +1,11 @@
-# URL
+# ==========================================
+# Nama File: routes.py
+# Deskripsi: Rute (URL) yang dimiliki
+# Penulis:   Fawwaz Yaqzhan
+# Tanggal:   01-04-2026
+# Catatan:
+#   - Rute memakai app.route
+# ==========================================
 
 from decimal import Decimal 
 from flask import Flask, render_template, request, redirect, url_for

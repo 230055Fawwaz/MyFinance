@@ -1,4 +1,9 @@
-# Daftar library
+# ==========================================
+# Nama File: requirements.txt
+# Deskripsi: Daftar library yang dipakai aplikasi ini
+# Penulis:   Fawwaz Yaqzhan
+# Tanggal:   01-04-2026
+# ==========================================
 
 Flask==3.0.0
 Flask-SQLAlchemy==3.1.1

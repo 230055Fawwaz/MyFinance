@@ -1,3 +1,12 @@
+// ==========================================
+// Nama File: akun.js
+// Deskripsi: JS khusus halaman akun
+// Penulis:   Fawwaz Yaqzhan
+// Tanggal:   06-05-2026
+// Catatan:
+//   - Mengatur interaksi user di halaman akun
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', function() {
 
     /* =========================================
