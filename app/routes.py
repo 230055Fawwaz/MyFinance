@@ -11,7 +11,7 @@ from decimal import Decimal
 from flask import Flask, render_template, request, redirect, url_for
 from app.models import db, Category, Account, Transaction, SubCategory, Transfer
 from app import app
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy import func
 
 # ==========================================
@@ -339,14 +339,80 @@ def edit_subkategori(id):
 
 @app.route('/dashboard')
 def dashboard():
-    # Mengambil total pengeluaran per subkategori
-    report_data = db.session.query(
-        SubCategory.nama, 
+    # Rentang waktu: 30 hari terakhir
+    hari_ini = datetime.utcnow()
+    tiga_puluh_hari_lalu = hari_ini - timedelta(days=30)
+
+    # ====================================================
+    # 1. DATA GRAFIK ARUS KAS (Pemasukan vs Pengeluaran)
+    # ====================================================
+    cash_flow_query = db.session.query(
+        func.date(Transaction.date).label('tanggal'),
+        Category.type.label('tipe'),
+        func.sum(Transaction.amount).label('total')
+    ).join(SubCategory, Transaction.subcategory_id == SubCategory.id)\
+     .join(Category, SubCategory.category_id == Category.id)\
+     .filter(Transaction.date >= tiga_puluh_hari_lalu)\
+     .group_by(func.date(Transaction.date), Category.type)\
+     .all()
+
+    # Susun struktur data tanggal agar urut untuk Chart.js
+    cf_labels = sorted(list(set([str(row.tanggal) for row in cash_flow_query])))
+    
+    # Buat template default nilai 0 untuk setiap tanggal yang ada
+    income_dict = {tgl: 0 for tgl in cf_labels}
+    expense_dict = {tgl: 0 for tgl in cf_labels}
+    
+    # Isi nilai dari database
+    for row in cash_flow_query:
+        tgl = str(row.tanggal)
+        if row.tipe == 'income':
+            income_dict[tgl] = float(row.total)
+        elif row.tipe == 'expense':
+            expense_dict[tgl] = float(row.total)
+
+    cf_income_values = [income_dict[tgl] for tgl in cf_labels]
+    cf_expense_values = [expense_dict[tgl] for tgl in cf_labels]
+
+
+    # ====================================================
+    # 2. DATA GRAFIK ALOKASI PENGELUARAN (Per Kategori Utama)
+    # ====================================================
+    expense_query = db.session.query(
+        Category.nama, 
         func.sum(Transaction.amount)
-    ).join(Transaction).group_by(SubCategory.nama).all()
+    ).join(SubCategory, Transaction.subcategory_id == SubCategory.id)\
+     .join(Category, SubCategory.category_id == Category.id)\
+     .filter(Category.type == 'expense')\
+     .filter(Transaction.date >= tiga_puluh_hari_lalu)\
+     .group_by(Category.nama).all()
 
-    # Pisahkan label dan data untuk Chart.js
-    labels = [row[0] for row in report_data]
-    values = [float(row[1]) for row in report_data]
+    exp_labels = [row[0] for row in expense_query]
+    exp_values = [float(row[1]) for row in expense_query]
 
-    return render_template('dashboard.html', labels=labels, values=values)
+
+    # ====================================================
+    # 3. DATA GRAFIK DISTRIBUSI SALDO AKUN
+    # ====================================================
+    account_query = db.session.query(Account.nama, Account.balance).all()
+
+    acc_labels = [row[0] for row in account_query]
+    acc_values = [float(row[1]) for row in account_query]
+
+
+    # ====================================================
+    # KIRIM SEMUA DATA KE TEMPLATE JINJA2
+    # ====================================================
+    return render_template(
+        'dashboard.html',
+        # Grafik 1: Arus Kas
+        cf_labels=cf_labels,
+        cf_income=cf_income_values,
+        cf_expense=cf_expense_values,
+        # Grafik 2: Alokasi Pengeluaran
+        exp_labels=exp_labels,
+        exp_values=exp_values,
+        # Grafik 3: Saldo Akun
+        acc_labels=acc_labels,
+        acc_values=acc_values
+    )
