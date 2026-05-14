@@ -9,17 +9,109 @@
 
 {% extends "base.html" %}
 
-{% block title %}Akun - MyFinance{% endblock %}
+{% block title %}Dashboard - MyFinance{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Dashboard Keuangan</h2>
+    
+    <!-- 1. BARIS KARTU KPI (STATISTIK UTAMA) -->
+    <div class="row mb-4">
+        <!-- Total Pemasukan -->
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success text-white shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-uppercase mb-1">Total Pemasukan (30 Hari)</div>
+                    <div class="h5 mb-0 font-weight-bold">Rp {{ "{:,.0f}".format(cf_income|sum) }}</div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Total Pengeluaran -->
+        <div class="col-md-4 mb-3">
+            <div class="card bg-danger text-white shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-uppercase mb-1">Total Pengeluaran (30 Hari)</div>
+                    <div class="h5 mb-0 font-weight-bold">Rp {{ "{:,.0f}".format(exp_values|sum) }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Saldo Saat Ini -->
+        <div class="col-md-4 mb-3">
+            <div class="card bg-primary text-white shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-uppercase mb-1">Total Saldo Akun</div>
+                    <div class="h5 mb-0 font-weight-bold">Rp {{ "{:,.0f}".format(acc_values|sum) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. BARIS GRAFIK UTAMA -->
+    <div class="row">
+        <!-- Grafik 1: Tren Arus Kas (Lebar Penuh) -->
+        <div class="col-12 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Tren Arus Kas (30 Hari Terakhir)</h6>
+                </div>
+                <div class="card-body">
+                    <div style="position: relative; height: 350px;">
+                        <canvas id="cashFlowChart" 
+                                data-labels='{{ cf_labels | tojson }}' 
+                                data-income='{{ cf_income | tojson }}'
+                                data-expense='{{ cf_expense | tojson }}'>
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Grafik 2: Alokasi Pengeluaran (Setengah Lebar) -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Alokasi Pengeluaran per Kategori</h6>
+                </div>
+                <div class="card-body">
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="expenseChart" 
+                                data-labels='{{ exp_labels | tojson }}' 
+                                data-values='{{ exp_values | tojson }}'>
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grafik 3: Saldo Akun (Setengah Lebar) -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Saldo Akun Saat Ini</h6>
+                </div>
+                <div class="card-body">
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="accountChart" 
+                                data-labels='{{ acc_labels | tojson }}' 
+                                data-values='{{ acc_values | tojson }}'>
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
-{# 4. Menambah JS khusus halaman transaksi saja #}
 {% block extra_js %}
+<script src="{{ url_for('static', filename='js/chart.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}
