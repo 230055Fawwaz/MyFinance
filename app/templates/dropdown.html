@@ -10,7 +10,7 @@
 
 {% extends "base.html" %}
 
-{% block title %}Settings - MyFinance{% endblock %}
+{% block title %}dropdown - MyFinance{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
@@ -90,7 +90,7 @@
     <div class="modal-content">
         <span class="close-btn">&times;</span>
         <h2>Tambah Kategori Baru</h2>
-        <form action="/settings/kategori/tambah" method="POST">
+        <form action="/dropdown/kategori/tambah" method="POST">
             <label for="nama_kategori">Nama Kategori:</label>
             <input type="text" id="nama_kategori" name="nama" required placeholder="Misal: Makanan, Gaji">
 
@@ -109,7 +109,7 @@
     <div class="modal-content">
         <span class="close-btn">&times;</span>
         <h2>Tambah Sub-Kategori Baru</h2>
-        <form action="/settings/subkategori/tambah" method="POST">
+        <form action="/dropdown/subkategori/tambah" method="POST">
             <label for="parent_kategori">Kategori Induk:</label>
             <select id="parent_kategori" name="category_id" class="form-select" required style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; margin-top: 5px;">
                 <option value="" disabled selected>-- Pilih Kategori Induk --</option>
