@@ -16,7 +16,45 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
+  <h2>Laporan Analisis Pengeluaran</h2>
+  
+  <!-- Form Filter Tanggal -->
+    <form method="GET" action="/laporan_hasil">
+        <input type="date" name="start_date" value="{{ start_date }}">
+        <input type="date" name="end_date" value="{{ end_date }}">
+        <button type="submit">Filter Laporan</button>
+    </form>
 
+  <!-- Tabel Grid Laporan -->
+  <table class="table">
+      <thead>
+          <tr>
+              <th>Kategori / Subkategori</th>
+              <th>Total Pengeluaran</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for cat in categories %}
+              <!-- Baris Kategori Utama (Bold) -->
+              <tr style="background-color: #f8f9fa; font-weight: bold;">
+                  <td>{{ cat.category_name }}</td>
+                  <td>Rp {{ "{:,.2f}".format(cat.total) }}</td>
+              </tr>
+              
+              <!-- Baris Subkategori di bawah Kategori Utama -->
+              {% for sub in subcategories %}
+                  {% if sub.category_name == cat.category_name %}
+                  <tr>
+                      <td style="padding-left: 30px; color: #555;">• {{ sub.subcategory_name }}</td>
+                      <td style="color: #555;">Rp {{ "{:,.2f}".format(sub.total) }}</td>
+                  </tr>
+                  {% endif %}
+              {% endfor %}
+          {% endfor %}
+      </tbody>
+  </table>
+</div>
 {% endblock %}
 
 {# 4. Menambah JS khusus halaman transaksi saja #}
