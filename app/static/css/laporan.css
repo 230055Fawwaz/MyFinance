@@ -7,3 +7,123 @@
      - Mengatur tampilan halaman laporan
    ========================================== */
 
+   /* Container Utama */
+   .report-container {
+       max-width: 1000px;
+       margin: 2rem auto;
+       padding: 0 1rem;
+       font-family: sans-serif;
+   }
+   
+   .report-title {
+       color: #333;
+       margin-bottom: 1.5rem;
+   }
+   
+   /* Form Filter */
+   .filter-form {
+       display: flex;
+       gap: 1rem;
+       align-items: flex-end;
+       margin-bottom: 2rem;
+       background-color: #f8f9fa;
+       padding: 1rem;
+       border-radius: 8px;
+   }
+   
+   .form-group {
+       display: flex;
+       flex-direction: column;
+       gap: 0.5rem;
+   }
+   
+   .form-group label {
+       font-size: 0.85rem;
+       color: #666;
+       font-weight: bold;
+   }
+   
+   .form-input {
+       padding: 0.5rem;
+       border: 1px solid #ccc;
+       border-radius: 4px;
+       font-size: 1rem;
+   }
+   
+   .btn-filter {
+       padding: 0.6rem 1.2rem;
+       background-color: #007bff;
+       color: white;
+       border: none;
+       border-radius: 4px;
+       cursor: pointer;
+       font-size: 1rem;
+       font-weight: bold;
+       transition: background 0.2s;
+   }
+   
+   .btn-filter:hover {
+       background-color: #0056b3;
+   }
+   
+   /* Tabel Laporan */
+   .table-responsive {
+       overflow-x: auto;
+       border: 1px solid #e0e0e0;
+       border-radius: 8px;
+   }
+   
+   .report-table {
+       width: 100%;
+       border-collapse: collapse;
+       text-align: left;
+   }
+   
+   .report-table th {
+       background-color: #f1f3f5;
+       color: #495057;
+       padding: 1rem;
+       font-weight: 600;
+       border-bottom: 2px solid #dee2e6;
+   }
+   
+   .report-table td {
+       padding: 0.75rem 1rem;
+       border-bottom: 1px solid #dee2e6;
+   }
+   
+   /* Baris Kategori (Parent) */
+   .row-category {
+       background-color: #f8f9fa;
+       font-weight: bold;
+       color: #212529;
+   }
+   
+   /* Baris Subkategori (Child) */
+   .row-subcategory {
+       background-color: #ffffff;
+   }
+   
+   .row-subcategory .sub-name {
+       padding-left: 2.5rem; /* Menggantikan peluru manual dengan indentasi bersih */
+       color: #495057;
+       position: relative;
+   }
+   
+   /* Variasi CSS Modern: Menambah garis penanda subkategori */
+   .row-subcategory .sub-name::before {
+       content: "—";
+       position: absolute;
+       left: 1.2rem;
+       color: #adb5bd;
+   }
+   
+   /* Kolom Angka/Uang */
+   .amount {
+       font-variant-numeric: tabular-nums; /* Membuat angka sejajar vertikal */
+       text-align: right;
+   }
+   .report-table th:last-child {
+       text-align: right;
+   }
+   
