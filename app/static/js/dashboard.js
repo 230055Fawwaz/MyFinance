@@ -9,8 +9,17 @@
 
 document.addEventListener("DOMContentLoaded", function () {
     
+    // Konfigurasi Font Global Chart.js agar senada dengan CSS
+    Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    Chart.defaults.font.color = "#495057";
+
+    // Helper Fungsi untuk Format Rupiah pada Tooltip & Sumbu Grafik
+    const formatRupiah = (value) => {
+        return 'Rp ' + Number(value).toLocaleString('id-ID', { minimumFractionDigits: 0 });
+    };
+
     // ==========================================
-    // INEPLEMENTASI GRAFIK 1: TREN ARUS KAS (LINE)
+    // IMPLEMENTASI GRAFIK 1: TREN ARUS KAS (LINE)
     // ==========================================
     const cfCanvas = document.getElementById('cashFlowChart');
     if (cfCanvas) {
@@ -26,26 +35,49 @@ document.addEventListener("DOMContentLoaded", function () {
                     {
                         label: 'Pemasukan',
                         data: incomeData,
-                        borderColor: '#2ecc71',
-                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
-                        tension: 0.2,
-                        fill: true
+                        borderColor: '#28a745', // Match warna .card-income CSS
+                        backgroundColor: 'rgba(40, 167, 69, 0.08)',
+                        tension: 0.3, // Curve sedikit lebih smooth
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 2,
+                        pointHoverRadius: 6
                     },
                     {
                         label: 'Pengeluaran',
                         data: expenseData,
-                        borderColor: '#e74c3c',
-                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
-                        tension: 0.2,
-                        fill: true
+                        borderColor: '#dc3545', // Match warna .card-expense CSS
+                        backgroundColor: 'rgba(220, 53, 69, 0.08)',
+                        tension: 0.3,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 2,
+                        pointHoverRadius: 6
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.dataset.label}: ${formatRupiah(context.raw)}`;
+                            }
+                        }
+                    }
+                },
                 scales: {
-                    y: { beginAtZero: true }
+                    x: {
+                        grid: { display: false } // Hilangkan garis vertikal agar clean
+                    },
+                    y: { 
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) { return formatRupiah(value); }
+                        }
+                    }
                 }
             }
         });
@@ -65,15 +97,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 labels: labels,
                 datasets: [{
                     data: values,
-                    backgroundColor: ['#3498db', '#9b59b6', '#f1c40f', '#e67e22', '#1abc9c', '#95a5a6']
+                    // Palet warna modern berkarakter pastel-bold yang kontras
+                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'right' }
-                }
+                    legend: { 
+                        position: 'right',
+                        labels: { boxWidth: 12, padding: 15 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.label}: ${formatRupiah(context.raw)}`;
+                            }
+                        }
+                    }
+                },
+                cutout: '70%' // Membuat lubang tengah donat sedikit lebih tipis & modern
             }
         });
     }
@@ -93,19 +139,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 datasets: [{
                     label: 'Saldo Tersedia',
                     data: values,
-                    backgroundColor: '#34495e',
-                    borderRadius: 5
+                    backgroundColor: '#007bff', // Match warna .card-balance CSS
+                    borderRadius: 6,
+                    barThickness: 20 // Mengontrol ketebalan bar agar tidak terlalu gemuk
                 }]
             },
             options: {
-                indexAxis: 'y', // Membuat bar chart menjadi horizontal
+                indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
-                scales: {
-                    x: { beginAtZero: true }
-                },
                 plugins: {
-                    legend: { display: false }
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` Saldo: ${formatRupiah(context.raw)}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) { return formatRupiah(value); }
+                        }
+                    },
+                    y: {
+                        grid: { display: false } // Hilangkan garis horizontal di latar belakang bar
+                    }
                 }
             }
         });
