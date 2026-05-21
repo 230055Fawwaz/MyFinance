@@ -33,8 +33,9 @@ def add_header(response):
 # PROSES REGISTRASI BLUEPRINT BARU DI SINI
 # ====================================================
 # Jalankan import di paling bawah untuk menghindari circular import
-from app.routes.main import main_bp
+from app.routes.main import main_bp, transaksi_bp, akun_bp
 
 # Daftarkan ke aplikasi utama Anda
 app.register_blueprint(main_bp, url_prefix='/')
 app.register_blueprint(transaksi_bp, url_prefix='/transaksi')
+app.register_blueprint(akun_bp, url_prefix='/akun')
