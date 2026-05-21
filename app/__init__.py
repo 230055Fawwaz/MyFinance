@@ -29,4 +29,11 @@ def add_header(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
 
-from app import routes
+# ====================================================
+# PROSES REGISTRASI BLUEPRINT BARU DI SINI
+# ====================================================
+# Jalankan import di paling bawah untuk menghindari circular import
+from app.routes.main import main_bp
+
+# Daftarkan ke aplikasi utama Anda
+app.register_blueprint(main_bp, url_prefix='/')
