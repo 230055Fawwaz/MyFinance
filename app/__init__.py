@@ -37,3 +37,4 @@ from app.routes.main import main_bp
 
 # Daftarkan ke aplikasi utama Anda
 app.register_blueprint(main_bp, url_prefix='/')
+app.register_blueprint(transaksi_bp, url_prefix='/transaksi')
