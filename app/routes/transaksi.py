@@ -51,7 +51,7 @@ def tambah_transaksi():
 
     db.session.commit()
 
-    return redirect(url_for('transaksi'))
+    return redirect(url_for('main.transaksi'))
 
 @transaksi_bp.route('/hapus/<int:id>', methods=['POST'])
 def hapus_transaksi(id):
@@ -74,7 +74,7 @@ def hapus_transaksi(id):
     db.session.delete(trx)
     db.session.commit()
     
-    return redirect(url_for('transaksi'))
+    return redirect(url_for('main.transaksi'))
 
 @transaksi_bp.route('/edit/<int:id>', methods=['POST'])
 def edit_transaksi(id):
@@ -118,7 +118,7 @@ def edit_transaksi(id):
     # Simpan semua perubahan (update transaksi & update saldo akun)
     db.session.commit()
     
-    return redirect(url_for('transaksi'))
+    return redirect(url_for('main.transaksi'))
 
 # Menggunakan rute absolut agar tetap bisa diakses di url '/transfer'
 @transaksi_bp.route('/../transfer', methods=['POST'])
@@ -132,18 +132,18 @@ def proses_transfer():
 
     # 1. Validasi Dasar: Jika akun sama atau jumlah <= 0, langsung kembali
     if from_account_id == to_account_id or amount <= 0:
-        return redirect(url_for('akun'))
+        return redirect(url_for('main.akun'))
 
     from_account = Account.query.get(from_account_id)
     to_account = Account.query.get(to_account_id)
 
     if not from_account or not to_account:
-        return redirect(url_for('akun'))
+        return redirect(url_for('main.akun'))
 
     # 2. Validasi Saldo: Jika saldo kurang, batalkan dan kembali ke akun
     total_deduction = amount + fee
     if from_account.balance < total_deduction:
-        return redirect(url_for('akun'))
+        return redirect(url_for('main.akun'))
 
     # 3. Proses Eksekusi Database
     try:
@@ -166,4 +166,4 @@ def proses_transfer():
         print(f"Error proses transfer: {e}") 
 
     # 4. Sukses: Kembali ke halaman akun
-    return redirect(url_for('akun'))
+    return redirect(url_for('main.akun'))
