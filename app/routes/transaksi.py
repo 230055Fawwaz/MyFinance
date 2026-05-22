@@ -119,7 +119,7 @@ def edit_transaksi(id):
     return redirect(url_for('main.transaksi'))
 
 # Menggunakan rute absolut agar tetap bisa diakses di url '/transfer'
-@transaksi_bp.route('/../transfer', methods=['POST'])
+@transaksi_bp.route('/transfer', methods=['POST'])
 def proses_transfer():
     from_account_id = request.form.get('from_account_id')
     to_account_id = request.form.get('to_account_id')
