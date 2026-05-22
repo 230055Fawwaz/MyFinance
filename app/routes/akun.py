@@ -27,7 +27,7 @@ def tambah_akun():
     db.session.add(akun_baru)
     db.session.commit()
 
-    return redirect(url_for('akun')) # Kembali ke halaman akun setelah simpan
+    return redirect(url_for('main.akun')) # Kembali ke halaman akun setelah simpan
 
 @akun_bp.route('/hapus/<int:id>', methods=['POST'])
 def hapus_akun(id):
@@ -41,7 +41,7 @@ def hapus_akun(id):
     db.session.delete(akun)
     db.session.commit()
     
-    return redirect(url_for('akun'))
+    return redirect(url_for('main.akun'))
 
 @akun_bp.route('/edit/<int:id>', methods=['POST'])
 def edit_akun(id):
@@ -54,4 +54,4 @@ def edit_akun(id):
     
     db.session.commit()
     
-    return redirect(url_for('akun'))
+    return redirect(url_for('main.akun'))
