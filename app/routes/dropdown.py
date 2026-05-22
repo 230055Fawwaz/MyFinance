@@ -26,7 +26,7 @@ def tambah_kategori():
     db.session.add(kategori_baru)
     db.session.commit()
 
-    return redirect(url_for('dropdown'))
+    return redirect(url_for('main.dropdown'))
 
 @kategori_bp.route('/subkategori/tambah', methods=['POST'])
 def tambah_subkategori():
@@ -37,7 +37,7 @@ def tambah_subkategori():
     db.session.add(sub_baru)
     db.session.commit()
 
-    return redirect(url_for('dropdown'))
+    return redirect(url_for('main.dropdown'))
 
 @kategori_bp.route('/kategori/hapus/<int:id>', methods=['POST'])
 def hapus_kategori(id):
@@ -48,7 +48,7 @@ def hapus_kategori(id):
     db.session.delete(kategori)
     db.session.commit()
     
-    return redirect(url_for('dropdown'))
+    return redirect(url_for('main.dropdown'))
 
 @kategori_bp.route('/kategori/edit/<int:id>', methods=['POST'])
 def edit_kategori(id):
@@ -58,7 +58,7 @@ def edit_kategori(id):
     kategori.type = request.form.get('type')
     
     db.session.commit()
-    return redirect(url_for('dropdown'))
+    return redirect(url_for('main.dropdown'))
 
 @kategori_bp.route('/subkategori/hapus/<int:id>', methods=['POST'])
 def hapus_subkategori(id):
@@ -67,7 +67,7 @@ def hapus_subkategori(id):
     db.session.delete(subkategori)
     db.session.commit()
     
-    return redirect(url_for('dropdown'))
+    return redirect(url_for('main.dropdown'))
 
 @kategori_bp.route('/subkategori/edit/<int:id>', methods=['POST'])
 def edit_subkategori(id):
@@ -77,4 +77,4 @@ def edit_subkategori(id):
     subkategori.category_id = request.form.get('category_id') # Memungkinkan ganti induk kategori
     
     db.session.commit()
-    return redirect(url_for('dropdown'))
+    return redirect(url_for('main.dropdown'))
