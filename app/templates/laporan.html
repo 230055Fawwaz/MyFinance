@@ -20,7 +20,7 @@
   <h2 class="report-title">Laporan Analisis Pengeluaran</h2>
   
   <!-- Form Filter Tanggal -->
-  <form method="GET" action="{{ url_for('laporan_hasil') }}" class="filter-form">
+  <form method="GET" action="{{ url_for('laporan.laporan_hasil') }}" class="filter-form">
       <div class="form-group">
           <label for="start_date">Tanggal Mulai</label>
           <input type="date" id="start_date" name="start_date" value="{{ start_date }}" class="form-input">

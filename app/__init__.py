@@ -29,4 +29,19 @@ def add_header(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
 
-from app import routes
+# ====================================================
+# PROSES REGISTRASI BLUEPRINT BARU DI SINI
+# ====================================================
+# Jalankan import di paling bawah untuk menghindari circular import
+from app.routes.main import main_bp
+from app.routes.transaksi import transaksi_bp
+from app.routes.akun import akun_bp
+from app.routes.dropdown import kategori_bp
+from app.routes.laporan import laporan_bp
+
+# Daftarkan ke aplikasi utama Anda
+app.register_blueprint(main_bp, url_prefix='/')
+app.register_blueprint(transaksi_bp, url_prefix='/transaksi')
+app.register_blueprint(akun_bp, url_prefix='/akun')
+app.register_blueprint(kategori_bp, url_prefix='/dropdown') 
+app.register_blueprint(laporan_bp, url_prefix='/laporan') 
