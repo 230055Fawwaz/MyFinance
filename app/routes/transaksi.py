@@ -9,11 +9,9 @@
 # ==========================================
 
 from decimal import Decimal 
-from flask import render_template, request, redirect, url_for, Blueprint
-from app.models import db, Category, Account, Transaction, SubCategory, Transfer
-from app import app
-from datetime import datetime, timedelta
-from sqlalchemy import func
+from flask import request, redirect, url_for, Blueprint
+from app.models import db, Account, Transaction, SubCategory, Transfer
+from datetime import datetime
 
 transaksi_bp = Blueprint('transaksi', __name__)
 

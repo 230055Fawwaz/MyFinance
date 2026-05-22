@@ -8,10 +8,8 @@
 #   - Rute lain ada di file tersendiri
 # ==========================================
 
-from decimal import Decimal 
-from flask import render_template, request, redirect, url_for, Blueprint
-from app.models import db, Category, Account, Transaction, SubCategory, Transfer
-from app import app
+from flask import render_template, request, Blueprint
+from app.models import db, Category, Transaction, SubCategory
 from datetime import datetime, timedelta
 from sqlalchemy import func
 

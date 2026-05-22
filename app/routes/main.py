@@ -7,10 +7,8 @@
 #   - Rute hanya menampilkan halaman saja beserta data di dalamnya
 # ==========================================
 
-from decimal import Decimal 
-from flask import render_template, request, redirect, url_for, Blueprint
-from app.models import db, Category, Account, Transaction, SubCategory, Transfer
-from app import app
+from flask import render_template, Blueprint
+from app.models import db, Category, Account, Transaction, SubCategory
 from datetime import datetime, timedelta
 from sqlalchemy import func
 

@@ -8,12 +8,8 @@
 #   - Rute lain ada di file tersendiri
 # ==========================================
 
-from decimal import Decimal 
-from flask import render_template, request, redirect, url_for, Blueprint
-from app.models import db, Category, Account, Transaction, SubCategory, Transfer
-from app import app
-from datetime import datetime, timedelta
-from sqlalchemy import func
+from flask import request, redirect, url_for, Blueprint
+from app.models import db, Category, SubCategory
 
 kategori_bp = Blueprint('kategori', __name__)
 
