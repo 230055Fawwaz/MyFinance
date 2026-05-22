@@ -21,36 +21,6 @@ main_bp = Blueprint('main', __name__)
 # ==========================================
 
 @main_bp.route('/')
-@main_bp.route('/transaksi')
-def transaksi():
-    # Ambil semua transaksi, urutkan dari yang terbaru
-    daftar_transaksi = Transaction.query.order_by(Transaction.date.desc()).all()
-    
-    # Ambil data akun dan kategori untuk dropdown di Modal Form
-    daftar_akun = Account.query.all()
-    daftar_kategori = Category.query.all()
-    
-    return render_template('transaksi.html', 
-                           transactions=daftar_transaksi,
-                           accounts=daftar_akun,
-                           categories=daftar_kategori)
-
-@main_bp.route('/akun')
-def akun():
-    # Ambil semua data akun dari database
-    daftar_akun = Account.query.all()
-    # Kirim variabel 'accounts' ke akun.html
-    return render_template('akun.html', accounts=daftar_akun)
-
-@main_bp.route('/laporan')
-def laporan():
-    return render_template('laporan.html')
-
-@main_bp.route('/dropdown')
-def dropdown():
-    kategori_induk = Category.query.all() 
-    return render_template('dropdown.html', categories=kategori_induk)
-
 @main_bp.route('/dashboard')
 def dashboard():
     # Rentang waktu: 30 hari terakhir
@@ -118,3 +88,33 @@ def dashboard():
         acc_labels=acc_labels,
         acc_values=acc_values
     )
+
+@main_bp.route('/transaksi')
+def transaksi():
+    # Ambil semua transaksi, urutkan dari yang terbaru
+    daftar_transaksi = Transaction.query.order_by(Transaction.date.desc()).all()
+    
+    # Ambil data akun dan kategori untuk dropdown di Modal Form
+    daftar_akun = Account.query.all()
+    daftar_kategori = Category.query.all()
+    
+    return render_template('transaksi.html', 
+                           transactions=daftar_transaksi,
+                           accounts=daftar_akun,
+                           categories=daftar_kategori)
+
+@main_bp.route('/akun')
+def akun():
+    # Ambil semua data akun dari database
+    daftar_akun = Account.query.all()
+    # Kirim variabel 'accounts' ke akun.html
+    return render_template('akun.html', accounts=daftar_akun)
+
+@main_bp.route('/laporan')
+def laporan():
+    return render_template('laporan.html')
+
+@main_bp.route('/dropdown')
+def dropdown():
+    kategori_induk = Category.query.all() 
+    return render_template('dropdown.html', categories=kategori_induk)
