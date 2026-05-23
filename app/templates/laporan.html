@@ -19,8 +19,8 @@
 <div class="report-container">
   <h2 class="report-title">Laporan Analisis Pengeluaran</h2>
   
-  <!-- Form Filter Tanggal -->
-  <form method="GET" action="{{ url_for('laporan.laporan_hasil') }}" class="filter-form">
+  <!-- Form Filter Tanggal (Ditambahkan id="filterForm") -->
+  <form id="filterForm" method="GET" action="{{ url_for('laporan.laporan_hasil') }}" class="filter-form">
       <div class="form-group">
           <label for="start_date">Tanggal Mulai</label>
           <input type="date" id="start_date" name="start_date" value="{{ start_date }}" class="form-input">
@@ -29,10 +29,19 @@
           <label for="end_date">Tanggal Selesai</label>
           <input type="date" id="end_date" name="end_date" value="{{ end_date }}" class="form-input">
       </div>
-      <button type="submit" class="btn-filter">Filter Laporan</button>
+      
+      <!-- Kontainer Tombol Pintasan Baru -->
+      <div class="shortcut-buttons-group" style="display: flex; gap: 10px; margin-bottom: 15px; width: 100%;">
+          <button type="button" class="btn-shortcut" onclick="setFilterCepat('hari_ini')" style="padding: 8px 12px; cursor: pointer;">Hari Ini</button>
+          <button type="button" class="btn-shortcut" onclick="setFilterCepat('minggu')" style="padding: 8px 12px; cursor: pointer;">7 Hari Lalu</button>
+          <button type="button" class="btn-shortcut" onclick="setFilterCepat('bulan_ini')" style="padding: 8px 12px; cursor: pointer;">Bulan Ini</button>
+      </div>
+
+      <!-- Ditambahkan event listener onsubmit untuk validasi -->
+      <button type="submit" class="btn-filter" onclick="return validasiFilter()">Filter Laporan</button>
   </form>
 
-  <!-- Tabel Laporan -->
+  <!-- Tabel Laporan (Tetap sama seperti kode lama Anda) -->
   <div class="table-responsive">
       <table class="report-table">
           <thead>
@@ -43,13 +52,10 @@
           </thead>
           <tbody>
               {% for cat in categories %}
-                  <!-- Baris Kategori Utama -->
                   <tr class="row-category">
                       <td>{{ cat.category_name }}</td>
                       <td class="amount">Rp {{ "{:,.2f}".format(cat.total) }}</td>
                   </tr>
-                  
-                  <!-- Baris Subkategori -->
                   {% for sub in subcategories %}
                       {% if sub.category_name == cat.category_name %}
                       <tr class="row-subcategory">
