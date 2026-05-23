@@ -26,6 +26,21 @@
     --sidebar-collapsed-width: 70px;
 }
 
+/* Warna Khusus Dark Mode */
+[data-theme="dark"] {
+    /* Latar belakang dibuat gelap */
+    --bg-color: #0F172A;
+    --card-bg: #1E293B;
+    
+    /* Teks dan border dibuat terang */
+    --text-main: #F8FAFC;
+    --border-color: #334155;
+    --secondary-color: #94A3B8;
+
+    /* Opsional: Sidebar diubah sedikit agar kontras dengan latar belakang baru */
+    --sidebar-bg: #020617;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -46,11 +61,20 @@ body {
     min-height: 100vh;
 }
 
+.main-content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .sidebar {
     width: var(--sidebar-width);
     background-color: var(--sidebar-bg);
     color: var(--sidebar-text);
-    transition: width 0.3s ease;
+    transition: width 0.3s ease, background-color 0.3s ease;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
@@ -112,10 +136,4 @@ body {
 
 .sidebar.collapsed .sidebar-nav li a {
     color: transparent;
-}
-
-.main-content {
-    flex: 1;
-    padding: 30px;
-    overflow-y: auto;
 }
