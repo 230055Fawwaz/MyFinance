@@ -17,51 +17,83 @@
 
 {% block content %}
 <div class="report-container">
-  <h2 class="report-title">Laporan Analisis Pengeluaran</h2>
-  
-  <!-- Form Filter Tanggal -->
-  <form method="GET" action="{{ url_for('laporan.laporan_hasil') }}" class="filter-form">
-      <div class="form-group">
-          <label for="start_date">Tanggal Mulai</label>
-          <input type="date" id="start_date" name="start_date" value="{{ start_date }}" class="form-input">
-      </div>
-      <div class="form-group">
-          <label for="end_date">Tanggal Selesai</label>
-          <input type="date" id="end_date" name="end_date" value="{{ end_date }}" class="form-input">
-      </div>
-      <button type="submit" class="btn-filter">Filter Laporan</button>
-  </form>
+    <h2 class="report-title">Laporan Analisis Pengeluaran</h2>
+    
+    <!-- Form Filter Tanggal (Ditambahkan id="filterForm") -->
+    <form id="filterForm" method="GET" action="{{ url_for('laporan.laporan_hasil') }}" class="filter-form">
+        <div class="form-group">
+            <label for="start_date">Tanggal Mulai</label>
+            <input type="date" id="start_date" name="start_date" value="{{ start_date }}" class="form-input">
+        </div>
+        <div class="form-group">
+            <label for="end_date">Tanggal Selesai</label>
+            <input type="date" id="end_date" name="end_date" value="{{ end_date }}" class="form-input">
+        </div>
+        
+        <!-- Kontainer Tombol Pintasan Baru -->
+        <div class="shortcut-buttons-group" style="display: flex; gap: 10px; margin-bottom: 15px; width: 100%;">
+            <button type="button" class="btn-shortcut" onclick="setFilterCepat('hari_ini')" style="padding: 8px 12px; cursor: pointer;">Hari Ini</button>
+            <button type="button" class="btn-shortcut" onclick="setFilterCepat('minggu')" style="padding: 8px 12px; cursor: pointer;">7 Hari Lalu</button>
+            <button type="button" class="btn-shortcut" onclick="setFilterCepat('bulan_ini')" style="padding: 8px 12px; cursor: pointer;">Bulan Ini</button>
+        </div>
 
-  <!-- Tabel Laporan -->
-  <div class="table-responsive">
-      <table class="report-table">
-          <thead>
-              <tr>
-                  <th>Kategori / Subkategori</th>
-                  <th>Total Pengeluaran</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for cat in categories %}
-                  <!-- Baris Kategori Utama -->
-                  <tr class="row-category">
-                      <td>{{ cat.category_name }}</td>
-                      <td class="amount">Rp {{ "{:,.2f}".format(cat.total) }}</td>
-                  </tr>
-                  
-                  <!-- Baris Subkategori -->
-                  {% for sub in subcategories %}
-                      {% if sub.category_name == cat.category_name %}
-                      <tr class="row-subcategory">
-                          <td class="sub-name">{{ sub.subcategory_name }}</td>
-                          <td class="amount">Rp {{ "{:,.2f}".format(sub.total) }}</td>
-                      </tr>
-                      {% endif %}
-                  {% endfor %}
-              {% endfor %}
-          </tbody>
-      </table>
-  </div>
+        <!-- Ditambahkan event listener onsubmit untuk validasi -->
+        <button type="submit" class="btn-filter" onclick="return validasiFilter()">Filter Laporan</button>
+    </form>
+
+    {% if categories %}
+    <div class="download-actions" style="margin: 20px 0; display: flex; gap: 10px; justify-content: flex-end;">
+        <a href="{{ url_for('laporan.download_csv', start_date=request.args.get('start_date', ''), end_date=request.args.get('end_date', '')) }}" 
+           class="btn-download csv-btn" style="background-color: #28a745; color: white; padding: 10px 16px; border-radius: 4px; text-decoration: none; font-weight: 500; font-size: 14px;">
+            📂 Export CSV
+        </a>
+        <a href="{{ url_for('laporan.download_pdf', start_date=request.args.get('start_date', ''), end_date=request.args.get('end_date', '')) }}" 
+           class="btn-download pdf-btn" style="background-color: #dc3545; color: white; padding: 10px 16px; border-radius: 4px; text-decoration: none; font-weight: 500; font-size: 14px;">
+            📄 Export PDF
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Tabel Laporan -->
+    <div class="table-responsive">
+        <!-- Cek apakah ada data di dalam list categories -->
+        {% if categories %}
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Kategori / Subkategori</th>
+                        <th>Total Pengeluaran</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in categories %}
+                        <!-- Baris Kategori Utama -->
+                        <tr class="row-category">
+                            <td>{{ cat.category_name }}</td>
+                            <td class="amount">Rp {{ "{:,.2f}".format(cat.total) }}</td>
+                        </tr>
+                        
+                        <!-- Baris Subkategori -->
+                        {% for sub in subcategories %}
+                            {% if sub.category_name == cat.category_name %}
+                            <tr class="row-subcategory">
+                                <td class="sub-name">{{ sub.subcategory_name }}</td>
+                                <td class="amount">Rp {{ "{:,.2f}".format(sub.total) }}</td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <!-- Tampilan Pesan Jika Data Kosong -->
+            <div class="no-data-alert" style="text-align: center; padding: 40px 20px; background-color: #f8f9fa; border: 1px dashed #dee2e6; border-radius: 8px; margin-top: 20px;">
+                <p style="margin: 0; font-size: 16px; color: #6c757d; font-weight: 500;">
+                    Tidak ada transaksi yang kamu lakukan pada rentang tanggal ini.
+                </p>
+            </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
 
