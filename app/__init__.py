@@ -13,21 +13,25 @@ from flask import Flask
 from app.models import db
 import os
 
-app = Flask(__name__, template_folder='templates', static_folder='static')
+app = Flask(__name__, template_folder="templates", static_folder="static")
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, '..', 'myfinance.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+    basedir, "..", "myfinance.db"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
 
+
 @app.after_request
 def add_header(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
+
 
 # ====================================================
 # PROSES REGISTRASI BLUEPRINT BARU DI SINI
@@ -40,8 +44,8 @@ from app.routes.dropdown import kategori_bp
 from app.routes.laporan import laporan_bp
 
 # Daftarkan ke aplikasi utama Anda
-app.register_blueprint(main_bp, url_prefix='/')
-app.register_blueprint(transaksi_bp, url_prefix='/transaksi')
-app.register_blueprint(akun_bp, url_prefix='/akun')
-app.register_blueprint(kategori_bp, url_prefix='/dropdown') 
-app.register_blueprint(laporan_bp, url_prefix='/laporan') 
+app.register_blueprint(main_bp, url_prefix="/")
+app.register_blueprint(transaksi_bp, url_prefix="/transaksi")
+app.register_blueprint(akun_bp, url_prefix="/akun")
+app.register_blueprint(kategori_bp, url_prefix="/dropdown")
+app.register_blueprint(laporan_bp, url_prefix="/laporan")

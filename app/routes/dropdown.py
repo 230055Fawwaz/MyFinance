@@ -11,66 +11,74 @@
 from flask import request, redirect, url_for, Blueprint
 from app.models import db, Category, SubCategory
 
-kategori_bp = Blueprint('kategori', __name__)
+kategori_bp = Blueprint("kategori", __name__)
 
-@kategori_bp.route('/kategori/tambah', methods=['POST'])
+
+@kategori_bp.route("/kategori/tambah", methods=["POST"])
 def tambah_kategori():
-    nama_kategori = request.form.get('nama')
-    tipe_kategori = request.form.get('type') # 'income' atau 'expense'
+    nama_kategori = request.form.get("nama")
+    tipe_kategori = request.form.get("type")  # 'income' atau 'expense'
 
     kategori_baru = Category(nama=nama_kategori, type=tipe_kategori)
     db.session.add(kategori_baru)
     db.session.commit()
 
-    return redirect(url_for('main.dropdown'))
+    return redirect(url_for("main.dropdown"))
 
-@kategori_bp.route('/subkategori/tambah', methods=['POST'])
+
+@kategori_bp.route("/subkategori/tambah", methods=["POST"])
 def tambah_subkategori():
-    nama_subkategori = request.form.get('nama')
-    kategori_induk_id = request.form.get('category_id')
+    nama_subkategori = request.form.get("nama")
+    kategori_induk_id = request.form.get("category_id")
 
     sub_baru = SubCategory(nama=nama_subkategori, category_id=kategori_induk_id)
     db.session.add(sub_baru)
     db.session.commit()
 
-    return redirect(url_for('main.dropdown'))
+    return redirect(url_for("main.dropdown"))
 
-@kategori_bp.route('/kategori/hapus/<int:id>', methods=['POST'])
+
+@kategori_bp.route("/kategori/hapus/<int:id>", methods=["POST"])
 def hapus_kategori(id):
     kategori = Category.query.get_or_404(id)
-    
+
     # Catatan: Sama seperti akun, menghapus kategori yang masih memiliki sub-kategori
     # atau transaksi bisa menyebabkan error database (jika foreign key diaktifkan).
     db.session.delete(kategori)
     db.session.commit()
-    
-    return redirect(url_for('main.dropdown'))
 
-@kategori_bp.route('/kategori/edit/<int:id>', methods=['POST'])
+    return redirect(url_for("main.dropdown"))
+
+
+@kategori_bp.route("/kategori/edit/<int:id>", methods=["POST"])
 def edit_kategori(id):
     kategori = Category.query.get_or_404(id)
-    
-    kategori.nama = request.form.get('nama')
-    kategori.type = request.form.get('type')
-    
-    db.session.commit()
-    return redirect(url_for('main.dropdown'))
 
-@kategori_bp.route('/subkategori/hapus/<int:id>', methods=['POST'])
+    kategori.nama = request.form.get("nama")
+    kategori.type = request.form.get("type")
+
+    db.session.commit()
+    return redirect(url_for("main.dropdown"))
+
+
+@kategori_bp.route("/subkategori/hapus/<int:id>", methods=["POST"])
 def hapus_subkategori(id):
     subkategori = SubCategory.query.get_or_404(id)
-    
+
     db.session.delete(subkategori)
     db.session.commit()
-    
-    return redirect(url_for('main.dropdown'))
 
-@kategori_bp.route('/subkategori/edit/<int:id>', methods=['POST'])
+    return redirect(url_for("main.dropdown"))
+
+
+@kategori_bp.route("/subkategori/edit/<int:id>", methods=["POST"])
 def edit_subkategori(id):
     subkategori = SubCategory.query.get_or_404(id)
-    
-    subkategori.nama = request.form.get('nama')
-    subkategori.category_id = request.form.get('category_id') # Memungkinkan ganti induk kategori
-    
+
+    subkategori.nama = request.form.get("nama")
+    subkategori.category_id = request.form.get(
+        "category_id"
+    )  # Memungkinkan ganti induk kategori
+
     db.session.commit()
-    return redirect(url_for('main.dropdown'))
+    return redirect(url_for("main.dropdown"))
