@@ -13,3 +13,4 @@ myfinance.db
 
 # Notes
 *.txt
+/notes
