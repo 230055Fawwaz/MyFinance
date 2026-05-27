@@ -43,7 +43,7 @@ def dashboard():
         .all()
     )
 
-    cf_labels = sorted(list(set([str(row.tanggal) for row in cash_flow_query])))
+    cf_labels = sorted({str(row.tanggal) for row in cash_flow_query})
 
     income_dict = {tgl: 0 for tgl in cf_labels}
     expense_dict = {tgl: 0 for tgl in cf_labels}

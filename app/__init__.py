@@ -10,10 +10,20 @@
 # ==========================================
 
 import os
+import logging
 from flask import Flask
 from app.models import db
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
+
+# Konfigurasi logging global
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    handlers=[
+        logging.StreamHandler()  # Agar log muncul di terminal/console
+    ]
+)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(

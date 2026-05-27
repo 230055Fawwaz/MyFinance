@@ -8,12 +8,15 @@
 #   - Rute lain ada di file tersendiri
 # ==========================================
 
+import logging
 from datetime import datetime
+from sqlalchemy.exc import SQLAlchemyError
 from decimal import Decimal
 from flask import request, redirect, url_for, Blueprint
 from app.models import db, Account, Transaction, SubCategory, Transfer
 
 transaksi_bp = Blueprint("transaksi", __name__)
+logger = logging.getLogger(__name__)
 
 
 @transaksi_bp.route("/tambah", methods=["POST"])
@@ -162,10 +165,12 @@ def proses_transfer():
         db.session.add(new_transfer)
         db.session.commit()
 
-    except Exception as e:
+    except SQLAlchemyError as e:
         db.session.rollback()
-        # Print error ke terminal untuk kebutuhan debugging kamu
-        print(f"Error proses transfer: {e}")
+        logger.error(f"Database error saat transfer: {e}")
+    except Exception as e:
+        logger.error(f"Unexpected error saat transfer: {e}")
+        raise e
 
     # 4. Sukses: Kembali ke halaman akun
     return redirect(url_for("main.akun"))
