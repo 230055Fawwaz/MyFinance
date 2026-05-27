@@ -10,8 +10,8 @@
 
 import logging
 from datetime import datetime
-from sqlalchemy.exc import SQLAlchemyError
 from decimal import Decimal
+from sqlalchemy.exc import SQLAlchemyError
 from flask import request, redirect, url_for, Blueprint
 from app.models import db, Account, Transaction, SubCategory, Transfer
 
@@ -165,11 +165,13 @@ def proses_transfer():
         db.session.add(new_transfer)
         db.session.commit()
 
+    # Error handling dengan lazy formatting
     except SQLAlchemyError as e:
         db.session.rollback()
-        logger.error(f"Database error saat transfer: {e}")
+        logger.error("Database error saat transfer: %s", e)
     except Exception as e:
-        logger.error(f"Unexpected error saat transfer: {e}")
+        # Menggunakan logger.exception otomatis mencatat stack trace
+        logger.exception("Unexpected error saat transfer: %s", e)
         raise e
 
     # 4. Sukses: Kembali ke halaman akun

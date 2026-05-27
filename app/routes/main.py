@@ -48,7 +48,7 @@ def _get_cash_flow_data(start_date):
 
     cf_income_values = [income_dict[tgl] for tgl in cf_labels]
     cf_expense_values = [expense_dict[tgl] for tgl in cf_labels]
-    
+
     return cf_labels, cf_income_values, cf_expense_values
 
 
@@ -66,7 +66,7 @@ def _get_expense_allocation(start_date):
 
     exp_labels = [row[0] for row in expense_query]
     exp_values = [float(row[1]) for row in expense_query]
-    
+
     return exp_labels, exp_values
 
 
@@ -76,77 +76,28 @@ def _get_account_distribution():
 
     acc_labels = [row[0] for row in account_query]
     acc_values = [float(row[1]) for row in account_query]
-    
+
     return acc_labels, acc_values
 
 
 @main_bp.route("/")
 @main_bp.route("/dashboard")
+# (Asumsi ada decorator @main_bp.route di sini)
 def dashboard():
     # Rentang waktu: 30 hari terakhir
     hari_ini = datetime.utcnow()
     tiga_puluh_hari_lalu = hari_ini - timedelta(days=30)
 
-    # ====================================================
-    # 1. DATA GRAFIK ARUS KAS (Pemasukan vs Pengeluaran)
-    # ====================================================
-    cash_flow_query = (
-        db.session.query(
-            func.date(Transaction.date).label("tanggal"),
-            Category.type.label("tipe"),
-            func.sum(Transaction.amount).label("total"),
-        )
-        .join(SubCategory, Transaction.subcategory_id == SubCategory.id)
-        .join(Category, SubCategory.category_id == Category.id)
-        .filter(Transaction.date >= tiga_puluh_hari_lalu)
-        .group_by(func.date(Transaction.date), Category.type)
-        .all()
-    )
-
-    cf_labels = sorted({str(row.tanggal) for row in cash_flow_query})
-
-    income_dict = {tgl: 0 for tgl in cf_labels}
-    expense_dict = {tgl: 0 for tgl in cf_labels}
-
-    for row in cash_flow_query:
-        tgl = str(row.tanggal)
-        if row.tipe == "income":
-            income_dict[tgl] = float(row.total)
-        elif row.tipe == "expense":
-            expense_dict[tgl] = float(row.total)
-
-    cf_income_values = [income_dict[tgl] for tgl in cf_labels]
-    cf_expense_values = [expense_dict[tgl] for tgl in cf_labels]
-
-    # ====================================================
-    # 2. DATA GRAFIK ALOKASI PENGELUARAN (Per Kategori Utama)
-    # ====================================================
-    expense_query = (
-        db.session.query(Category.nama, func.sum(Transaction.amount))
-        .join(SubCategory, Transaction.subcategory_id == SubCategory.id)
-        .join(Category, SubCategory.category_id == Category.id)
-        .filter(Category.type == "expense")
-        .filter(Transaction.date >= tiga_puluh_hari_lalu)
-        .group_by(Category.nama)
-        .all()
-    )
-
-    exp_labels = [row[0] for row in expense_query]
-    exp_values = [float(row[1]) for row in expense_query]
-
-    # ====================================================
-    # 3. DATA GRAFIK DISTRIBUSI SALDO AKUN
-    # ====================================================
-    account_query = db.session.query(Account.nama, Account.balance).all()
-
-    acc_labels = [row[0] for row in account_query]
-    acc_values = [float(row[1]) for row in account_query]
+    # Memanggil fungsi bantuan untuk masing-masing data
+    cf_labels, cf_income, cf_expense = _get_cash_flow_data(tiga_puluh_hari_lalu)
+    exp_labels, exp_values = _get_expense_allocation(tiga_puluh_hari_lalu)
+    acc_labels, acc_values = _get_account_distribution()
 
     return render_template(
         "dashboard.html",
         cf_labels=cf_labels,
-        cf_income=cf_income_values,
-        cf_expense=cf_expense_values,
+        cf_income=cf_income,
+        cf_expense=cf_expense,
         exp_labels=exp_labels,
         exp_values=exp_values,
         acc_labels=acc_labels,

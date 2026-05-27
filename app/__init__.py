@@ -20,9 +20,7 @@ app = Flask(__name__, template_folder="templates", static_folder="static")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    handlers=[
-        logging.StreamHandler()  # Agar log muncul di terminal/console
-    ]
+    handlers=[logging.StreamHandler()],  # Agar log muncul di terminal/console
 )
 
 basedir = os.path.abspath(os.path.dirname(__file__))
