@@ -31,7 +31,7 @@
             
             <button class="btn-edit" onclick="document.getElementById('modal-edit-{{ account.id }}').style.display='block'">Edit</button>
             
-            <form action="{{ url_for('akun.hapus_akun', id=account.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah kamu yakin ingin menghapus akun ini?');">
+            <form action="{{ url_for('akun.hapus_akun', akun_id=account.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah kamu yakin ingin menghapus akun ini?');">
                 <button type="submit" class="btn-hapus">Hapus</button>
             </form>
         </div>
@@ -73,7 +73,7 @@
         
         <h2>Edit Akun</h2>
         
-        <form method="POST" action="{{ url_for('akun.edit_akun', id=account.id) }}">
+        <form method="POST" action="{{ url_for('akun.edit_akun', akun_id=account.id) }}">
             <div>
                 <label>Nama Akun:</label><br>
                 <input type="text" name="nama" value="{{ account.nama }}" required>

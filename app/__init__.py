@@ -9,9 +9,9 @@
 #   - Rute di-impor agar menghindari circular import
 # ==========================================
 
+import os
 from flask import Flask
 from app.models import db
-import os
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 

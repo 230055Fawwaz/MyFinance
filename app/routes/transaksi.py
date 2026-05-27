@@ -8,10 +8,10 @@
 #   - Rute lain ada di file tersendiri
 # ==========================================
 
+from datetime import datetime
 from decimal import Decimal
 from flask import request, redirect, url_for, Blueprint
 from app.models import db, Account, Transaction, SubCategory, Transfer
-from datetime import datetime
 
 transaksi_bp = Blueprint("transaksi", __name__)
 
@@ -53,10 +53,10 @@ def tambah_transaksi():
     return redirect(url_for("main.transaksi"))
 
 
-@transaksi_bp.route("/hapus/<int:id>", methods=["POST"])
-def hapus_transaksi(id):
+@transaksi_bp.route("/hapus/<int:transaksi_id>", methods=["POST"])
+def hapus_transaksi(transaksi_id):
     # Cari transaksi berdasarkan ID, jika tidak ada kembalikan 404
-    trx = Transaction.query.get_or_404(id)
+    trx = Transaction.query.get_or_404(transaksi_id)
 
     # Ambil data akun dan tipe kategori transaksi yang akan dihapus
     akun = trx.account
@@ -77,9 +77,9 @@ def hapus_transaksi(id):
     return redirect(url_for("main.transaksi"))
 
 
-@transaksi_bp.route("/edit/<int:id>", methods=["POST"])
-def edit_transaksi(id):
-    trx = Transaction.query.get_or_404(id)
+@transaksi_bp.route("/edit/<int:transaksi_id>", methods=["POST"])
+def edit_transaksi(transaksi_id):
+    trx = Transaction.query.get_or_404(transaksi_id)
 
     # ---------------------------------------------------------
     # FASE 1: REVERSAL SALDO LAMA

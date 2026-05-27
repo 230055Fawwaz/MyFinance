@@ -38,9 +38,9 @@ def tambah_subkategori():
     return redirect(url_for("main.dropdown"))
 
 
-@kategori_bp.route("/kategori/hapus/<int:id>", methods=["POST"])
-def hapus_kategori(id):
-    kategori = Category.query.get_or_404(id)
+@kategori_bp.route("/kategori/hapus/<int:kategori_id>", methods=["POST"])
+def hapus_kategori(kategori_id):
+    kategori = Category.query.get_or_404(kategori_id)
 
     # Catatan: Sama seperti akun, menghapus kategori yang masih memiliki sub-kategori
     # atau transaksi bisa menyebabkan error database (jika foreign key diaktifkan).
@@ -50,9 +50,9 @@ def hapus_kategori(id):
     return redirect(url_for("main.dropdown"))
 
 
-@kategori_bp.route("/kategori/edit/<int:id>", methods=["POST"])
-def edit_kategori(id):
-    kategori = Category.query.get_or_404(id)
+@kategori_bp.route("/kategori/edit/<int:kategori_id>", methods=["POST"])
+def edit_kategori(kategori_id):
+    kategori = Category.query.get_or_404(kategori_id)
 
     kategori.nama = request.form.get("nama")
     kategori.type = request.form.get("type")
@@ -61,9 +61,9 @@ def edit_kategori(id):
     return redirect(url_for("main.dropdown"))
 
 
-@kategori_bp.route("/subkategori/hapus/<int:id>", methods=["POST"])
-def hapus_subkategori(id):
-    subkategori = SubCategory.query.get_or_404(id)
+@kategori_bp.route("/subkategori/hapus/<int:subkategori_id>", methods=["POST"])
+def hapus_subkategori(subkategori_id):
+    subkategori = SubCategory.query.get_or_404(subkategori_id)
 
     db.session.delete(subkategori)
     db.session.commit()
@@ -71,9 +71,9 @@ def hapus_subkategori(id):
     return redirect(url_for("main.dropdown"))
 
 
-@kategori_bp.route("/subkategori/edit/<int:id>", methods=["POST"])
-def edit_subkategori(id):
-    subkategori = SubCategory.query.get_or_404(id)
+@kategori_bp.route("/subkategori/edit/<int:subkategori_id>", methods=["POST"])
+def edit_subkategori(subkategori_id):
+    subkategori = SubCategory.query.get_or_404(subkategori_id)
 
     subkategori.nama = request.form.get("nama")
     subkategori.category_id = request.form.get(

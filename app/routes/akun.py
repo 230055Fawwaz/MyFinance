@@ -28,9 +28,9 @@ def tambah_akun():
     return redirect(url_for("main.akun"))  # Kembali ke halaman akun setelah simpan
 
 
-@akun_bp.route("/hapus/<int:id>", methods=["POST"])
-def hapus_akun(id):
-    akun = Account.query.get_or_404(id)
+@akun_bp.route("/hapus/<int:akun_id>", methods=["POST"])
+def hapus_akun(akun_id):
+    akun = Account.query.get_or_404(akun_id)
 
     # PERHATIAN: Jika akun dihapus, transaksi yang menggunakan foreign key akun ini
     # bisa menyebabkan error (IntegrityError) kecuali dikonfigurasi 'cascade delete'.
@@ -43,9 +43,9 @@ def hapus_akun(id):
     return redirect(url_for("main.akun"))
 
 
-@akun_bp.route("/edit/<int:id>", methods=["POST"])
-def edit_akun(id):
-    akun = Account.query.get_or_404(id)
+@akun_bp.route("/edit/<int:akun_id>", methods=["POST"])
+def edit_akun(akun_id):
+    akun = Account.query.get_or_404(akun_id)
 
     # Update data berdasarkan input dari form modal
     akun.nama = request.form.get("nama")

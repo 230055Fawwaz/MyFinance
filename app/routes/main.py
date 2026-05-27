@@ -7,10 +7,10 @@
 #   - Rute hanya menampilkan halaman saja beserta data di dalamnya
 # ==========================================
 
-from flask import render_template, Blueprint
-from app.models import db, Category, Account, Transaction, SubCategory
 from datetime import datetime, timedelta
 from sqlalchemy import func
+from flask import render_template, Blueprint
+from app.models import db, Category, Account, Transaction, SubCategory
 
 main_bp = Blueprint("main", __name__)
 
@@ -18,6 +18,7 @@ main_bp = Blueprint("main", __name__)
 # ==========================================
 # ROUTE UNTUK MENAMPILKAN HALAMAN WEB
 # ==========================================
+
 
 @main_bp.route("/")
 @main_bp.route("/dashboard")
