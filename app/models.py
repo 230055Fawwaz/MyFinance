@@ -17,6 +17,7 @@ db = SQLAlchemy()
 
 
 class Category(db.Model):
+    # pylint: disable=too-few-public-methods
     __tablename__ = "categories"
     id = db.Column(db.Integer, primary_key=True)
     nama = db.Column(db.String(20), nullable=False)
@@ -27,6 +28,7 @@ class Category(db.Model):
 
 
 class SubCategory(db.Model):
+    # pylint: disable=too-few-public-methods
     __tablename__ = "subcategories"
     id = db.Column(db.Integer, primary_key=True)
     category_id = db.Column(db.Integer, db.ForeignKey("categories.id"), nullable=False)
@@ -34,6 +36,7 @@ class SubCategory(db.Model):
 
 
 class Account(db.Model):
+    # pylint: disable=too-few-public-methods
     __tablename__ = "accounts"
     id = db.Column(db.Integer, primary_key=True)
     nama = db.Column(db.String(20), nullable=False)
@@ -42,6 +45,7 @@ class Account(db.Model):
 
 
 class Transaction(db.Model):
+    # pylint: disable=too-few-public-methods
     __tablename__ = "transactions"
     id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, db.ForeignKey("accounts.id"), nullable=False)
@@ -58,6 +62,7 @@ class Transaction(db.Model):
 
 
 class Transfer(db.Model):
+    # pylint: disable=too-few-public-methods
     __tablename__ = "transfers"
     id = db.Column(db.Integer, primary_key=True)
     from_account_id = db.Column(

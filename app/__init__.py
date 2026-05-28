@@ -45,10 +45,20 @@ def add_header(response):
 # PROSES REGISTRASI BLUEPRINT BARU DI SINI
 # ====================================================
 # Jalankan import di paling bawah untuk menghindari circular import
+
+# noqa: E402 # pylint: disable=wrong-import-position
 from app.routes.main import main_bp
+
+# noqa: E402 # pylint: disable=wrong-import-position
 from app.routes.transaksi import transaksi_bp
+
+# noqa: E402 # pylint: disable=wrong-import-position
 from app.routes.akun import akun_bp
+
+# noqa: E402 # pylint: disable=wrong-import-position
 from app.routes.dropdown import kategori_bp
+
+# noqa: E402 # pylint: disable=wrong-import-position
 from app.routes.laporan import laporan_bp
 
 # Daftarkan ke aplikasi utama Anda
