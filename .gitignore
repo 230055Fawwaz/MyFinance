@@ -25,3 +25,8 @@ clean_python.bat
 .prettierrc
 .prettierignore
 .stylelintrc.json
+
+# Node.js Dependencies
+/node_modules
+package-lock.json
+package.json
