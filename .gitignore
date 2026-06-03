@@ -17,3 +17,11 @@ myfinance.db
 
 # Development
 clean_python.bat
+
+# Code Cleaning Configurations
+.djlintrc
+.eslintrc.json
+.eslintignore
+.prettierrc
+.prettierignore
+.stylelintrc.json
