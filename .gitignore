@@ -17,6 +17,7 @@ myfinance.db
 
 # Development
 clean_python.bat
+clean_web.bat
 
 # Code Cleaning Configurations
 .djlintrc
