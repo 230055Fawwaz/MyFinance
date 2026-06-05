@@ -24,10 +24,21 @@
     transition: background 0.2s;
 }
 
-.btn-primary { background-color: var(--primary-color); color: white; }
-.btn-primary:hover { background-color: var(--primary-hover); }
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
 
-.btn-success { background-color: var(--success-color); color: white; width: 100%; margin-top: 15px;}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+    width: 100%;
+    margin-top: 15px;
+}
 
 .btn-edit, .btn-hapus {
     padding: 6px 10px;
@@ -38,8 +49,13 @@
     color: white;
 }
 
-.btn-edit { background-color: #F59E0B; }
-.btn-hapus { background-color: var(--danger-color); }
+.btn-edit {
+    background-color: #F59E0B;
+}
+
+.btn-hapus {
+    background-color: var(--danger-color);
+}
 
 .close-btn {
     position: absolute;
@@ -60,7 +76,7 @@
 .table-container {
     background-color: var(--card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px rgb(0 0 0 / 5%);
     overflow: hidden;
 }
 
@@ -100,7 +116,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgb(0 0 0 / 50%);
     align-items: center;
     justify-content: center;
 }
@@ -111,8 +127,7 @@
     border-radius: 8px;
     width: 100%;
     max-width: 400px;
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgb(0 0 0 / 20%);
     position: absolute;
     top: 50%;
     left: 50%;

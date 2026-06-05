@@ -7,8 +7,7 @@
 //   - Mengatur interaksi user di halaman akun
 // ==========================================
 
-document.addEventListener('DOMContentLoaded', function() {
-
+document.addEventListener('DOMContentLoaded', function () {
     /* =========================================
        Logika Modal Pop-up (Reusable)
     ========================================= */
@@ -19,17 +18,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (btn && modal) {
             const closeBtn = modal.querySelector('.close-btn');
 
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 modal.style.display = 'flex';
             });
 
             if (closeBtn) {
-                closeBtn.addEventListener('click', function() {
+                closeBtn.addEventListener('click', function () {
                     modal.style.display = 'none';
                 });
             }
 
-            window.addEventListener('click', function(event) {
+            window.addEventListener('click', function (event) {
                 if (event.target === modal) {
                     modal.style.display = 'none';
                 }
@@ -39,5 +38,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setupModal('btn-tambah-akun', 'modal-akun');
     setupModal('btn-transfer', 'modal-transfer');
-
 });

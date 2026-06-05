@@ -7,8 +7,7 @@
 //   - Mengatur interaksi user di halaman laporan
 // ==========================================
 
-document.addEventListener('DOMContentLoaded', function() {
-    
+document.addEventListener('DOMContentLoaded', function () {
     // 1. Ambil semua elemen yang dibutuhkan
     const filterForm = document.getElementById('filterForm');
     const startDateInput = document.getElementById('start_date');
@@ -17,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 2. Cegah submit form jika tanggal kosong (Validasi Utama)
     if (filterForm) {
-        filterForm.addEventListener('submit', function(event) {
+        filterForm.addEventListener('submit', function (event) {
             const startDate = startDateInput.value;
             const endDate = endDateInput.value;
 
@@ -37,8 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 4. Pasang Event Listener ke Tombol Pintasan secara otomatis
-    shortcutButtons.forEach(button => {
-        button.addEventListener('click', function() {
+    shortcutButtons.forEach((button) => {
+        button.addEventListener('click', function () {
             // Mengambil tipe filter dari teks tombol atau fungsi parameter
             // Agar aman, kita cek teks tombolnya atau inline onclick bawaan HTML
             const tipeText = this.textContent.toLowerCase();
@@ -57,12 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (tipe === 'hari_ini') {
                 tglAwal = tglSekarang;
                 tglAkhir = tglSekarang;
-            } 
-            else if (tipe === 'minggu') {
+            } else if (tipe === 'minggu') {
                 tglAwal.setDate(tglSekarang.getDate() - 7);
                 tglAkhir.setDate(tglSekarang.getDate() - 1);
-            } 
-            else if (tipe === 'bulan_ini') {
+            } else if (tipe === 'bulan_ini') {
                 tglAwal = new Date(tglSekarang.getFullYear(), tglSekarang.getMonth(), 1);
                 tglAkhir = tglSekarang;
             }
@@ -75,5 +72,4 @@ document.addEventListener('DOMContentLoaded', function() {
             filterForm.submit();
         });
     });
-
 });

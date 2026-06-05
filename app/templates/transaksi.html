@@ -7,168 +7,186 @@
     - Menampilkan semua transaksi yangg dilakukan user
     - Mengisi form transaksi
 -->
-
 {% extends "base.html" %}
-
 {% block title %}Transaksi - MyFinance{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/transaksi.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/transaksi.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="content-header">
-    <h1>Histori Transaksi</h1>
-    <button class="btn btn-primary" id="btn-tambah-transaksi">+ Tambah Transaksi</button>
-</div>
 
-<div class="table-container">
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Nama Akun</th>
-                <th>Kategori</th>
-                <th>Sub-Kategori</th>
-                <th>Detail</th>
-                <th>Tanggal</th>
-                <th>Nominal</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for trx in transactions %}
-            <tr>
-                <td>{{ trx.account.nama }}</td>
-                <td>{{ trx.subcategory.category.nama }}</td>
-                <td>{{ trx.subcategory.nama }}</td>
-                <td>{{ trx.note }}</td>
-                <td>{{ trx.date.strftime('%Y-%m-%d') }}</td>
-                <td>Rp {{ "{:,.0f}".format(trx.amount | float).replace(',', '.') }}</td>
-                
-                <td>
-                    <button class="btn-edit" onclick="document.getElementById('modal-edit-{{ trx.id }}').style.display='block'">Edit</button>
-
-                    <form action="{{ url_for('transaksi.hapus_transaksi', transaksi_id=trx.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus transaksi ini? Saldo akun akan disesuaikan kembali.');">
-                        <button type="submit" class="btn-hapus">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="7" style="text-align: center;">Belum ada histori transaksi.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-<div id="modal-transaksi" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Tambah Transaksi Baru</h2>
-        <form action="/transaksi/tambah" method="POST">
-            
-            <label for="account_id">Nama Akun:</label>
-            <select id="account_id" name="account_id" required class="form-select">
-                <option value="" disabled selected>-- Pilih Akun --</option>
-                {% for acc in accounts %}
-                    <option value="{{ acc.id }}">{{ acc.nama }} (Rp {{ "{:,.0f}".format(acc.balance | float).replace(',', '.') }})</option>
-                {% endfor %}
-            </select>
-
-            <label for="kategori">Kategori:</label>
-            <select id="kategori" name="kategori" required class="form-select">
-                <option value="" disabled selected>-- Pilih Kategori --</option>
-                {% for kat in categories %}
-                    <option value="{{ kat.id }}">{{ kat.nama }}</option>
-                {% endfor %}
-            </select>
-
-            <label for="subcategory_id">Sub-Kategori:</label>
-            <select id="subcategory_id" name="subcategory_id" required class="form-select">
-                <option value="" disabled selected>-- Pilih Kategori Terlebih Dahulu --</option>
-                {% for kat in categories %}
-                    {% for sub in kat.subcategories %}
-                        <option value="{{ sub.id }}" class="sub-option" data-category="{{ kat.id }}" style="display: none;">
-                            {{ sub.nama }}
-                        </option>
-                    {% endfor %}
-                {% endfor %}
-            </select>
-
-            <label for="amount">Nominal (Rp):</label>
-            <input type="number" id="amount" name="amount" required placeholder="Misal: 50000" step="0.01">
-
-            <label for="date">Tanggal:</label>
-            <input type="date" id="date" name="date" required>
-
-            <label for="note">Detail / Catatan:</label>
-            <textarea id="note" name="note" rows="2" placeholder="Misal: Makan siang di warteg"></textarea>
-
-            <button type="submit" class="btn btn-success">Simpan Transaksi</button>
-        </form>
+    <div class="content-header">
+        <h1>Histori Transaksi</h1>
+        <button class="btn btn-primary" id="btn-tambah-transaksi">+ Tambah Transaksi</button>
     </div>
-</div>
-
-{% for trx in transactions %}
-<div id="modal-edit-{{ trx.id }}" class="modal" style="display:none;">
-    <div class="modal-content">
-        <span class="close-btn" onclick="document.getElementById('modal-edit-{{ trx.id }}').style.display='none'">&times;</span>
-        
-        <h2>Edit Transaksi</h2>
-        <form action="{{ url_for('transaksi.edit_transaksi', transaksi_id=trx.id) }}" method="POST">
-            
-            <label for="account_id_{{ trx.id }}">Nama Akun:</label>
-            <select id="account_id_{{ trx.id }}" name="account_id" required class="form-select">
-                <option value="" disabled>-- Pilih Akun --</option>
-                {% for acc in accounts %}
-                    <option value="{{ acc.id }}" {% if acc.id == trx.account_id %}selected{% endif %}>
-                        {{ acc.nama }} (Rp {{ "{:,.0f}".format(acc.balance | float).replace(',', '.') }})
-                    </option>
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Nama Akun</th>
+                    <th>Kategori</th>
+                    <th>Sub-Kategori</th>
+                    <th>Detail</th>
+                    <th>Tanggal</th>
+                    <th>Nominal</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trx in transactions %}
+                    <tr>
+                        <td>{{ trx.account.nama }}</td>
+                        <td>{{ trx.subcategory.category.nama }}</td>
+                        <td>{{ trx.subcategory.nama }}</td>
+                        <td>{{ trx.note }}</td>
+                        <td>{{ trx.date.strftime("%Y-%m-%d") }}</td>
+                        <td>Rp {{ "{:,.0f}".format(trx.amount | float).replace(',', '.') }}</td>
+                        <td>
+                            <button class="btn-edit"
+                                    onclick="document.getElementById('modal-edit-{{ trx.id }}').style.display='block'">
+                                Edit
+                            </button>
+                            <form action="{{ url_for('transaksi.hapus_transaksi', transaksi_id=trx.id) }}"
+                                  method="POST"
+                                  style="display:inline"
+                                  onsubmit="return confirm('Yakin ingin menghapus transaksi ini? Saldo akun akan disesuaikan kembali.');">
+                                <button type="submit" class="btn-hapus">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center;">Belum ada histori transaksi.</td>
+                    </tr>
                 {% endfor %}
-            </select>
-
-            <label for="kategori_{{ trx.id }}">Kategori:</label>
-            <select id="kategori_{{ trx.id }}" name="kategori" required class="form-select">
-                <option value="" disabled>-- Pilih Kategori --</option>
-                {% for kat in categories %}
-                    <option value="{{ kat.id }}" {% if kat.id == trx.subcategory.category_id %}selected{% endif %}>
-                        {{ kat.nama }}
-                    </option>
-                {% endfor %}
-            </select>
-
-            <label for="subcategory_id_{{ trx.id }}">Sub-Kategori:</label>
-            <select id="subcategory_id_{{ trx.id }}" name="subcategory_id" required class="form-select">
-                <option value="" disabled>-- Pilih Kategori Terlebih Dahulu --</option>
-                {% for kat in categories %}
-                    {% for sub in kat.subcategories %}
-                        <option value="{{ sub.id }}" class="sub-option" data-category="{{ kat.id }}" 
-                                {% if kat.id != trx.subcategory.category_id %}style="display: none;"{% endif %}
-                                {% if sub.id == trx.subcategory_id %}selected{% endif %}>
-                            {{ sub.nama }}
-                        </option>
-                    {% endfor %}
-                {% endfor %}
-            </select>
-
-            <label for="amount_{{ trx.id }}">Nominal (Rp):</label>
-            <input type="number" id="amount_{{ trx.id }}" name="amount" required value="{{ trx.amount }}" step="0.01">
-
-            <label for="date_{{ trx.id }}">Tanggal:</label>
-            <input type="date" id="date_{{ trx.id }}" name="date" required value="{{ trx.date.strftime('%Y-%m-%d') }}">
-
-            <label for="note_{{ trx.id }}">Detail / Catatan:</label>
-            <textarea id="note_{{ trx.id }}" name="note" rows="2">{{ trx.note }}</textarea>
-
-            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-        </form>
+            </tbody>
+        </table>
     </div>
-</div>
-{% endfor %}
-
+    <div id="modal-transaksi" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Tambah Transaksi Baru</h2>
+            <form action="/transaksi/tambah" method="POST">
+                <label for="account_id">Nama Akun:</label>
+                <select id="account_id" name="account_id" required class="form-select">
+                    <option value="" disabled selected>-- Pilih Akun --</option>
+                    {% for acc in accounts %}
+                        <option value="{{ acc.id }}">{{ acc.nama }} (Rp {{ "{:,.0f}".format(acc.balance | float).replace(',', '.') }})</option>
+                    {% endfor %}
+                </select>
+                <label for="kategori">Kategori:</label>
+                <select id="kategori" name="kategori" required class="form-select">
+                    <option value="" disabled selected>-- Pilih Kategori --</option>
+                    {% for kat in categories %}<option value="{{ kat.id }}">{{ kat.nama }}</option>{% endfor %}
+                </select>
+                <label for="subcategory_id">Sub-Kategori:</label>
+                <select id="subcategory_id"
+                        name="subcategory_id"
+                        required
+                        class="form-select">
+                    <option value="" disabled selected>-- Pilih Kategori Terlebih Dahulu --</option>
+                    {% for kat in categories %}
+                        {% for sub in kat.subcategories %}
+                            <option value="{{ sub.id }}"
+                                    class="sub-option"
+                                    data-category="{{ kat.id }}"
+                                    style="display: none">{{ sub.nama }}</option>
+                        {% endfor %}
+                    {% endfor %}
+                </select>
+                <label for="amount">Nominal (Rp):</label>
+                <input type="number"
+                       id="amount"
+                       name="amount"
+                       required
+                       placeholder="Misal: 50000"
+                       step="0.01">
+                <label for="date">Tanggal:</label>
+                <input type="date" id="date" name="date" required>
+                <label for="note">Detail / Catatan:</label>
+                <textarea id="note"
+                          name="note"
+                          rows="2"
+                          placeholder="Misal: Makan siang di warteg"></textarea>
+                <button type="submit" class="btn btn-success">Simpan Transaksi</button>
+            </form>
+        </div>
+    </div>
+    {% for trx in transactions %}
+        <div id="modal-edit-{{ trx.id }}" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close-btn"
+                      onclick="document.getElementById('modal-edit-{{ trx.id }}').style.display='none'">&times;</span>
+                <h2>Edit Transaksi</h2>
+                <form action="{{ url_for('transaksi.edit_transaksi', transaksi_id=trx.id) }}"
+                      method="POST">
+                    <label for="account_id_{{ trx.id }}">Nama Akun:</label>
+                    <select id="account_id_{{ trx.id }}"
+                            name="account_id"
+                            required
+                            class="form-select">
+                        <option value="" disabled>-- Pilih Akun --</option>
+                        {% for acc in accounts %}
+                            <option value="{{ acc.id }}"
+                                    {% if acc.id == trx.account_id %}selected{% endif %}>
+                                {{ acc.nama }} (Rp {{ "{:,.0f}".format(acc.balance | float).replace(',', '.') }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <label for="kategori_{{ trx.id }}">Kategori:</label>
+                    <select id="kategori_{{ trx.id }}"
+                            name="kategori"
+                            required
+                            class="form-select">
+                        <option value="" disabled>-- Pilih Kategori --</option>
+                        {% for kat in categories %}
+                            <option value="{{ kat.id }}"
+                                    {% if kat.id == trx.subcategory.category_id %}selected{% endif %}>
+                                {{ kat.nama }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <label for="subcategory_id_{{ trx.id }}">Sub-Kategori:</label>
+                    <select id="subcategory_id_{{ trx.id }}"
+                            name="subcategory_id"
+                            required
+                            class="form-select">
+                        <option value="" disabled>-- Pilih Kategori Terlebih Dahulu --</option>
+                        {% for kat in categories %}
+                            {% for sub in kat.subcategories %}
+                                <option value="{{ sub.id }}"
+                                        class="sub-option"
+                                        data-category="{{ kat.id }}"
+                                        {% if kat.id != trx.subcategory.category_id %}style="display: none;"{% endif %}
+                                        {% if sub.id == trx.subcategory_id %}selected{% endif %}>
+                                    {{ sub.nama }}
+                                </option>
+                            {% endfor %}
+                        {% endfor %}
+                    </select>
+                    <label for="amount_{{ trx.id }}">Nominal (Rp):</label>
+                    <input type="number"
+                           id="amount_{{ trx.id }}"
+                           name="amount"
+                           required
+                           value="{{ trx.amount }}"
+                           step="0.01">
+                    <label for="date_{{ trx.id }}">Tanggal:</label>
+                    <input type="date"
+                           id="date_{{ trx.id }}"
+                           name="date"
+                           required
+                           value="{{ trx.date.strftime('%Y-%m-%d') }}">
+                    <label for="note_{{ trx.id }}">Detail / Catatan:</label>
+                    <textarea id="note_{{ trx.id }}" name="note" rows="2">{{ trx.note }}</textarea>
+                    <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
 
-{% block extra_js %}
-<script src="{{ url_for('static', filename='js/transaksi.js') }}"></script>
-{% endblock %}
+{% block extra_js %}<script src="{{ url_for('static', filename='js/transaksi.js') }}"></script>{% endblock %}

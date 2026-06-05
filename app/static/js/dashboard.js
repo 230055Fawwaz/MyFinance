@@ -5,13 +5,12 @@
 // Tanggal:   10-05-2026
 // Catatan:
 //   - Mengatur interaksi user di halaman dashboard
-// ==========================================       
+// ==========================================
 
-document.addEventListener("DOMContentLoaded", function () {
-    
+document.addEventListener('DOMContentLoaded', function () {
     // Konfigurasi Font Global Chart.js agar senada dengan CSS
     Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-    Chart.defaults.font.color = "#495057";
+    Chart.defaults.font.color = '#495057';
 
     // Helper Fungsi untuk Format Rupiah pada Tooltip & Sumbu Grafik
     const formatRupiah = (value) => {
@@ -41,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         fill: true,
                         borderWidth: 3,
                         pointRadius: 2,
-                        pointHoverRadius: 6
+                        pointHoverRadius: 6,
                     },
                     {
                         label: 'Pengeluaran',
@@ -52,9 +51,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         fill: true,
                         borderWidth: 3,
                         pointRadius: 2,
-                        pointHoverRadius: 6
-                    }
-                ]
+                        pointHoverRadius: 6,
+                    },
+                ],
             },
             options: {
                 responsive: true,
@@ -62,24 +61,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 plugins: {
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 return ` ${context.dataset.label}: ${formatRupiah(context.raw)}`;
-                            }
-                        }
-                    }
+                            },
+                        },
+                    },
                 },
                 scales: {
                     x: {
-                        grid: { display: false } // Hilangkan garis vertikal agar clean
+                        grid: { display: false }, // Hilangkan garis vertikal agar clean
                     },
-                    y: { 
+                    y: {
                         beginAtZero: true,
                         ticks: {
-                            callback: function(value) { return formatRupiah(value); }
-                        }
-                    }
-                }
-            }
+                            callback: function (value) {
+                                return formatRupiah(value);
+                            },
+                        },
+                    },
+                },
+            },
         });
     }
 
@@ -95,32 +96,34 @@ document.addEventListener("DOMContentLoaded", function () {
             type: 'doughnut',
             data: {
                 labels: labels,
-                datasets: [{
-                    data: values,
-                    // Palet warna modern berkarakter pastel-bold yang kontras
-                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'],
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
-                }]
+                datasets: [
+                    {
+                        data: values,
+                        // Palet warna modern berkarakter pastel-bold yang kontras
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                    },
+                ],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { 
+                    legend: {
                         position: 'right',
-                        labels: { boxWidth: 12, padding: 15 }
+                        labels: { boxWidth: 12, padding: 15 },
                     },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 return ` ${context.label}: ${formatRupiah(context.raw)}`;
-                            }
-                        }
-                    }
+                            },
+                        },
+                    },
                 },
-                cutout: '70%' // Membuat lubang tengah donat sedikit lebih tipis & modern
-            }
+                cutout: '70%', // Membuat lubang tengah donat sedikit lebih tipis & modern
+            },
         });
     }
 
@@ -136,13 +139,15 @@ document.addEventListener("DOMContentLoaded", function () {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: 'Saldo Tersedia',
-                    data: values,
-                    backgroundColor: '#007bff', // Match warna .card-balance CSS
-                    borderRadius: 6,
-                    barThickness: 20 // Mengontrol ketebalan bar agar tidak terlalu gemuk
-                }]
+                datasets: [
+                    {
+                        label: 'Saldo Tersedia',
+                        data: values,
+                        backgroundColor: '#007bff', // Match warna .card-balance CSS
+                        borderRadius: 6,
+                        barThickness: 20, // Mengontrol ketebalan bar agar tidak terlalu gemuk
+                    },
+                ],
             },
             options: {
                 indexAxis: 'y',
@@ -152,24 +157,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     legend: { display: false },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 return ` Saldo: ${formatRupiah(context.raw)}`;
-                            }
-                        }
-                    }
+                            },
+                        },
+                    },
                 },
                 scales: {
-                    x: { 
+                    x: {
                         beginAtZero: true,
                         ticks: {
-                            callback: function(value) { return formatRupiah(value); }
-                        }
+                            callback: function (value) {
+                                return formatRupiah(value);
+                            },
+                        },
                     },
                     y: {
-                        grid: { display: false } // Hilangkan garis horizontal di latar belakang bar
-                    }
-                }
-            }
+                        grid: { display: false }, // Hilangkan garis horizontal di latar belakang bar
+                    },
+                },
+            },
         });
     }
 });
