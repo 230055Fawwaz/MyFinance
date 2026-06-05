@@ -24,10 +24,21 @@
     transition: background 0.2s;
 }
 
-.btn-primary { background-color: var(--primary-color); color: white; }
-.btn-primary:hover { background-color: var(--primary-hover); }
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
 
-.btn-success { background-color: var(--success-color); color: white; width: 100%; margin-top: 15px;}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+    width: 100%;
+    margin-top: 15px;
+}
 
 .btn-edit, .btn-hapus {
     padding: 6px 10px;
@@ -38,8 +49,13 @@
     color: white;
 }
 
-.btn-edit { background-color: #F59E0B; }
-.btn-hapus { background-color: var(--danger-color); }
+.btn-edit {
+    background-color: #F59E0B;
+}
+
+.btn-hapus {
+    background-color: var(--danger-color);
+}
 
 .close-btn {
     position: absolute;
