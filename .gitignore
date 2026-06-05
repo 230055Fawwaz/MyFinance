@@ -9,7 +9,8 @@ venv/
 .vscode
 
 # Database
-myfinance.db 
+myfinance.db
+/backups
 
 # Notes
 *.txt
