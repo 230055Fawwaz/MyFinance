@@ -7,8 +7,7 @@
 //   - Mengatur interaksi user di halaman transaksi
 // ==========================================
 
-document.addEventListener('DOMContentLoaded', function() {
-
+document.addEventListener('DOMContentLoaded', function () {
     /* =========================================
        Logika Modal Pop-up (Reusable)
     ========================================= */
@@ -19,17 +18,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (btn && modal) {
             const closeBtn = modal.querySelector('.close-btn');
 
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 modal.style.display = 'flex';
             });
 
             if (closeBtn) {
-                closeBtn.addEventListener('click', function() {
+                closeBtn.addEventListener('click', function () {
                     modal.style.display = 'none';
                 });
             }
 
-            window.addEventListener('click', function(event) {
+            window.addEventListener('click', function (event) {
                 if (event.target === modal) {
                     modal.style.display = 'none';
                 }
@@ -46,12 +45,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const subkategoriSelect = document.getElementById('subcategory_id');
     const subOptions = subkategoriSelect.querySelectorAll('.sub-option');
 
-    kategoriSelect.addEventListener('change', function() {
+    kategoriSelect.addEventListener('change', function () {
         const selectedCategoryId = this.value;
-        
-        subkategoriSelect.value = "";
-        
-        subOptions.forEach(function(opt) {
+
+        subkategoriSelect.value = '';
+
+        subOptions.forEach(function (opt) {
             if (opt.getAttribute('data-category') === selectedCategoryId) {
                 opt.style.display = 'block';
             } else {

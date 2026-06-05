@@ -7,8 +7,7 @@
 //   - Mengatur interkasi user di base.html
 // ==========================================
 
-document.addEventListener('DOMContentLoaded', function() {
-    
+document.addEventListener('DOMContentLoaded', function () {
     /* =========================================
        Logika Collapsible Menu (Sidebar)
     ========================================= */
@@ -16,9 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleBtn = document.getElementById('toggle-btn');
 
     if (toggleBtn && sidebar) {
-        toggleBtn.addEventListener('click', function() {
+        toggleBtn.addEventListener('click', function () {
             sidebar.classList.toggle('collapsed');
         });
     }
-
 });

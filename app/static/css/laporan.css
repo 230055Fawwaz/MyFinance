@@ -101,7 +101,7 @@
    
    /* Baris Subkategori (Child) */
    .row-subcategory {
-       background-color: #ffffff;
+       background-color: #fff;
    }
    
    .row-subcategory .sub-name {
@@ -123,6 +123,7 @@
        font-variant-numeric: tabular-nums; /* Membuat angka sejajar vertikal */
        text-align: right;
    }
+
    .report-table th:last-child {
        text-align: right;
    }
