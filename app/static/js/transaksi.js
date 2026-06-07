@@ -58,4 +58,25 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    window.duplikatTransaksi = function duplikatTransaksi(accountId, categoryId, subcategoryId, amount, note) {
+        document.getElementById('account_id').value = accountId;
+        document.getElementById('kategori').value = categoryId;
+        
+        const event = new Event('change');
+        document.getElementById('kategori').dispatchEvent(event);
+        
+        // Beri jeda 300 milidetik agar opsi sub-kategori sempat ter-render
+        setTimeout(() => {
+            document.getElementById('subcategory_id').value = subcategoryId;
+        }, 300);
+        
+        document.getElementById('amount').value = amount;
+        document.getElementById('note').value = note;
+        
+        const hariIni = new Date().toISOString().split('T')[0];
+        document.getElementById('date').value = hariIni;
+        
+        document.getElementById('modal-transaksi').classList.add('show');
+    }
 });

@@ -45,6 +45,11 @@
                         <td>{{ trx.date.strftime("%Y-%m-%d") }}</td>
                         <td>Rp {{ "{:,.0f}".format(trx.amount | float).replace(',', '.') }}</td>
                         <td>
+                            <button class="btn-duplikat" 
+                                    style="background-color: var(--primary-color); color: white; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 600;"
+                                    onclick="duplikatTransaksi('{{ trx.account_id }}', '{{ trx.subcategory.category_id }}', '{{ trx.subcategory_id }}', '{{ trx.amount }}', '{{ trx.note }}')">
+                                Copy
+                            </button>
                             <button class="btn-edit"
                                     onclick="document.getElementById('modal-edit-{{ trx.id }}').style.display='block'">
                                 Edit
