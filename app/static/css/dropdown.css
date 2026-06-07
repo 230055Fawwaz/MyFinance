@@ -226,9 +226,12 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
-    display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.modal.show {
+    display: flex; /* Aktifkan flex HANYA saat class .show ditambahkan */
 }
 
 .modal-content {
