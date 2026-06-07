@@ -7,21 +7,40 @@
      - Mengatur tampilan halaman transaksi
    ========================================== */
 
+   /* ==========================================================================
+   Header Konten Utama
+   ========================================================================== */
 .content-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 1.5rem;
 }
 
+.content-header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* ==========================================================================
+   Tombol-Tombol Aksi (Buttons)
+   ========================================================================== */
 .btn {
-    padding: 10px 15px;
+    padding: 10px 18px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.9rem;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:active {
+    transform: scale(0.98);
 }
 
 .btn-primary {
@@ -37,77 +56,106 @@
     background-color: var(--success-color);
     color: white;
     width: 100%;
-    margin-top: 15px;
+    margin-top: 1.25rem;
 }
 
+.btn-success:hover {
+    filter: brightness(0.9);
+}
+
+/* Tombol Aksi di Dalam Baris Tabel */
 .btn-edit, .btn-hapus {
-    padding: 6px 10px;
+    padding: 6px 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 0.8rem;
+    font-weight: 600;
     color: white;
+    transition: background 0.2s;
 }
 
 .btn-edit {
-    background-color: #F59E0B;
+    background-color: #F59E0B; /* Warna amber modern */
+    margin-right: 4px;
+}
+
+.btn-edit:hover {
+    background-color: #D97706;
 }
 
 .btn-hapus {
     background-color: var(--danger-color);
 }
 
-.close-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--secondary-color);
+.btn-hapus:hover {
+    filter: brightness(0.85);
 }
 
-.close-btn:hover {
-    color: var(--danger-color);
-}
-
-/* =========================================
-   Tabel Data
-========================================= */
+/* ==========================================================================
+   Komponen Tabel Transaksi (Data Table)
+   ========================================================================== */
 .table-container {
     background-color: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgb(0 0 0 / 5%);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
     overflow: hidden;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .data-table {
     width: 100%;
     border-collapse: collapse;
+    text-align: left;
 }
 
 .data-table th, .data-table td {
-    padding: 15px;
-    text-align: left;
+    padding: 14px 16px;
     border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+    transition: border-color 0.3s, background-color 0.3s;
 }
 
+/* Penyesuaian Header Tabel agar Responsif Terhadap Dark Mode */
 .data-table th {
-    background-color: #F9FAFB;
+    background-color: rgba(0, 0, 0, 0.02);
     font-weight: 600;
     color: var(--secondary-color);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
+[data-theme="dark"] .data-table th {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Efek Zebra Striping Ringan */
+.data-table tbody tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.005);
+}
+[data-theme="dark"] .data-table tbody tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.005);
+}
+
+/* Efek Hover pada Baris */
 .data-table tbody tr:hover {
-    background-color: #F3F4F6;
+    background-color: rgba(0, 0, 0, 0.02);
+}
+[data-theme="dark"] .data-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.04);
 }
 
-.data-table ul {
-    padding-left: 20px;
+/* Kolom Nominal dibuat rata kanan secara visual agar angka sejajar rapi */
+.data-table td:nth-last-child(2) {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
 }
 
-/* =========================================
-   Modal Pop-up
-========================================= */
+/* ==========================================================================
+   Jendela Dialog Pop-up (Modal)
+   ========================================================================== */
 .modal {
     display: none;
     position: fixed;
@@ -116,42 +164,101 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgb(0 0 0 / 50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px); /* Efek blur halus di belakang latar belakang modal */
     align-items: center;
     justify-content: center;
 }
 
-.modal-content {
-    background-color: var(--card-bg);
-    padding: 30px;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 10px 25px rgb(0 0 0 / 20%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.modal.show {
+    display: flex; /* Aktifkan flex HANYA saat class .show ditambahkan */
 }
 
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 440px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
+    position: relative;
+    animation: modalAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalAppear {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.close-btn {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--secondary-color);
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: var(--danger-color);
+}
+
+.modal h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   Komponen Formulir di Dalam Modal
+   ========================================================================== */
 form label {
     display: block;
-    margin-bottom: 8px;
-    margin-top: 15px;
-    font-weight: 500;
+    margin-bottom: 6px;
+    margin-top: 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--secondary-color);
 }
 
 form input, form select, form textarea {
     width: 100%;
-    padding: 10px;
+    padding: 10px 12px;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 1rem;
-    background-color: white;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-color: var(--card-bg); /* Mengikuti tema gelap/terang secara dinamis */
+    color: var(--text-main);           /* Mencegah masalah tulisan tidak terlihat */
     font-family: inherit;
-    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-form button[type="submit"] {
-    margin-top: 20px;
+/* Efek Fokus Input Form */
+form input:focus, form select:focus, form textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+form textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+/* ==========================================================================
+   Perbaikan Kontras Ikon Kalender Native di Dark Mode
+   ========================================================================== */
+[data-theme="dark"] form input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Membalik warna ikon dari hitam ke putih */
+    cursor: pointer;
+    opacity: 0.7;      /* Dibuat sedikit lembut agar tidak terlalu putih benderang */
+    transition: opacity 0.2s;
+}
+
+[data-theme="dark"] form input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;        /* Menjadi putih terang saat kursor diarahkan */
 }

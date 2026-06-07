@@ -7,7 +7,7 @@
      - Mengatur tampilan bse.html
    ========================================== */
 
-/* =========================================
+   /* =========================================
    Variabel Global & Reset
 ========================================= */
 :root {
@@ -16,41 +16,38 @@
     --secondary-color: #6B7280;
     --success-color: #10B981;
     --danger-color: #EF4444;
-    --bg-color: #F3F4F6;
-    --sidebar-bg: #1F2937;
-    --sidebar-text: #F9FAFB;
-    --card-bg: #FFF;
-    --text-main: #111827;
-    --border-color: #E5E7EB;
-    --sidebar-width: 250px;
-    --sidebar-collapsed-width: 70px;
+    --bg-color: #F8FAFC;          /* Diubah ke slate-50 agar kontras card lebih estetik */
+    --sidebar-bg: #0F172A;        /* Menggunakan warna Slate gelap yang lebih modern */
+    --sidebar-text: #F1F5F9;
+    --card-bg: #FFFFFF;
+    --text-main: #0F172A;
+    --border-color: #E2E8F0;
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 78px;
+    --transition-speed: 0.3s;
 }
 
 /* Warna Khusus Dark Mode */
 [data-theme="dark"] {
-    /* Latar belakang dibuat gelap */
-    --bg-color: #0F172A;
-    --card-bg: #1E293B;
-    
-    /* Teks dan border dibuat terang */
+    --bg-color: #020617;
+    --card-bg: #0B1329;
     --text-main: #F8FAFC;
-    --border-color: #334155;
+    --border-color: #1E293B;
     --secondary-color: #94A3B8;
-
-    /* Opsional: Sidebar diubah sedikit agar kontras dengan latar belakang baru */
-    --sidebar-bg: #020617;
+    --sidebar-bg: #010409;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
 /* =========================================
@@ -63,21 +60,24 @@ body {
 
 .main-content {
     flex: 1;
-    padding: 30px;
+    padding: 2rem;
     overflow-y: auto;
     background-color: var(--bg-color);
-    color: var(--text-main);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color var(--transition-speed) ease, padding var(--transition-speed) ease;
 }
 
+/* =========================================
+   Sidebar Styling
+========================================= */
 .sidebar {
     width: var(--sidebar-width);
     background-color: var(--sidebar-bg);
     color: var(--sidebar-text);
-    transition: width 0.3s ease, background-color 0.3s ease;
-    overflow-x: hidden;
+    transition: width var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
+    border-right: 1px solid var(--border-color);
+    z-index: 100;
 }
 
 .sidebar.collapsed {
@@ -88,52 +88,119 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
-    border-bottom: 1px solid #374151;
-    white-space: nowrap;
-    overflow: hidden;
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    height: 75px;
 }
 
 .sidebar-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #FFFFFF;
+    transition: opacity var(--transition-speed) ease;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Gaya Tombol Toggle */
+.toggle-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Modifikasi Header saat Collapsed */
+.sidebar.collapsed .sidebar-header h2 {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
 }
 
 .sidebar.collapsed .sidebar-header {
     justify-content: center;
-    padding: 20px 0;
+    padding: 24px 0;
 }
 
-.sidebar.collapsed .sidebar-header h2 {
-    display: none; 
+.sidebar.collapsed .header-buttons {
+    flex-direction: column; /* Tombol bertumpuk vertikal dengan rapi saat sempit */
+    gap: 12px;
 }
 
-.toggle-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
+/* =========================================
+   Navigasi Menu
+========================================= */
 .sidebar-nav ul {
     list-style: none;
-    padding: 20px 0;
+    padding: 15px 10px;
+}
+
+.sidebar-nav li {
+    margin-bottom: 4px;
 }
 
 .sidebar-nav li a {
-    display: block;
-    padding: 15px 20px;
-    color: #D1D5DB;
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: #94A3B8;         /* Warna teks menu default agak redup agar rileks di mata */
     text-decoration: none;
-    transition: background 0.2s;
-    white-space: nowrap;
+    border-radius: 8px;
+    transition: background var(--transition-speed), color var(--transition-speed);
 }
 
 .sidebar-nav li a:hover {
-    background-color: #374151;
-    color: white;
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #FFFFFF;
+}
+
+/* Icon & Text Grid di dalam Link */
+.nav-icon {
+    font-size: 1.25rem;
+    min-width: 30px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-text {
+    margin-left: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity var(--transition-speed) ease;
+}
+
+/* Sembunyikan Teks dengan Lembut saat Collapsed */
+.sidebar.collapsed .nav-text {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
 }
 
 .sidebar.collapsed .sidebar-nav li a {
-    color: transparent;
+    justify-content: center;
+    padding: 12px 0;
+}
+
+.sidebar.collapsed .nav-icon {
+    min-width: 0;
 }
