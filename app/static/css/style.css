@@ -204,3 +204,9 @@ body {
 .sidebar.collapsed .nav-icon {
     min-width: 0;
 }
+
+.sidebar-nav a.processing {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none; /* Menonaktifkan klik selama proses */
+}

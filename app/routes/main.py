@@ -7,9 +7,11 @@
 #   - Rute hanya menampilkan halaman saja beserta data di dalamnya
 # ==========================================
 
+import os
+import subprocess
 from datetime import datetime, timedelta
 from sqlalchemy import func
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, jsonify, current_app
 from app.models import db, Category, Account, Transaction, SubCategory
 
 main_bp = Blueprint("main", __name__)
@@ -139,3 +141,27 @@ def laporan():
 def dropdown():
     kategori_induk = Category.query.all()
     return render_template("dropdown.html", categories=kategori_induk)
+
+@main_bp.route('/run-backup', methods=['POST'])
+def run_backup():
+    # Karena .bat sudah di dalam /app, langsung gabungkan saja
+    path_to_bat = os.path.join(current_app.root_path, 'backup.bat') 
+
+    if os.path.exists(path_to_bat):
+        try:
+            # Jalankan skrip dengan 'cwd' di dalam folder /app tempat skrip itu berada
+            subprocess.run(
+                [path_to_bat], 
+                shell=True, 
+                check=True, 
+                cwd=current_app.root_path,
+                stdout=subprocess.PIPE, 
+                stderr=subprocess.PIPE,
+                text=True
+            )
+            return jsonify({"status": "success", "message": "Database berhasil dibackup!"}), 200
+        except subprocess.CalledProcessError as e:
+            return jsonify({"status": "error", "message": f"Skrip gagal dieksekusi: {e.stderr}"}), 500
+    else:
+        return jsonify({"status": "error", "message": f"Skrip tidak ditemukan di: {path_to_bat}"}), 404
+     

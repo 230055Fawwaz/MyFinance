@@ -69,6 +69,13 @@
                                 <span class="nav-text">Dropdown Menu</span>
                             </a>
                         </li>
+                        
+                        <li>
+                            <a href="javascript:void(0);" id="backup-btn" onclick="triggerBackup()">
+                                <span class="nav-icon" id="backup-icon">💾</span>
+                                <span class="nav-text" id="backup-text">Backup DB</span>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </aside>
@@ -92,6 +99,44 @@
             localStorage.setItem('theme', newTheme);
             updateToggleIcon(newTheme);
         });
+
+        // TAMBAHAN: Fungsi JavaScript untuk Trigger Backup tanpa reload halaman
+        function triggerBackup() {
+            const backupBtn = document.getElementById('backup-btn');
+            const backupIcon = document.getElementById('backup-icon');
+            const backupText = document.getElementById('backup-text');
+            
+            // Cegah klik ganda saat proses sedang berjalan
+            if (backupBtn.classList.contains('processing')) return;
+            
+            // Mengubah tampilan menu menjadi status loading
+            backupBtn.classList.add('processing');
+            backupIcon.innerText = "⏳";
+            backupText.innerText = "Backing up...";
+            
+            // Tembak route Flask menggunakan Fetch API (metode POST)
+            fetch("{{ url_for('main.run_backup') }}", {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message); // Notifikasi sederhana jika sukses
+                } else {
+                    alert("Gagal: " + data.message);
+                }
+            })
+            .catch(error => {
+                alert("Terjadi kesalahan koneksi ke server.");
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                // Kembalikan tampilan tombol ke kondisi semula
+                backupBtn.classList.remove('processing');
+                backupIcon.innerText = "💾";
+                backupText.innerText = "Backup DB";
+            });
+        }
         </script>
         {% block extra_js %}{% endblock %}
     </body>
