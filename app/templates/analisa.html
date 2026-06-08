@@ -1,0 +1,26 @@
+<!--
+  Nama File: analisa.html
+  Deskripsi: Halaman Analisa   
+  Penulis:   Fawwaz Yaqzhan
+  Tanggal:   08-06-2026
+  Catatan:
+    - Menampilkan DSS
+    - Menampilkan data mining
+-->
+{% extends "base.html" %}
+{% block title %}Akun - MyFinance{% endblock %}
+
+{% block extra_css %}
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/analisa.css') }}">
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/vendor/chart.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/analisa.js') }}"></script>
+{% endblock %}
