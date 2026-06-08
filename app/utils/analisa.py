@@ -10,44 +10,13 @@
 #   - Analisis hubungan kategori
 # ==========================================
 
-import os
-import sqlite3
 import pandas as pd
 from datetime import datetime
 
 # Impor untuk Data Mining & DSS
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import LinearRegression
-from statsmodels.tsa.arima.model import ARIMA
 from mlxtend.frequent_patterns import apriori, association_rules
-
-# Hasilnya: /root/database.db
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATABASE_PATH = os.path.join(BASE_DIR, 'myfinance.db')
-
-def get_transaction_data():
-    """Mengambil data transaksi dari SQLite dan mengubahnya menjadi Pandas DataFrame"""
-    conn = sqlite3.connect(DATABASE_PATH)
-    
-    query = """
-        SELECT 
-            t.id, 
-            t.date, 
-            s.nama AS kategori, 
-            t.amount, 
-            t.note
-        FROM transactions t
-        JOIN subcategories s ON t.subcategory_id = s.id
-    """
-    
-    df = pd.read_sql_query(query, conn)
-    conn.close()
-    
-    if not df.empty:
-        # Menyelaraskan tipe data
-        df['date'] = pd.to_datetime(df['date'])
-        df['amount'] = pd.to_numeric(df['amount'])
-    return df
 
 # ==========================================
 # 1. TEMPAT FUNGSI DSS (RULE-BASED / RASIO)
