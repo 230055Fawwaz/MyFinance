@@ -26,3 +26,170 @@
 .content-header div, .content-header {
     gap: 8px;
 }
+
+/* Container Utama */
+.container-analisa {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #f3f4f6;
+}
+
+/* Header */
+.header-analisa h1 {
+    font-size: 2rem;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+.header-analisa p {
+    color: #9ca3af;
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+}
+
+/* Grid untuk Dashboard Cards (DSS & Prediksi) */
+.grid-analisa {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* Base Card Style */
+.card-analisa {
+    background-color: #111827; /* Dark background */
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.card-analisa:hover {
+    transform: translateY(-2px);
+}
+
+.card-analisa h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #1f2937;
+    padding-bottom: 10px;
+}
+
+/* Status Colors untuk DSS */
+.status-success { border-left: 5px solid #10b981; }
+.status-warning { border-left: 5px solid #f59e0b; }
+.status-danger { border-left: 5px solid #ef4444; }
+.status-neutral { border-left: 5px solid #6b7280; }
+
+.skor-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.status-success .skor-badge { background-color: rgba(16, 185, 129, 0.2); color: #10b981; }
+.status-warning .skor-badge { background-color: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+.status-danger .skor-badge { background-color: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.status-neutral .skor-badge { background-color: rgba(107, 114, 128, 0.2); color: #9ca3af; }
+
+/* Prediksi Card */
+.card-prediksi {
+    border-left: 5px solid #3b82f6;
+}
+
+.angka-prediksi {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3b82f6;
+    margin: 15px 0 5px 0;
+}
+
+/* Pola Kebiasaan (Association Mining) Card */
+.card-pola {
+    border-left: 5px solid #a855f7;
+    grid-column: 1 / -1; /* Memanjang penuh di baris baru */
+}
+
+.pola-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+.pola-list li {
+    background-color: #1f2937;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    border-left: 3px solid #a855f7;
+}
+
+/* Tabel Anomali */
+.section-tabel {
+    background-color: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.table-anomali {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.table-anomali th {
+    background-color: #1f2937;
+    color: #9ca3af;
+    padding: 12px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.table-anomali td {
+    padding: 12px;
+    border-bottom: 1px solid #1f2937;
+    font-size: 0.95rem;
+}
+
+.table-anomali tr:hover {
+    background-color: #1f2937;
+}
+
+.badge-kategori {
+    background-color: #374151;
+    color: #e5e7eb;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+.text-danger {
+    color: #f87171;
+    font-weight: 600;
+}
+
+/* Alert Box untuk Kondisi Kosong */
+.alert-aman {
+    background-color: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}

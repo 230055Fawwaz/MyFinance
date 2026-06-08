@@ -9,6 +9,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    
+    console.log("Mesin Analisis AI/BI Lokal siap beroperasi!");
+    // Tempat kustomisasi interaksi JS masa depan (seperti modal info atau grafik interaktif chart.js)
 
 });

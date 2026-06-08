@@ -7,101 +7,107 @@
     - Menampilkan DSS
     - Menampilkan data mining
 -->
-{% extends "base.html" %}
-{% block title %}Analisa - MyFinance{% endblock %}
+{% extends 'base.html' %}
 
 {% block extra_css %}
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/analisa.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analisa.css') }}">
 {% endblock %}
 
 {% block content %}
-
-    <div class="content-header">
-        <h1>Daftar Akun</h1>
-    </div>
-    <div class="container">
-        <h2>Analisis AI/BI Keuangan</h2>
-        <hr>
+<div class="container-analisa">
     
-        <div class="section-analisa">
-            <h3>🚨 Deteksi Anomali Pengeluaran</h3>
-            <p>Sistem AI mendeteksi pengeluaran yang nilainya jauh di luar kebiasaan normalmu.</p>
-            
-            {% if data_anomali %}
-                <div class="table-responsive">
-                    <table class="table-anomali">
-                        <thead>
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Kategori</th>
-                                <th>Nominal</th>
-                                <th>Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in data_anomali %}
-                                <tr class="row-anomali">
-                                    <td>{{ item.date }}</td>
-                                    <td><span class="badge-kategori">{{ item.kategori }}</span></td>
-                                    <td class="text-danger">Rp {{ "{:,.0f}".format(item.amount) }}</td>
-                                    <td>{{ item.note or '-' }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <div class="alert-aman">
-                    <p>✅ Bagus! Belum ada anomali atau lonjakan pengeluaran yang mencurigakan saat ini.</p>
-                </div>
-            {% endif %}
-        </div>
-        <div class="section-analisa" style="margin-bottom: 30px;">
-            <h3>📊 Sistem Pendukung Keputusan: Status Bulan Ini</h3>
-            <div class="card-dss status-{{ dss.status_color }}">
-                <h4>Skor Kesehatan: <strong>{{ dss.skor }}</strong></h4>
-                <p>Rasio Uang Tersisa/Ditabung: <strong>{{ dss.rasio_menabung }}%</strong></p>
-                
-                <div class="rekomendasi-box" style="border-left: 4px solid #3b82f6; padding: 10px; margin-top: 10px;">
-                    <p style="color: #e5e7eb; margin: 0;">
-                        <strong>Rekomendasi AI:</strong> {{ dss.rekomendasi }}
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="section-analisa" style="margin-bottom: 30px;">
-            <h3>🔮 Prediksi Data Mining (Tren Keuangan)</h3>
-            <div class="card-prediksi" style="border-left: 4px solid #10b981; padding: 10px; margin-top: 10px;">
-                <h4>Prediksi Total Pengeluaran Bulan Depan:</h4>
-                <p style="font-size: 24px; color: #10b981; font-weight: bold; margin: 5px 0;">
-                    Rp {{ "{:,.0f}".format(prediksi) }}
-                </p>
-                <p style="color: #9ca3af; font-size: 13px; margin: 0;">
-                    *Dihitung menggunakan algoritma Linear Regression berdasarkan pola fluktuasi bulananmu.
-                </p>
-            </div>
-        </div>
-        <div class="section-analisa" style="margin-bottom: 30px;">
-            <h3>🔗 Analisis Pola Kebiasaan (Association Rules)</h3>
-            {% if pola_hubungan %}
-                <div class="pola-container" style="border-left: 4px solid #a855f7; padding: 10px; margin-top: 10px;">
-                    {% for item in pola_hubungan %}
-                        <p style="color: #e5e7eb; margin: 8px 0;">💡 {{ item.pola }}</p>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="alert-info" style="border-left: 4px solid #6b7280; padding: 10px; margin-top: 10px;">
-                    <p style="color: #9ca3af; margin: 0;">Sistem sedang mengumpulkan lebih banyak variasi kombinasi transaksi harian untuk menyimpulkan pola kebiasaan belanjamu.</p>
-                </div>
-            {% endif %}
-        </div>
-    </div>   
+    <div class="header-analisa">
+        <h1>📊 Analisis AI/BI Keuangan</h1>
+        <p>Metode pengembangan: AI-Assisted lokal (Data tidak dikirim ke publik) [cite: 37, 38, 39]</p>
+    </div>
 
+    <div class="grid-analisa">
+        
+        <div class="card-analisa status-{{ dss.status_color }}">
+            <h3>🧠 Pendukung Keputusan (DSS)</h3>
+            <div style="margin-top: 10px;">
+                Status Finansial Bulan Ini: <br>
+                <span class="skor-badge">{{ dss.skor }}</span>
+            </div>
+            <p style="margin: 15px 0 5px 0; font-size: 0.95rem; color: #d1d5db;">
+                Rasio Uang Tersisa: <strong>{{ dss.rasio_menabung }}%</strong>
+            </p>
+            <div style="margin-top: 15px; font-size: 0.9rem; color: #9ca3af; line-height: 1.4;">
+                <strong>Rekomendasi Sistem:</strong> {{ dss.rekomendasi }}
+            </div>
+        </div>
+
+        <div class="card-analisa card-prediksi">
+            <h3>🔮 Prediksi Tren (Data Mining)</h3>
+            <p style="margin: 0; color: #9ca3af; font-size: 0.9rem;">Estimasi Beban Bulan Depan:</p>
+            <div class="angka-prediksi">
+                Rp {{ "{:,.0f}".format(prediksi) }}
+            </div>
+            <p style="color: #6b7280; font-size: 0.8rem; margin: 0; line-height: 1.3;">
+                *Dihitung menggunakan algoritma Regresi Linier otomatis berdasarkan agregat total belanja historismu.
+            </p>
+        </div>
+
+        <div class="card-analisa card-pola">
+            <h3>🔗 Analisis Kebiasaan Belanja Berdampingan</h3>
+            {% if pola_hubungan %}
+                <ul class="pola-list">
+                    {% for item in pola_hubungan %}
+                        <li>💡 {{ item.pola }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div style="color: #9ca3af; font-size: 0.9rem; margin-top: 10px;">
+                    ℹ️ Sistem memerlukan variasi kombinasi transaksi harian yang lebih beragam untuk menyimpulkan aturan asosiasi belanja yang akurat.
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="section-tabel">
+        <h3 style="margin-top: 0; display: flex; align-items: center; gap: 10px;">
+            🚨 Deteksi Pencatatan Ekstrem (Anomaly Detection)
+        </h3>
+        <p style="color: #9ca3af; font-size: 0.9rem; margin: 0;">
+            Menggunakan algoritma <em>Isolation Forest</em> untuk menyaring entri manual dengan nominal melompat jauh di luar kebiasaan wajar.
+        </p>
+
+        {% if data_anomali %}
+            <div class="table-responsive">
+                <table class="table-anomali">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Sub-Kategori</th>
+                            <th>Nominal</th>
+                            <th>Catatan Nota</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in data_anomali %}
+                            <tr>
+                                <td style="color: #9ca3af;">{{ item.date }}</td>
+                                <td><span class="badge-kategori">{{ item.kategori }}</span></td>
+                                <td class="text-danger">Rp {{ "{:,.0f}".format(item.amount) }}</td>
+                                <td style="color: #d1d5db; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    {{ item.note or '-' }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert-aman">
+                ✅ Bagus! Belum ada entri transaksi dengan lonjakan nominal abnormal yang tertangkap oleh radar kecerdasan buatan saat ini.
+            </div>
+        {% endif %}
+    </div>
+
+</div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{{ url_for('static', filename='js/vendor/chart.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/analisa.js') }}"></script>
 {% endblock %}
