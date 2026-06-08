@@ -7,3 +7,8 @@
 //   - Mengatur interaksi user di halaman analisa
 // ==========================================
 
+document.addEventListener('DOMContentLoaded', function () {
+
+    
+
+});
