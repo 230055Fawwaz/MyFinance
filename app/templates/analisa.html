@@ -22,13 +22,43 @@
         <h1>Daftar Akun</h1>
     </div>
     <div class="container">
-        <h1>Analisis AI/BI Keuangan</h1>
-        <p>Status: Menggunakan metode AI-Assisted lokal.</p>
-        
-        <div class="chart-container">
-            <canvas id="chartAnalisa"></canvas>
+        <h2>Analisis AI/BI Keuangan</h2>
+        <hr>
+    
+        <div class="section-analisa">
+            <h3>🚨 Deteksi Anomali Pengeluaran</h3>
+            <p>Sistem AI mendeteksi pengeluaran yang nilainya jauh di luar kebiasaan normalmu.</p>
+            
+            {% if data_anomali %}
+                <div class="table-responsive">
+                    <table class="table-anomali">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Kategori</th>
+                                <th>Nominal</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in data_anomali %}
+                                <tr class="row-anomali">
+                                    <td>{{ item.date }}</td>
+                                    <td><span class="badge-kategori">{{ item.kategori }}</span></td>
+                                    <td class="text-danger">Rp {{ "{:,.0f}".format(item.amount) }}</td>
+                                    <td>{{ item.note or '-' }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert-aman">
+                    <p>✅ Bagus! Belum ada anomali atau lonjakan pengeluaran yang mencurigakan saat ini.</p>
+                </div>
+            {% endif %}
         </div>
-    </div>    
+    </div>   
 
 {% endblock %}
 
