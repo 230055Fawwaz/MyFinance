@@ -58,6 +58,45 @@
                 </div>
             {% endif %}
         </div>
+        <div class="section-analisa" style="margin-bottom: 30px;">
+            <h3>📊 Sistem Pendukung Keputusan: Status Bulan Ini</h3>
+            <div class="card-dss status-{{ dss.status_color }}">
+                <h4>Skor Kesehatan: <strong>{{ dss.skor }}</strong></h4>
+                <p>Rasio Uang Tersisa/Ditabung: <strong>{{ dss.rasio_menabung }}%</strong></p>
+                
+                <div class="rekomendasi-box" style="border-left: 4px solid #3b82f6; padding: 10px; margin-top: 10px;">
+                    <p style="color: #e5e7eb; margin: 0;">
+                        <strong>Rekomendasi AI:</strong> {{ dss.rekomendasi }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="section-analisa" style="margin-bottom: 30px;">
+            <h3>🔮 Prediksi Data Mining (Tren Keuangan)</h3>
+            <div class="card-prediksi" style="border-left: 4px solid #10b981; padding: 10px; margin-top: 10px;">
+                <h4>Prediksi Total Pengeluaran Bulan Depan:</h4>
+                <p style="font-size: 24px; color: #10b981; font-weight: bold; margin: 5px 0;">
+                    Rp {{ "{:,.0f}".format(prediksi) }}
+                </p>
+                <p style="color: #9ca3af; font-size: 13px; margin: 0;">
+                    *Dihitung menggunakan algoritma Linear Regression berdasarkan pola fluktuasi bulananmu.
+                </p>
+            </div>
+        </div>
+        <div class="section-analisa" style="margin-bottom: 30px;">
+            <h3>🔗 Analisis Pola Kebiasaan (Association Rules)</h3>
+            {% if pola_hubungan %}
+                <div class="pola-container" style="border-left: 4px solid #a855f7; padding: 10px; margin-top: 10px;">
+                    {% for item in pola_hubungan %}
+                        <p style="color: #e5e7eb; margin: 8px 0;">💡 {{ item.pola }}</p>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert-info" style="border-left: 4px solid #6b7280; padding: 10px; margin-top: 10px;">
+                    <p style="color: #9ca3af; margin: 0;">Sistem sedang mengumpulkan lebih banyak variasi kombinasi transaksi harian untuk menyimpulkan pola kebiasaan belanjamu.</p>
+                </div>
+            {% endif %}
+        </div>
     </div>   
 
 {% endblock %}

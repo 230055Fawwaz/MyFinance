@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import func
 from flask import Flask, render_template, Blueprint, jsonify, current_app
 from app.models import db, Category, Account, Transaction, SubCategory
-from app.utils.analisa import deteksi_anomali_pengeluaran
+from app.utils.analisa import deteksi_anomali_pengeluaran, hitung_kesehatan_keuangan, prediksi_pengeluaran_bulan_depan, analisis_hubungan_kategori
 
 main_bp = Blueprint("main", __name__)
 
@@ -169,10 +169,12 @@ def run_backup():
 
 @main_bp.route('/analisa')
 def halaman_analisa():
-    # Mengambil semua data transaksi langsung lewat ORM Flask-SQLAlchemy.
     semua_transaksi = Transaction.query.all()
     
-    # Lempar hasil query tersebut ke fungsi analitik
-    daftar_anomali = deteksi_anomali_pengeluaran(semua_transaksi)
-    
-    return render_template('analisa.html', data_anomali=daftar_anomali)
+    return render_template(
+        'analisa.html', 
+        data_anomali=deteksi_anomali_pengeluaran(semua_transaksi), 
+        dss=hitung_kesehatan_keuangan(semua_transaksi),
+        prediksi=prediksi_pengeluaran_bulan_depan(semua_transaksi),
+        pola_hubungan=analisis_hubungan_kategori(semua_transaksi)
+    )
