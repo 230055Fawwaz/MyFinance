@@ -82,10 +82,21 @@
 }
 
 /* Status Colors untuk DSS */
-.status-success { border-left: 5px solid #10b981; }
-.status-warning { border-left: 5px solid #f59e0b; }
-.status-danger { border-left: 5px solid #ef4444; }
-.status-neutral { border-left: 5px solid #6b7280; }
+.status-success {
+    border-left: 5px solid #10b981;
+}
+
+.status-warning {
+    border-left: 5px solid #f59e0b;
+}
+
+.status-danger {
+    border-left: 5px solid #ef4444;
+}
+
+.status-neutral {
+    border-left: 5px solid #6b7280; 
+}
 
 .skor-badge {
     display: inline-block;
@@ -95,10 +106,22 @@
     font-weight: bold;
     margin-top: 10px;
 }
-.status-success .skor-badge { background-color: rgba(16, 185, 129, 0.2); color: #10b981; }
-.status-warning .skor-badge { background-color: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-.status-danger .skor-badge { background-color: rgba(239, 68, 68, 0.2); color: #ef4444; }
-.status-neutral .skor-badge { background-color: rgba(107, 114, 128, 0.2); color: #9ca3af; }
+.status-success .skor-badge {
+    background-color: rgba(16, 185, 129, 0.2); color: #10b981;
+}
+
+.status-warning .skor-badge {
+    background-color: rgba(245, 158, 11, 0.2); color: #f59e0b;
+}
+
+.status-danger .skor-badge {
+    background-color: rgba(239, 68, 68, 0.2); color: #ef4444;
+}
+
+.status-neutral .skor-badge {
+    background-color: rgba(107, 114, 128, 0.2); color: #9ca3af;
+}
+
 
 /* Prediksi Card */
 .card-prediksi {
@@ -115,7 +138,7 @@
 /* Pola Kebiasaan (Association Mining) Card */
 .card-pola {
     border-left: 5px solid #a855f7;
-    grid-column: 1 / -1; /* Memanjang penuh di baris baru */
+    grid-column: 1 / -1;
 }
 
 .pola-list {
