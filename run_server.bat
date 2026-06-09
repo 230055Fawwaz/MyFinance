@@ -65,19 +65,20 @@ if exist "%DB_SOURCE%" (
 echo --------------------------------------------------------------------
 
 :: ====================================================================
-:: PEMBERSIHAN OTOMATIS (RETENSI DATA)
+:: PEMBERSIHAN OTOMATIS (RETENSI DATA) - VERSI CEPAT
 :: ====================================================================
 echo Memeriksa retensi file backup...
 
-:: Urutkan semua file .db dari yang terbaru, SKIP 10 file pertama (dilindungi).
-:: File ke-11 dan seterusnya akan diperiksa apakah umurnya > 30 hari.
-for /f "skip=10 delims=" %%F in ('dir "%BACKUP_DIR%\*.db" /b /a-d /o-d') do (
-    
-    :: Gunakan PowerShell internal untuk cek apakah file tersebut sudah lebih dari 30 hari
-    powershell -Command "$file = Get-Item '%BACKUP_DIR%\%%F'; if ((Get-Date) - $file.LastWriteTime -gt (New-TimeSpan -Days 30)) { Remove-Item $file.FullName; Write-Host 'Menghapus backup lama:' %%F }"
-)
+:: Panggil PowerShell hanya 1 kali untuk menyaring dan menghapus file
+powershell -Command ^
+    "$files = Get-ChildItem '%BACKUP_DIR%\*.db' | Sort-Object LastWriteTime -Descending;" ^
+    "if ($files.Count -gt 10) {" ^
+        "$files | Select-Object -Skip 10 | Where-Object { (Get-Date) - $_.LastWriteTime -gt (New-TimeSpan -Days 30) } | ForEach-Object {" ^
+            "Remove-Item $_.FullName;" ^
+            "Write-Host 'Menghapus backup lama:' $_.Name" ^
+        "}" ^
+    "}"
 echo --------------------------------------------------------------------
-:: ====================================================================
 
 :: 4. Jalankan Flask di window terpisah yang BISA DITUTUP MANUAL
 echo Menyalakan server Flask...
