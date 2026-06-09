@@ -69,13 +69,9 @@ echo --------------------------------------------------------------------
 :: ====================================================================
 echo Memeriksa retensi file backup...
 
-:: Urutkan semua file .db dari yang terbaru, SKIP 10 file pertama (dilindungi).
-:: File ke-11 dan seterusnya akan diperiksa apakah umurnya > 30 hari.
-for /f "skip=10 delims=" %%F in ('dir "%BACKUP_DIR%\*.db" /b /a-d /o-d') do (
-    
-    :: Gunakan PowerShell internal untuk cek apakah file tersebut sudah lebih dari 30 hari
-    powershell -Command "$file = Get-Item '%BACKUP_DIR%\%%F'; if ((Get-Date) - $file.LastWriteTime -gt (New-TimeSpan -Days 30)) { Remove-Item $file.FullName; Write-Host 'Menghapus backup lama:' %%F }"
-)
+:: Memanggil PowerShell SATU KALI untuk mengurutkan, melewati 10 terbaru, dan menghapus yang >30 hari
+powershell -NoProfile -Command "$limitDate = (Get-Date).AddDays(-30); Get-ChildItem -Path '%BACKUP_DIR%' -Filter '*.db' -File | Sort-Object LastWriteTime -Descending | Select-Object -Skip 10 | Where-Object { $_.LastWriteTime -lt $limitDate } | ForEach-Object { Remove-Item -LiteralPath $_.FullName -Force; Write-Host ('Menghapus backup lama: ' + $_.Name) }"
+
 echo --------------------------------------------------------------------
 :: ====================================================================
 
