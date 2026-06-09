@@ -11,7 +11,8 @@ import os
 import subprocess
 from datetime import datetime, timedelta
 from flask import render_template, Blueprint, jsonify, current_app
-from app.models import db, Category, Account, Transaction
+import pandas as pd
+from app.models import db, Category, SubCategory, Account, Transaction
 from app.utils.analisa import deteksi_anomali_pengeluaran, hitung_kesehatan_keuangan, prediksi_pengeluaran_bulan_depan, analisis_hubungan_kategori
 from app.utils.dashgraph import get_cash_flow_data, get_expense_allocation, get_account_distribution
 
@@ -104,12 +105,28 @@ def run_backup():
 
 @main_bp.route('/analisa')
 def halaman_analisa():
-    semua_transaksi = Transaction.query.all()
+# 1. Buat Query SQL JOIN menggunakan SQLAlchemy Statement
+    stmt = db.session.query(
+        Transaction.id,
+        Transaction.date,
+        Transaction.amount,
+        Transaction.note,
+        SubCategory.nama.label('sub_nama'),
+        Category.type.label('cat_type')
+    ).select_from(Transaction).join(SubCategory).join(Category).statement
     
+    # 2. Masukkan langsung ke Pandas DataFrame
+    df = pd.read_sql(stmt, con=db.engine)
+    
+    # 3. Konversi kolom date menjadi tipe datetime agar bisa diolah Pandas
+    if not df.empty:
+        df['date'] = pd.to_datetime(df['date'])
+    
+    # 4. Oper DataFrame ke fungsi analisa (Bukan lagi objek semua_transaksi)
     return render_template(
         'analisa.html', 
-        data_anomali=deteksi_anomali_pengeluaran(semua_transaksi), 
-        dss=hitung_kesehatan_keuangan(semua_transaksi),
-        prediksi=prediksi_pengeluaran_bulan_depan(semua_transaksi),
-        pola_hubungan=analisis_hubungan_kategori(semua_transaksi)
+        data_anomali=deteksi_anomali_pengeluaran(df), 
+        dss=hitung_kesehatan_keuangan(df),
+        prediksi=prediksi_pengeluaran_bulan_depan(df),
+        pola_hubungan=analisis_hubungan_kategori(df)
     )

@@ -21,30 +21,28 @@ from mlxtend.frequent_patterns import apriori, association_rules
 # ==========================================
 # 1. TEMPAT FUNGSI DSS (RULE-BASED / RASIO)
 # ==========================================
-def hitung_kesehatan_keuangan(query_result):
+def hitung_kesehatan_keuangan(df):
     """
-    DSS Rule-Based: Menghitung rasio keuangan bulan berjalan
-    memanfaatkan Enum type ('income' / 'expense') dari Category.
+    DSS Rule-Based: Menghitung rasio keuangan bulan berjalan menggunakan Pandas DataFrame.
     """
-    now = datetime.now()
-    total_pemasukan = 0
-    total_pengeluaran = 0
-    
-    for t in query_result:
-        # Filter transaksi bulan dan tahun berjalan
-        if t.date.year == now.year and t.date.month == now.month:
-            amount = float(t.amount)
-            
-            # Mengakses tipe kategori melalui relasi: Transaction -> SubCategory -> Category
-            if t.subcategory and t.subcategory.category:
-                tipe_transaksi = t.subcategory.category.type # nilainya 'income' atau 'expense'
-                
-                if tipe_transaksi == 'income':
-                    total_pemasukan += amount
-                elif tipe_transaksi == 'expense':
-                    total_pengeluaran += abs(amount)
+    if df.empty:
+        return {
+            "status": "Belum ada data",
+            "rasio_menabung": 0,
+            "skor": "N/A",
+            "rekomendasi": "Belum ada transaksi yang tercatat untuk bulan ini.",
+            "status_color": "neutral"
+        }
 
-    # Jika tidak ada transaksi sama sekali bulan ini
+    now = datetime.now()
+    
+    # Filter transaksi bulan dan tahun berjalan menggunakan properti .dt Pandas
+    df_bulan_ini = df[(df['date'].dt.year == now.year) & (df['date'].dt.month == now.month)]
+    
+    # Hitung total pemasukan dan pengeluaran tanpa loop
+    total_pemasukan = df_bulan_ini[df_bulan_ini['cat_type'] == 'income']['amount'].astype(float).sum()
+    total_pengeluaran = df_bulan_ini[df_bulan_ini['cat_type'] == 'expense']['amount'].astype(float).abs().sum()
+
     if total_pemasukan == 0 and total_pengeluaran == 0:
         return {
             "status": "Belum ada data",
@@ -54,7 +52,6 @@ def hitung_kesehatan_keuangan(query_result):
             "status_color": "neutral"
         }
 
-    # Jika ada pengeluaran tapi tidak ada pemasukan tercatat
     if total_pemasukan == 0 and total_pengeluaran > 0:
         return {
             "total_pemasukan": 0,
@@ -65,7 +62,6 @@ def hitung_kesehatan_keuangan(query_result):
             "status_color": "danger"
         }
 
-    # Hitung Rasio Menabung Normal
     uang_tersisa = total_pemasukan - total_pengeluaran
     rasio_menabung = (uang_tersisa / total_pemasukan) * 100
     
@@ -94,60 +90,52 @@ def hitung_kesehatan_keuangan(query_result):
 # ==========================================
 # 2. TEMPAT FUNGSI DATA MINING (ANOMALI)
 # ==========================================
-def deteksi_anomali_pengeluaran(query_result):
+def deteksi_anomali_pengeluaran(df):
     """
     Data Mining: Mendeteksi anomali khusus pada transaksi bertipe 'expense'.
     """
-    data = []
-    for t in query_result:
-        if t.subcategory and t.subcategory.category:
-            if t.subcategory.category.type == 'expense':
-                data.append({
-                    'id': t.id,
-                    'date': t.date,
-                    'kategori': t.subcategory.nama, # Menggunakan t.subcategory.nama sesuai model baru
-                    'amount': float(t.amount),
-                    'note': t.note
-                })
-    
-    if not data or len(data) < 5:
+    if df.empty:
         return []
         
-    df = pd.DataFrame(data)
-    X = df['amount'].values.reshape(-1, 1)
+    # Filter khusus expense
+    df_expense = df[df['cat_type'] == 'expense'].copy()
+    
+    if len(df_expense) < 5:
+        return []
+        
+    X = df_expense['amount'].astype(float).values.reshape(-1, 1)
     
     model = IsolationForest(contamination=0.05, random_state=42)
-    df['is_anomali'] = model.fit_predict(X)
+    df_expense['is_anomali'] = model.fit_predict(X)
     
-    anomali_df = df[df['is_anomali'] == -1]
+    anomali_df = df_expense[df_expense['is_anomali'] == -1].copy()
     anomali_df = anomali_df.sort_values(by='date', ascending=False)
     anomali_df['date'] = anomali_df['date'].dt.strftime('%Y-%m-%d')
     
-    return anomali_df.to_dict(orient='records')
+    # Rename kolom sub_nama kembali menjadi 'kategori' agar sesuai dengan struktur HTML/Template
+    anomali_df = anomali_df.rename(columns={'sub_nama': 'kategori'})
+    
+    return anomali_df[['id', 'date', 'kategori', 'amount', 'note']].to_dict(orient='records')
 
 # ==========================================
 # 3. TEMPAT FUNGSI DATA MINING (PREDIKSI)
 # ==========================================
-def prediksi_pengeluaran_bulan_depan(query_result):
+def prediksi_pengeluaran_bulan_depan(df):
     """
-    Data Mining: Memprediksi pengeluaran bulan depan menggunakan Linear Regression
-    berdasarkan data historis bulanan bertipe 'expense'.
+    Data Mining: Memprediksi pengeluaran bulan depan menggunakan Linear Regression.
     """
-    data = []
-    for t in query_result:
-        if t.subcategory and t.subcategory.category:
-            if t.subcategory.category.type == 'expense':
-                data.append({
-                    'period': t.date.strftime('%Y-%m'),
-                    'amount': float(t.amount)
-                })
-            
-    if not data:
+    if df.empty:
         return 0
         
-    df = pd.DataFrame(data)
-    df_bulanan = df.groupby('period')['amount'].sum().reset_index()
-    df_bulanan = df_bulanan.sort_values(by='period').reset_index()
+    df_expense = df[df['cat_type'] == 'expense'].copy()
+    if df_expense.empty:
+        return 0
+        
+    df_expense['period'] = df_expense['date'].dt.strftime('%Y-%m')
+    df_expense['amount'] = df_expense['amount'].astype(float)
+    
+    df_bulanan = df_expense.groupby('period')['amount'].sum().reset_index()
+    df_bulanan = df_bulanan.sort_values(by='period').reset_index(drop=True)
     df_bulanan['bulan_ke'] = df_bulanan.index
     
     if len(df_bulanan) < 2:
@@ -167,45 +155,36 @@ def prediksi_pengeluaran_bulan_depan(query_result):
 # ==========================================
 # 4. Analisis Hubungan Kategori
 # ==========================================
-def analisis_hubungan_kategori(query_result):
+def analisis_hubungan_kategori(df):
     """
-    Data Mining: Menggunakan algoritma Apriori untuk menemukan 
-    subkategori pengeluaran yang sering muncul bersamaan berdasarkan tanggal transaksi.
+    Data Mining: Menggunakan algoritma Apriori untuk pola hubungan subkategori.
     """
-    data = []
-    for t in query_result:
-        if t.subcategory and t.subcategory.category:
-            if t.subcategory.category.type == 'expense':
-                data.append({
-                    'tanggal': t.date.strftime('%Y-%m-%d'),
-                    'sub_nama': t.subcategory.nama
-                })
-                
-    if not data or len(data) < 5:
+    if df.empty:
         return []
         
-    df = pd.DataFrame(data)
+    df_expense = df[df['cat_type'] == 'expense'].copy()
+    if len(df_expense) < 5:
+        return []
+        
+    df_expense['tanggal'] = df_expense['date'].dt.strftime('%Y-%m-%d')
     
-    # Membuat matriks transaksi: Baris = Tanggal, Kolom = Nama Subkategori (1 jika dibeli di tanggal itu, 0 jika tidak)
-    basket = (df.groupby(['tanggal', 'sub_nama'])['sub_nama']
+    # Membuat matriks transaksi
+    basket = (df_expense.groupby(['tanggal', 'sub_nama'])['sub_nama']
               .count().unstack().reset_index().fillna(0)
               .set_index('tanggal'))
     
-    # Ubah jumlah item menjadi boolean (True/False) sesuai syarat pustaka mlxtend
     basket_sets = basket.map(lambda x: True if x > 0 else False)
     
     try:
-        # Cari kombinasi item yang sering muncul (min_support=0.1 artinya minimal muncul di 10% dari total hari transaksi)
         frequent_itemsets = apriori(basket_sets, min_support=0.1, use_colnames=True)
         
         if frequent_itemsets.empty:
             return []
             
-        # Bentuk aturan asosiasi
         rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1.0)
         
         output = []
-        for _, row in rules.head(3).iterrows(): # Ambil top 3 pola terkuat
+        for _, row in rules.head(3).iterrows():
             item_a = list(row['antecedents'])[0]
             item_b = list(row['consequents'])[0]
             keyakinan = round(row['confidence'] * 100, 1)
@@ -215,6 +194,5 @@ def analisis_hubungan_kategori(query_result):
             })
         return output
     except Exception:
-        # Mengantisipasi jika variasi data di hari tersebut belum cukup untuk membentuk matriks asosiasi
         return []
     
