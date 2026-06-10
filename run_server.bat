@@ -37,11 +37,7 @@ call .venv\Scripts\activate
 echo Menyalakan server Flask...
 start "Flask Server - Tutup jendela ini untuk mematikan server" /MIN cmd /k "python run.py"
 
-:: 5. Jalankan backup database dan pembersihan retensi di background (paralel)
-echo Menjalankan backup database di background...
-start /b powershell -Command "$db = 'myfinance.db'; $dir = 'backups'; if (-not (Test-Path $dir)) { New-Item -ItemType Directory $dir | Out-Null }; if (Test-Path $db) { $dt = (Get-Date).ToString('yyyyMMdd_HHmm'); Copy-Item $db -Destination \"$dir\backup_$dt.db\" -Force }; $files = Get-ChildItem \"$dir\*.db\" | Sort-Object LastWriteTime -Descending; if ($files.Count -gt 10) { $files | Select-Object -Skip 10 | Where-Object { (Get-Date) - $_.LastWriteTime -gt (New-TimeSpan -Days 30) } | Remove-Item -Force }" >nul 2>&1
-
-:: 6. Tunggu Flask siap dengan polling cepat (tanpa delay di awal)
+:: 5. Tunggu Flask siap dengan polling cepat
 echo Menunggu Flask siap...
 :tunggu
 curl -s http://127.0.0.1:5000 >nul 2>&1
@@ -50,7 +46,7 @@ if errorlevel 1 (
     goto tunggu
 )
 
-:: 7. Buka browser
+:: 6. Buka browser
 :buka_browser
 echo Membuka browser...
 start http://127.0.0.1:5000
