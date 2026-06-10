@@ -16,25 +16,40 @@
     --secondary-color: #6B7280;
     --success-color: #10B981;
     --danger-color: #EF4444;
-    --bg-color: #F8FAFC;          /* Diubah ke slate-50 agar kontras card lebih estetik */
-    --sidebar-bg: #0F172A;        /* Menggunakan warna Slate gelap yang lebih modern */
+    --warning-color: #F59E0B;
+    
+    --bg-color: #F8FAFC;          
+    --sidebar-bg: #0F172A;        
     --sidebar-text: #F1F5F9;
     --card-bg: #FFFFFF;
     --text-main: #0F172A;
+    --text-muted: #64748B;
     --border-color: #E2E8F0;
     --sidebar-width: 260px;
     --sidebar-collapsed-width: 78px;
     --transition-speed: 0.3s;
+    --table-padding: 12px 16px;
 }
 
-/* Warna Khusus Dark Mode */
+/* =========================================================================
+   Sihir Dark Mode: Di sinilah kita memperbaiki "keanehan" visualnya!
+========================================================================= */
 [data-theme="dark"] {
-    --bg-color: #020617;
-    --card-bg: #0B1329;
-    --text-main: #F8FAFC;
-    --border-color: #1E293B;
+    --bg-color: #0B0F19; 
+    --card-bg: #161D30; 
+    --text-main: #E2E8F0; 
+    --text-muted: #94A3B8;
+    --border-color: #242F47; 
+    --sidebar-bg: #060911;
+
+    --primary-color: #6366F1;
+    --primary-hover: #4F46E5;
+    --success-color: #34D399;
+    --danger-color: #F87171;
+    --warning-color: #FBBF24;
     --secondary-color: #94A3B8;
-    --sidebar-bg: #010409;
+    
+    --table-padding: 16px 20px;
 }
 
 * {
@@ -48,6 +63,8 @@ body {
     background-color: var(--bg-color);
     color: var(--text-main);
     transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* =========================================
