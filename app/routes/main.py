@@ -11,7 +11,6 @@ import os
 import subprocess
 from datetime import datetime, timedelta
 from flask import render_template, Blueprint, jsonify, current_app
-import pandas as pd
 from app.models import db, Category, SubCategory, Account, Transaction
 from app.utils.analisa import deteksi_anomali_pengeluaran, hitung_kesehatan_keuangan, prediksi_pengeluaran_bulan_depan, analisis_hubungan_kategori
 from app.utils.dashgraph import get_cash_flow_data, get_expense_allocation, get_account_distribution
@@ -116,6 +115,7 @@ def halaman_analisa():
     ).select_from(Transaction).join(SubCategory).join(Category).statement
     
     # 2. Masukkan langsung ke Pandas DataFrame
+    import pandas as pd
     df = pd.read_sql(stmt, con=db.engine)
     
     # 3. Konversi kolom date menjadi tipe datetime agar bisa diolah Pandas

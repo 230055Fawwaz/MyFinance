@@ -33,65 +33,24 @@ if not exist .venv\Scripts\activate (
 :: 3. Aktifkan venv
 call .venv\Scripts\activate
 
-:: ====================================================================
-:: TAMBAHAN: OTOMATISASI BACKUP SQLITE
-:: ====================================================================
-echo Menjalankan backup database...
-
-:: Tentukan folder penyimpanan backup (sesuaikan jika letak DB kamu berbeda)
-set "DB_SOURCE=myfinance.db"
-set "BACKUP_DIR=backups"
-
-:: Buat folder backup jika belum ada
-if not exist "%BACKUP_DIR%" mkdir "%BACKUP_DIR%"
-
-:: Ambil tanggal dan waktu saat ini (Format independen regional setting)
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do set "dt=%%I"
-set "YYYY=%dt:~0,4%"
-set "MM=%dt:~4,2%"
-set "DD=%dt:~6,2%"
-set "HH=%dt:~8,2%"
-set "Min=%dt:~10,2%"
-
-set "BACKUP_FILE=%BACKUP_DIR%\backup_%YYYY%%MM%%DD%_%HH%%Min%.db"
-
-:: Eksekusi penyalinan file DB jika file sumber ditemukan
-if exist "%DB_SOURCE%" (
-    copy "%DB_SOURCE%" "%BACKUP_FILE%" >nul
-    echo [SUKSES] Backup disimpan ke: %BACKUP_FILE%
-) else (
-    echo [INFO] Database asal belum terbentuk. Backup dilewati untuk sesi ini.
-)
-echo --------------------------------------------------------------------
-
-:: ====================================================================
-:: PEMBERSIHAN OTOMATIS (RETENSI DATA) - VERSI CEPAT
-:: ====================================================================
-echo Memeriksa retensi file backup...
-
-:: Panggil PowerShell hanya 1 kali untuk menyaring dan menghapus file
-powershell -Command ^
-    "$files = Get-ChildItem '%BACKUP_DIR%\*.db' | Sort-Object LastWriteTime -Descending;" ^
-    "if ($files.Count -gt 10) {" ^
-        "$files | Select-Object -Skip 10 | Where-Object { (Get-Date) - $_.LastWriteTime -gt (New-TimeSpan -Days 30) } | ForEach-Object {" ^
-            "Remove-Item $_.FullName;" ^
-            "Write-Host 'Menghapus backup lama:' $_.Name" ^
-        "}" ^
-    "}"
-echo --------------------------------------------------------------------
-
-:: 4. Jalankan Flask di window terpisah yang BISA DITUTUP MANUAL
+:: 4. Jalankan Flask di window terpisah secara langsung!
 echo Menyalakan server Flask...
 start "Flask Server - Tutup jendela ini untuk mematikan server" /MIN cmd /k "python run.py"
 
-:: 5. Tunggu Flask siap dengan polling
+:: 5. Jalankan backup database dan pembersihan retensi di background (paralel)
+echo Menjalankan backup database di background...
+start /b powershell -Command "$db = 'myfinance.db'; $dir = 'backups'; if (-not (Test-Path $dir)) { New-Item -ItemType Directory $dir | Out-Null }; if (Test-Path $db) { $dt = (Get-Date).ToString('yyyyMMdd_HHmm'); Copy-Item $db -Destination \"$dir\backup_$dt.db\" -Force }; $files = Get-ChildItem \"$dir\*.db\" | Sort-Object LastWriteTime -Descending; if ($files.Count -gt 10) { $files | Select-Object -Skip 10 | Where-Object { (Get-Date) - $_.LastWriteTime -gt (New-TimeSpan -Days 30) } | Remove-Item -Force }" >nul 2>&1
+
+:: 6. Tunggu Flask siap dengan polling cepat (tanpa delay di awal)
 echo Menunggu Flask siap...
 :tunggu
-timeout /t 1 /nobreak >nul
 curl -s http://127.0.0.1:5000 >nul 2>&1
-if errorlevel 1 goto tunggu
+if errorlevel 1 (
+    timeout /t 1 /nobreak >nul
+    goto tunggu
+)
 
-:: 6. Buka browser
+:: 7. Buka browser
 :buka_browser
 echo Membuka browser...
 start http://127.0.0.1:5000

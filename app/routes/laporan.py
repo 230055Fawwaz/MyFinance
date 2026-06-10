@@ -13,12 +13,6 @@ import csv
 from datetime import datetime, timedelta
 from sqlalchemy import func
 
-# Pustaka untuk PDF
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib import colors
-
 from flask import render_template, request, Blueprint, Response
 from app.models import db, Category, Transaction, SubCategory
 
@@ -162,6 +156,12 @@ def download_csv():
 def download_pdf():
     start_date = request.args.get("start_date", "")
     end_date = request.args.get("end_date", "")
+
+    # Defer reportlab imports
+    from reportlab.lib.pagesizes import letter
+    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.lib import colors
 
     categories, subcategories = ambil_data_agregasi(start_date, end_date)
 

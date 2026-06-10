@@ -10,13 +10,8 @@
 #   - Analisis hubungan kategori
 # ==========================================
 
-import pandas as pd
 from datetime import datetime
 
-# Impor untuk Data Mining & DSS
-from sklearn.ensemble import IsolationForest
-from sklearn.linear_model import LinearRegression
-from mlxtend.frequent_patterns import apriori, association_rules
 
 # ==========================================
 # 1. TEMPAT FUNGSI DSS (RULE-BASED / RASIO)
@@ -105,6 +100,7 @@ def deteksi_anomali_pengeluaran(df):
         
     X = df_expense['amount'].astype(float).values.reshape(-1, 1)
     
+    from sklearn.ensemble import IsolationForest
     model = IsolationForest(contamination=0.05, random_state=42)
     df_expense['is_anomali'] = model.fit_predict(X)
     
@@ -144,6 +140,7 @@ def prediksi_pengeluaran_bulan_depan(df):
     X = df_bulanan['bulan_ke'].values.reshape(-1, 1)
     y = df_bulanan['amount'].values
     
+    from sklearn.linear_model import LinearRegression
     model = LinearRegression()
     model.fit(X, y)
     
@@ -176,6 +173,7 @@ def analisis_hubungan_kategori(df):
     basket_sets = basket.map(lambda x: True if x > 0 else False)
     
     try:
+        from mlxtend.frequent_patterns import apriori, association_rules
         frequent_itemsets = apriori(basket_sets, min_support=0.1, use_colnames=True)
         
         if frequent_itemsets.empty:
