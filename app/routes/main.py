@@ -9,7 +9,7 @@
 
 import os
 import subprocess
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from flask import render_template, Blueprint, jsonify, current_app
 from app.models import db, Category, SubCategory, Account, Transaction
 from app.utils.analisa import (
@@ -32,7 +32,7 @@ main_bp = Blueprint("main", __name__)
 # (Asumsi ada decorator @main_bp.route di sini)
 def dashboard():
     # Rentang waktu: 30 hari terakhir
-    hari_ini = datetime.utcnow()
+    hari_ini = datetime.now(timezone.utc).replace(tzinfo=None)
     tiga_puluh_hari_lalu = hari_ini - timedelta(days=30)
 
     # Memanggil fungsi bantuan untuk masing-masing data

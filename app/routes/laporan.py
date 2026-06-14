@@ -10,7 +10,7 @@
 
 from io import StringIO, BytesIO
 import csv
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import func
 
 from flask import render_template, request, Blueprint, Response
@@ -39,7 +39,7 @@ def laporan_hasil():
         end_date_obj = end_date_raw.replace(hour=23, minute=59, second=59)
     else:
         # Default jika filter kosong (Sama persis dengan dashboard Anda: 30 hari terakhir)
-        hari_ini = datetime.utcnow()
+        hari_ini = datetime.now(timezone.utc).replace(tzinfo=None)
         start_date_obj = hari_ini - timedelta(days=30)
         end_date_obj = hari_ini
 
@@ -47,37 +47,8 @@ def laporan_hasil():
         start_date_str = start_date_obj.strftime("%Y-%m-%d")
         end_date_str = end_date_obj.strftime("%Y-%m-%d")
 
-    # 3. Query Pengeluaran Kategori (Gunakan objek datetime, samakan dengan dashboard)
-    expense_by_category = (
-        db.session.query(
-            Category.nama.label("category_name"),
-            func.sum(Transaction.amount).label("total"),
-        )
-        .join(SubCategory, Transaction.subcategory_id == SubCategory.id)
-        .join(Category, SubCategory.category_id == Category.id)
-        .filter(Category.type == "expense")
-        .filter(Transaction.date >= start_date_obj)
-        .filter(Transaction.date <= end_date_obj)
-        .group_by(Category.nama)
-        .all()
-    )
-
-    # 4. Query Pengeluaran Subkategori
-    expense_by_subcategory = (
-        db.session.query(
-            Category.nama.label("category_name"),
-            SubCategory.nama.label("subcategory_name"),
-            func.sum(Transaction.amount).label("total"),
-        )
-        .join(SubCategory, Transaction.subcategory_id == SubCategory.id)
-        .join(Category, SubCategory.category_id == Category.id)
-        .filter(Category.type == "expense")
-        .filter(Transaction.date >= start_date_obj)
-        .filter(Transaction.date <= end_date_obj)
-        .group_by(Category.nama, SubCategory.nama)
-        .order_by(Category.nama, func.sum(Transaction.amount).desc())
-        .all()
-    )
+    # 3. Panggil fungsi pembantu tunggal untuk data agregasi
+    expense_by_category, expense_by_subcategory = ambil_data_agregasi(start_date_obj, end_date_obj)
 
     return render_template(
         "laporan.html",
@@ -88,8 +59,13 @@ def laporan_hasil():
     )
 
 
-def ambil_data_agregasi(start_date_str, end_date_str):
+def ambil_data_agregasi(start_date, end_date):
     """Fungsi pembantu untuk memfilter dan mengagregasi total pengeluaran"""
+    # Mengonversi string tanggal ke datetime jika dikirim berupa string
+    if isinstance(start_date, str) and start_date:
+        start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    if isinstance(end_date, str) and end_date:
+        end_date = datetime.strptime(end_date, "%Y-%m-%d").replace(hour=23, minute=59, second=59)
 
     # Query 1: Total berdasarkan Kategori Utama
     query = (
@@ -114,21 +90,21 @@ def ambil_data_agregasi(start_date_str, end_date_str):
         .filter(Category.type == "expense")
     )
 
-    # Terapkan filter tanggal jika dikirim oleh frontend
-    if start_date_str:
-        start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+    # Terapkan filter tanggal jika tersedia
+    if start_date:
         query = query.filter(Transaction.date >= start_date)
         query_sub = query_sub.filter(Transaction.date >= start_date)
-    if end_date_str:
-        end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+    if end_date:
         query = query.filter(Transaction.date <= end_date)
         query_sub = query_sub.filter(Transaction.date <= end_date)
 
-    # Eksekusi query dengan pengelompokan yang tepat
-    categories = query.group_by(Category.id, Category.nama).all()
-    subcategories = query_sub.group_by(
-        Category.id, Category.nama, SubCategory.id, SubCategory.nama
-    ).all()
+    # Eksekusi query dengan pengelompokan dan pengurutan yang konsisten
+    categories = query.group_by(Category.id, Category.nama).order_by(func.sum(Transaction.amount).desc()).all()
+    subcategories = (
+        query_sub.group_by(Category.id, Category.nama, SubCategory.id, SubCategory.nama)
+        .order_by(Category.nama, func.sum(Transaction.amount).desc())
+        .all()
+    )
 
     return categories, subcategories
 
