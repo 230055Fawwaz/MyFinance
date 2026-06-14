@@ -12,11 +12,18 @@
 import os
 import logging
 from flask import Flask
+from dotenv import load_dotenv
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from app.models import db
 
+# Memuat file .env
+load_dotenv()
+
 app = Flask(__name__, template_folder="templates", static_folder="static")
+
+# Mengambil kunci dari .env. Jika tidak ditemukan, gunakan fallback default (hanya untuk development)
+app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', 'dev-key-fallback-jangan-pakai-di-production')
 
 # Konfigurasi logging global
 logging.basicConfig(
