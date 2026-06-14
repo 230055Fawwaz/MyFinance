@@ -16,6 +16,11 @@ from sqlalchemy import func
 from flask import render_template, request, Blueprint, Response
 from app.models import db, Category, Transaction, SubCategory
 
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+
 laporan_bp = Blueprint("laporan", __name__)
 
 
@@ -157,12 +162,6 @@ def download_pdf():
     start_date = request.args.get("start_date", "")
     end_date = request.args.get("end_date", "")
 
-    # Defer reportlab imports
-    from reportlab.lib.pagesizes import letter
-    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-    from reportlab.lib.styles import getSampleStyleSheet
-    from reportlab.lib import colors
-
     categories, subcategories = ambil_data_agregasi(start_date, end_date)
 
     buffer = BytesIO()
@@ -187,23 +186,27 @@ def download_pdf():
         )
     story.append(Spacer(1, 20))
 
-    # Struktur matriks tabel PDF mengikuti logika hierarki HTML Anda
+    # Struktur matriks tabel PDF
     table_data = [["Kategori / Subkategori", "Total Pengeluaran"]]
 
-    # Variabel penampung styling baris dinamis (untuk membedakan warna subkategori)
+    # Variabel penampung styling baris dinamis
     table_styles = [
         ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#343a40")),
         ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"), # Tambahan: Header dibuat tebal
+        ("FONTSIZE", (0, 0), (-1, 0), 11),               # Tambahan: Ukuran font header
         ("ALIGN", (0, 0), (0, -1), "LEFT"),
         ("ALIGN", (1, 0), (1, -1), "RIGHT"),
         ("BOTTOMPADDING", (0, 0), (-1, 0), 8),
+        ("TOPPADDING", (0, 0), (-1, 0), 8),             # Tambahan: Padding atas agar seimbang
         ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#dee2e6")),
     ]
 
     row_idx = 1
     for cat in categories:
         table_data.append([cat.category_name, f"Rp {cat.total:,.2f}"])
-        table_styles.append(("fontname", (0, row_idx), (-1, row_idx), "Helvetica-Bold"))
+        # PERBAIKAN: Mengubah "fontname" menjadi "FONTNAME" (Huruf Besar)
+        table_styles.append(("FONTNAME", (0, row_idx), (-1, row_idx), "Helvetica-Bold"))
         table_styles.append(
             ("BACKGROUND", (0, row_idx), (-1, row_idx), colors.HexColor("#f8f9fa"))
         )
@@ -212,7 +215,7 @@ def download_pdf():
         for sub in subcategories:
             if sub.category_name == cat.category_name:
                 table_data.append(
-                    [f"  • {sub.subcategory_name}", f"Rp {sub.total:,.2f}"]
+                    [f"   • {sub.subcategory_name}", f"Rp {sub.total:,.2f}"]
                 )
                 table_styles.append(
                     (
@@ -222,9 +225,12 @@ def download_pdf():
                         colors.HexColor("#6c757d"),
                     )
                 )
+                table_styles.append(
+                    ("FONTNAME", (0, row_idx), (-1, row_idx), "Helvetica") # Memastikan subkategori reguler
+                )
                 row_idx += 1
 
-    t_table = Table(table_data, colWidths=[350, 180])
+    t_table = Table(table_data, colWidths=[350, 182]) # Disesuaikan sedikit menjadi 182 agar total pas 532
     t_table.setStyle(TableStyle(table_styles))
 
     story.append(t_table)
