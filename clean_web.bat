@@ -46,9 +46,24 @@ echo   MEMULAI PROSES PEMBERSIHAN KODE WEB (HTML, CSS, JS)
 echo ===================================================
 
 echo.
-echo [1/4] Memeriksa instalasi Node.js dan Dependensi NPM...
-pip install --quiet djlint --disable-pip-version-check
-call npm install --silent --save-dev eslint@8.57.1 prettier eslint-config-prettier stylelint stylelint-config-standard >nul 2>&1
+echo [1/4] Memeriksa instalasi Node.js dan Dependensi...
+
+:: Cek instalasi djLint (Python)
+python -c "import djlint" >nul 2>&1
+if errorlevel 1 (
+    echo Menginstal djLint...
+    pip install --quiet djlint --disable-pip-version-check
+) else (
+    echo * djLint sudah terinstal.
+)
+
+:: Cek instalasi NPM devDependencies
+if not exist node_modules (
+    echo Menginstal dependensi linter frontend: ESLint, Prettier, Stylelint...
+    call npm install --silent >nul 2>&1
+) else (
+    echo * Dependensi linter frontend sudah terpasang.
+)
 
 echo.
 echo [2/4] Menjalankan djLint (HTML Jinja)...

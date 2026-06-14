@@ -39,8 +39,14 @@ echo   MEMULAI PROSES PEMBERSIHAN KODE PYTHON (FLASK)
 echo ===================================================
 
 echo.
-echo [1/4] Menginstal/Memperbarui Tools PIP...
-pip install --quiet vulture black flake8 pylint
+echo [1/4] Memeriksa/Menginstal Tools PIP...
+python -c "import vulture, black, flake8, pylint" >nul 2>&1
+if errorlevel 1 (
+    echo Menginstal tools PIP: vulture, black, flake8, pylint...
+    pip install --quiet vulture black flake8 pylint
+) else (
+    echo * Tools PIP sudah terinstal. Melewati instalasi.
+)
 
 echo.
 echo [2/4] Menjalankan VULTURE (Mencari kode mati)...
@@ -55,7 +61,7 @@ black run.py app/ >> "%REPORT_FILE%" 2>&1
 echo * Selesai. Kode Anda sudah dirapikan otomatis.
 
 echo.
-echo [4/4] Menjalankan FLAKE8 & PYLINT (Analisis Kode)...
+echo [4/4] Menjalankan FLAKE8 dan PYLINT (Analisis Kode)...
 echo. >> "%REPORT_FILE%"
 echo --- HASIL FLAKE8 --- >> "%REPORT_FILE%"
 flake8 run.py app/ --ignore=E501 >> "%REPORT_FILE%" 2>&1
