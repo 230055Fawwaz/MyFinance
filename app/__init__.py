@@ -12,6 +12,8 @@
 import os
 import logging
 from flask import Flask
+from sqlalchemy import event
+from sqlalchemy.engine import Engine
 from app.models import db
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
@@ -28,6 +30,13 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
     basedir, "..", "myfinance.db"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.execute("PRAGMA journal_mode=WAL")
+    cursor.close()
 
 db.init_app(app)
 
