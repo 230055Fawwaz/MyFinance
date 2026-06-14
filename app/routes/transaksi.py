@@ -77,7 +77,10 @@ def tambah_transaksi():
         )
         db.session.add(trx_baru)
         db.session.commit()
-        flash(f"Transaksi sebesar Rp {amount:,.0f} berhasil dicatat ke akun '{akun.nama}'!", "success")
+        flash(
+            f"Transaksi sebesar Rp {amount:,.0f} berhasil dicatat ke akun '{akun.nama}'!",
+            "success",
+        )
     except SQLAlchemyError as e:
         db.session.rollback()
         logger.error("Database error saat tambah transaksi: %s", e)
@@ -107,7 +110,9 @@ def hapus_transaksi(transaksi_id):
         # Hapus transaksi
         db.session.delete(trx)
         db.session.commit()
-        flash("Transaksi berhasil dihapus dan saldo akun disesuaikan kembali!", "success")
+        flash(
+            "Transaksi berhasil dihapus dan saldo akun disesuaikan kembali!", "success"
+        )
     except SQLAlchemyError as e:
         db.session.rollback()
         logger.error("Database error saat hapus transaksi: %s", e)
@@ -132,7 +137,12 @@ def edit_transaksi(transaksi_id):
     tanggal_str = request.form.get("date")
 
     # Validasi Input Kosong
-    if not new_account_id or not new_subcategory_id or not new_amount_str or not tanggal_str:
+    if (
+        not new_account_id
+        or not new_subcategory_id
+        or not new_amount_str
+        or not tanggal_str
+    ):
         flash("Semua field transaksi wajib diisi!", "danger")
         return redirect(url_for("main.transaksi"))
 
@@ -198,7 +208,9 @@ def edit_transaksi(transaksi_id):
     except SQLAlchemyError as e:
         db.session.rollback()
         logger.error("Database error saat edit transaksi ID %s: %s", transaksi_id, e)
-        flash("Gagal menyimpan perubahan transaksi akibat kesalahan database.", "danger")
+        flash(
+            "Gagal menyimpan perubahan transaksi akibat kesalahan database.", "danger"
+        )
     except Exception as e:
         db.session.rollback()
         logger.error("Error tak terduga saat edit transaksi ID %s: %s", transaksi_id, e)
@@ -232,7 +244,9 @@ def proses_transfer():
         if fee < 0:
             raise ValueError("Biaya transfer tidak boleh negatif.")
     except (InvalidOperation, ValueError):
-        flash("Jumlah dan biaya transfer harus berupa angka positif yang valid!", "danger")
+        flash(
+            "Jumlah dan biaya transfer harus berupa angka positif yang valid!", "danger"
+        )
         return redirect(url_for("main.akun"))
 
     from_account = Account.query.get(from_account_id)
@@ -244,7 +258,10 @@ def proses_transfer():
 
     total_deduction = amount + fee
     if from_account.balance < total_deduction:
-        flash(f"Saldo akun '{from_account.nama}' tidak mencukupi untuk transfer! (Dibutuhkan: Rp {total_deduction:,.0f}, Saldo aktif: Rp {from_account.balance:,.0f})", "danger")
+        flash(
+            f"Saldo akun '{from_account.nama}' tidak mencukupi untuk transfer! (Dibutuhkan: Rp {total_deduction:,.0f}, Saldo aktif: Rp {from_account.balance:,.0f})",
+            "danger",
+        )
         return redirect(url_for("main.akun"))
 
     # Proses Eksekusi Database
@@ -261,7 +278,10 @@ def proses_transfer():
         )
         db.session.add(new_transfer)
         db.session.commit()
-        flash(f"Transfer sebesar Rp {amount:,.0f} dari '{from_account.nama}' ke '{to_account.nama}' berhasil!", "success")
+        flash(
+            f"Transfer sebesar Rp {amount:,.0f} dari '{from_account.nama}' ke '{to_account.nama}' berhasil!",
+            "success",
+        )
     except SQLAlchemyError as e:
         db.session.rollback()
         logger.error("Database error saat transfer: %s", e)

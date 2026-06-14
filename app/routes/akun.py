@@ -41,9 +41,7 @@ def tambah_akun():
     # Simpan ke Database
     try:
         akun_baru = Account(
-            nama=nama_akun.strip(), 
-            type=tipe_akun.strip(), 
-            balance=saldo_awal
+            nama=nama_akun.strip(), type=tipe_akun.strip(), balance=saldo_awal
         )
         db.session.add(akun_baru)
         db.session.commit()
@@ -61,13 +59,21 @@ def hapus_akun(akun_id):
     akun = Account.query.get_or_404(akun_id)
 
     # Validasi Hubungan Kunci Asing sebelum Hapus (menghindari orphan/IntegrityError)
-    has_transactions = Transaction.query.filter_by(account_id=akun_id).first() is not None
-    has_transfers = Transfer.query.filter(
-        (Transfer.from_account_id == akun_id) | (Transfer.to_account_id == akun_id)
-    ).first() is not None
+    has_transactions = (
+        Transaction.query.filter_by(account_id=akun_id).first() is not None
+    )
+    has_transfers = (
+        Transfer.query.filter(
+            (Transfer.from_account_id == akun_id) | (Transfer.to_account_id == akun_id)
+        ).first()
+        is not None
+    )
 
     if has_transactions or has_transfers:
-        flash(f"Akun '{akun.nama}' tidak dapat dihapus karena masih memiliki histori transaksi atau transfer aktif!", "danger")
+        flash(
+            f"Akun '{akun.nama}' tidak dapat dihapus karena masih memiliki histori transaksi atau transfer aktif!",
+            "danger",
+        )
         return redirect(url_for("main.akun"))
 
     try:

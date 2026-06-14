@@ -23,7 +23,7 @@ def tambah_kategori():
     if not nama_kategori or not nama_kategori.strip():
         flash("Nama kategori tidak boleh kosong!", "danger")
         return redirect(url_for("main.dropdown"))
-    
+
     if tipe_kategori not in ["income", "expense"]:
         flash("Tipe kategori tidak valid!", "danger")
         return redirect(url_for("main.dropdown"))
@@ -62,12 +62,14 @@ def tambah_subkategori():
 
     try:
         sub_baru = SubCategory(
-            nama=nama_subkategori.strip(), 
-            category_id=kategori_induk_id
+            nama=nama_subkategori.strip(), category_id=kategori_induk_id
         )
         db.session.add(sub_baru)
         db.session.commit()
-        flash(f"Subkategori '{sub_baru.nama}' berhasil ditambahkan ke kategori '{kategori_induk.nama}'!", "success")
+        flash(
+            f"Subkategori '{sub_baru.nama}' berhasil ditambahkan ke kategori '{kategori_induk.nama}'!",
+            "success",
+        )
     except SQLAlchemyError as e:
         db.session.rollback()
         logger.error("Gagal menambahkan subkategori ke database: %s", e)
@@ -84,20 +86,31 @@ def hapus_kategori(kategori_id):
     subkategori_ids = [sub.id for sub in kategori.subcategories]
     has_transactions = False
     if subkategori_ids:
-        has_transactions = Transaction.query.filter(Transaction.subcategory_id.in_(subkategori_ids)).first() is not None
+        has_transactions = (
+            Transaction.query.filter(
+                Transaction.subcategory_id.in_(subkategori_ids)
+            ).first()
+            is not None
+        )
 
     if has_transactions:
-        flash(f"Kategori '{kategori.nama}' tidak dapat dihapus karena salah satu subkategorinya masih digunakan dalam transaksi aktif!", "danger")
+        flash(
+            f"Kategori '{kategori.nama}' tidak dapat dihapus karena salah satu subkategorinya masih digunakan dalam transaksi aktif!",
+            "danger",
+        )
         return redirect(url_for("main.dropdown"))
 
     try:
         # Hapus semua subkategori terlebih dahulu secara eksplisit
         for sub in kategori.subcategories:
             db.session.delete(sub)
-        
+
         db.session.delete(kategori)
         db.session.commit()
-        flash(f"Kategori '{kategori.nama}' beserta seluruh subkategorinya berhasil dihapus!", "success")
+        flash(
+            f"Kategori '{kategori.nama}' beserta seluruh subkategorinya berhasil dihapus!",
+            "success",
+        )
     except SQLAlchemyError as e:
         db.session.rollback()
         logger.error("Gagal menghapus kategori ID %s: %s", kategori_id, e)
@@ -117,7 +130,7 @@ def edit_kategori(kategori_id):
     if not nama_kategori or not nama_kategori.strip():
         flash("Nama kategori tidak boleh kosong!", "danger")
         return redirect(url_for("main.dropdown"))
-    
+
     if tipe_kategori not in ["income", "expense"]:
         flash("Tipe kategori tidak valid!", "danger")
         return redirect(url_for("main.dropdown"))
@@ -140,9 +153,14 @@ def hapus_subkategori(subkategori_id):
     subkategori = SubCategory.query.get_or_404(subkategori_id)
 
     # Validasi: Apakah subkategori ini digunakan dalam transaksi aktif?
-    has_transactions = Transaction.query.filter_by(subcategory_id=subkategori_id).first() is not None
+    has_transactions = (
+        Transaction.query.filter_by(subcategory_id=subkategori_id).first() is not None
+    )
     if has_transactions:
-        flash(f"Subkategori '{subkategori.nama}' tidak dapat dihapus karena masih digunakan dalam transaksi aktif!", "danger")
+        flash(
+            f"Subkategori '{subkategori.nama}' tidak dapat dihapus karena masih digunakan dalam transaksi aktif!",
+            "danger",
+        )
         return redirect(url_for("main.dropdown"))
 
     try:
@@ -182,10 +200,14 @@ def edit_subkategori(subkategori_id):
         subkategori.nama = nama_subkategori.strip()
         subkategori.category_id = kategori_induk_id
         db.session.commit()
-        flash(f"Perubahan subkategori '{subkategori.nama}' berhasil disimpan!", "success")
+        flash(
+            f"Perubahan subkategori '{subkategori.nama}' berhasil disimpan!", "success"
+        )
     except SQLAlchemyError as e:
         db.session.rollback()
         logger.error("Gagal mengubah subkategori ID %s: %s", subkategori_id, e)
-        flash("Gagal menyimpan perubahan subkategori akibat kesalahan database.", "danger")
+        flash(
+            "Gagal menyimpan perubahan subkategori akibat kesalahan database.", "danger"
+        )
 
     return redirect(url_for("main.dropdown"))

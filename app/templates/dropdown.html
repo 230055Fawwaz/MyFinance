@@ -9,15 +9,11 @@
 -->
 {% extends "base.html" %}
 {% block title %}dropdown - MyFinance{% endblock %}
-
 {% block extra_css %}
-
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/dropdown.css') }}">
 {% endblock %}
-
 {% block content %}
-
     <div class="content-header">
         <h1>Pengaturan Kategori</h1>
         <div class="header-actions">
@@ -136,7 +132,9 @@
                                border-radius: 6px;
                                margin-top: 5px">
                     <option value="" disabled selected>-- Pilih Kategori Induk --</option>
-                    {% for kat in categories %}<option value="{{ kat.id }}">{{ kat.nama }}</option>{% endfor %}
+                    {% for kat in categories %}
+                        <option value="{{ kat.id }}">{{ kat.nama }}</option>
+                    {% endfor %}
                 </select>
                 <label for="nama_subkategori">Nama Sub-Kategori:</label>
                 <input type="text"
@@ -214,6 +212,5 @@
         {% endfor %}
     {% endfor %}
 {% endblock %}
-
 {# 4. Menambah JS khusus halaman transaksi saja #}
 {% block extra_js %}<script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>{% endblock %}

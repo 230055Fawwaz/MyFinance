@@ -99,6 +99,7 @@ def ambil_data_agregasi(start_date_str, end_date_str):
         )
         .join(SubCategory, Transaction.subcategory_id == SubCategory.id)
         .join(Category, SubCategory.category_id == Category.id)
+        .filter(Category.type == "expense")
     )
 
     # Query 2: Total berdasarkan Subkategori
@@ -110,6 +111,7 @@ def ambil_data_agregasi(start_date_str, end_date_str):
         )
         .join(SubCategory, Transaction.subcategory_id == SubCategory.id)
         .join(Category, SubCategory.category_id == Category.id)
+        .filter(Category.type == "expense")
     )
 
     # Terapkan filter tanggal jika dikirim oleh frontend
@@ -193,12 +195,17 @@ def download_pdf():
     table_styles = [
         ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#343a40")),
         ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
-        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"), # Tambahan: Header dibuat tebal
-        ("FONTSIZE", (0, 0), (-1, 0), 11),               # Tambahan: Ukuran font header
+        (
+            "FONTNAME",
+            (0, 0),
+            (-1, 0),
+            "Helvetica-Bold",
+        ),  # Tambahan: Header dibuat tebal
+        ("FONTSIZE", (0, 0), (-1, 0), 11),  # Tambahan: Ukuran font header
         ("ALIGN", (0, 0), (0, -1), "LEFT"),
         ("ALIGN", (1, 0), (1, -1), "RIGHT"),
         ("BOTTOMPADDING", (0, 0), (-1, 0), 8),
-        ("TOPPADDING", (0, 0), (-1, 0), 8),             # Tambahan: Padding atas agar seimbang
+        ("TOPPADDING", (0, 0), (-1, 0), 8),  # Tambahan: Padding atas agar seimbang
         ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#dee2e6")),
     ]
 
@@ -226,11 +233,18 @@ def download_pdf():
                     )
                 )
                 table_styles.append(
-                    ("FONTNAME", (0, row_idx), (-1, row_idx), "Helvetica") # Memastikan subkategori reguler
+                    (
+                        "FONTNAME",
+                        (0, row_idx),
+                        (-1, row_idx),
+                        "Helvetica",
+                    )  # Memastikan subkategori reguler
                 )
                 row_idx += 1
 
-    t_table = Table(table_data, colWidths=[350, 182]) # Disesuaikan sedikit menjadi 182 agar total pas 532
+    t_table = Table(
+        table_data, colWidths=[350, 182]
+    )  # Disesuaikan sedikit menjadi 182 agar total pas 532
     t_table.setStyle(TableStyle(table_styles))
 
     story.append(t_table)

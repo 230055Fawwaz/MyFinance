@@ -23,7 +23,9 @@ load_dotenv()
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
 # Mengambil kunci dari .env. Jika tidak ditemukan, gunakan fallback default (hanya untuk development)
-app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', 'dev-key-fallback-jangan-pakai-di-production')
+app.config["SECRET_KEY"] = os.environ.get(
+    "FLASK_SECRET_KEY", "dev-key-fallback-jangan-pakai-di-production"
+)
 
 # Konfigurasi logging global
 logging.basicConfig(
@@ -38,12 +40,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.execute("PRAGMA journal_mode=WAL")
     cursor.close()
+
 
 db.init_app(app)
 

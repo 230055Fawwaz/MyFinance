@@ -8,15 +8,11 @@
 -->
 {% extends "base.html" %}
 {% block title %}Dashboard - MyFinance{% endblock %}
-
 {% block extra_css %}
-
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
-
 {% block content %}
-
     <div class="dashboard-container">
         <h2 class="dashboard-title">Dashboard Keuangan</h2>
         <!-- 1. BARIS KARTU KPI (STATISTIK UTAMA) -->
@@ -87,9 +83,7 @@
         </div>
     </div>
 {% endblock %}
-
 {% block extra_js %}
-
     <script src="{{ url_for('static', filename='js/vendor/chart.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

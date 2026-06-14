@@ -9,15 +9,11 @@
 -->
 {% extends "base.html" %}
 {% block title %}Akun - MyFinance{% endblock %}
-
 {% block extra_css %}
-
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/akun.css') }}">
 {% endblock %}
-
 {% block content %}
-
     <div class="content-header">
         <h1>Daftar Akun</h1>
         <button class="btn btn-primary" id="btn-tambah-akun">+ Tambah Akun</button>
@@ -117,7 +113,7 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h2>Transfer Antar Akun</h2>
-            <form action="{{ url_for('transaksi.proses_transfer') }}" method="POST">
+            <form action="{{ url_for("transaksi.proses_transfer") }}" method="POST">
                 <label for="from_account_id">Dari Akun:</label>
                 <select id="from_account_id" name="from_account_id" required>
                     <option value="" disabled selected>Pilih akun asal...</option>
@@ -128,7 +124,9 @@
                 <label for="to_account_id">Ke Akun:</label>
                 <select id="to_account_id" name="to_account_id" required>
                     <option value="" disabled selected>Pilih akun tujuan...</option>
-                    {% for akun in accounts %}<option value="{{ akun.id }}">{{ akun.nama }}</option>{% endfor %}
+                    {% for akun in accounts %}
+                        <option value="{{ akun.id }}">{{ akun.nama }}</option>
+                    {% endfor %}
                 </select>
                 <label for="amount">Jumlah Transfer:</label>
                 <input type="number"
@@ -147,6 +145,7 @@
         </div>
     </div>
 {% endblock %}
-
 {# 4. Menambah JS khusus halaman transaksi saja #}
-{% block extra_js %}<script src="{{ url_for('static', filename='js/akun.js') }}"></script>{% endblock %}
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='js/akun.js') }}"></script>
+{% endblock %}

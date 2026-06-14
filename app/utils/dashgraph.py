@@ -12,6 +12,7 @@
 from sqlalchemy import func
 from app.models import db, Category, Account, Transaction, SubCategory
 
+
 def get_cash_flow_data(start_date):
     """Mengambil dan memproses data grafik arus kas (Pemasukan vs Pengeluaran)."""
     cash_flow_query = (
