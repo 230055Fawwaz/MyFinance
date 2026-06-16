@@ -1,0 +1,8 @@
+[flake8]
+ignore = E402,W503,E501
+exclude =
+    .git,
+    __pycache__,
+    node_modules,
+    venv,
+    app/static/js/vendor

@@ -1,6 +1,9 @@
 {
     "extends": "stylelint-config-standard",
     "rules": {
-        "color-hex-length": "short"
+        "color-hex-length": "short",
+        "keyframes-name-pattern": null,
+        "no-descending-specificity": null,
+        "declaration-block-single-line-max-declarations": null
     }
 }

@@ -99,7 +99,7 @@
     background-color: var(--card-bg);
     border-radius: 12px;
     border: 1px solid var(--border-color);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 2%);
     overflow: hidden;
     transition: background-color 0.3s, border-color 0.3s;
 }
@@ -119,7 +119,7 @@
 
 /* Penyesuaian Header Tabel agar Responsif Terhadap Dark Mode */
 .data-table th {
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: rgb(0 0 0 / 2%);
     font-weight: 600;
     color: var(--secondary-color);
     font-size: 0.85rem;
@@ -128,23 +128,25 @@
 }
 
 [data-theme="dark"] .data-table th {
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgb(255 255 255 / 2%);
 }
 
 /* Efek Zebra Striping Ringan */
 .data-table tbody tr:nth-child(even) {
-    background-color: rgba(0, 0, 0, 0.005);
+    background-color: rgb(0 0 0 / 0.5%);
 }
+
 [data-theme="dark"] .data-table tbody tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.005);
+    background-color: rgb(255 255 255 / 0.5%);
 }
 
 /* Efek Hover pada Baris */
 .data-table tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: rgb(0 0 0 / 2%);
 }
+
 [data-theme="dark"] .data-table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: rgb(255 255 255 / 4%);
 }
 
 /* Kolom Nominal dibuat rata kanan secara visual agar angka sejajar rapi */
@@ -164,7 +166,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(0 0 0 / 50%);
     backdrop-filter: blur(4px); /* Efek blur halus di belakang latar belakang modal */
     align-items: center;
     justify-content: center;
@@ -180,7 +182,7 @@
     border-radius: 12px;
     width: 90%;
     max-width: 440px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 10px 10px -5px rgb(0 0 0 / 4%);
     border: 1px solid var(--border-color);
     position: relative;
     animation: modalAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -241,7 +243,7 @@ form input, form select, form textarea {
 /* Efek Fokus Input Form */
 form input:focus, form select:focus, form textarea:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    box-shadow: 0 0 0 3px rgb(79 70 229 / 15%);
 }
 
 form textarea {

@@ -9,10 +9,13 @@
 -->
 {% extends 'base.html' %}
 {% block extra_css %}
+
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/analisa.css') }}">
 {% endblock %}
+
 {% block content %}
+
     <div class="container-analisa">
         <div class="header-analisa">
             <h1>📊 Analisis AI/BI Keuangan</h1>
@@ -104,6 +107,8 @@
         </div>
     </div>
 {% endblock %}
+
 {% block extra_js %}
+
     <script src="{{ url_for('static', filename='js/analisa.js') }}"></script>
 {% endblock %}

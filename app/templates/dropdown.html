@@ -9,199 +9,170 @@
 -->
 {% extends "base.html" %}
 {% block title %}dropdown - MyFinance{% endblock %}
-{% block extra_css %}
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/dropdown.css') }}">
-{% endblock %}
-{% block content %}
-    <div class="content-header">
-        <h1>Pengaturan Kategori</h1>
-        <div class="header-actions">
-            <button class="btn btn-primary" id="btn-tambah-kategori">+ Tambah Kategori</button>
-            <button class="btn btn-secondary" id="btn-tambah-subkategori">+ Tambah Sub-Kategori</button>
+
+    {% block extra_css %}
+
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/dropdown.css') }}">
+    {% endblock %}
+
+    {% block content %}
+
+        <div class="content-header">
+            <h1>Pengaturan Kategori</h1>
+            <div class="header-actions">
+                <button class="btn btn-primary" id="btn-tambah-kategori">+ Tambah Kategori</button>
+                <button class="btn btn-secondary" id="btn-tambah-subkategori">+ Tambah Sub-Kategori</button>
+            </div>
         </div>
-    </div>
-    <div class="table-container">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Kategori</th>
-                    <th>Jenis</th>
-                    <th>Aksi Kategori</th>
-                    <th>Sub-Kategori & Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for category in categories %}
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
                     <tr>
-                        <td>{{ category.nama }}</td>
-                        <td>
-                            {% if category.type == 'income' %}
-                                <span class="teks-pemasukan">Pemasukan</span>
-                            {% elif category.type == 'expense' %}
-                                <span class="teks-pengeluaran">Pengeluaran</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <button class="btn-edit"
-                                    onclick="document.getElementById('modal-edit-kategori-{{ category.id }}').style.display='block'">
-                                Edit
-                            </button>
-                            <form action="{{ url_for('kategori.hapus_kategori', kategori_id=category.id) }}"
-                                  method="POST"
-                                  style="display:inline"
-                                  onsubmit="return confirm('Apakah kamu yakin ingin menghapus kategori ini?');">
-                                <button type="submit" class="btn-hapus">Hapus</button>
-                            </form>
-                        </td>
-                        <td>
-                            {% if category.subcategories %}
-                                <ul class="subkategori-list">
-                                    {% for sub in category.subcategories %}
-                                        <li class="subkategori-item">
-                                            <span>{{ sub.nama }}</span>
-                                            <div class="action-buttons">
-                                                <button class="btn-edit"
-                                                        onclick="document.getElementById('modal-edit-subkategori-{{ sub.id }}').style.display='block'">
-                                                    Edit
-                                                </button>
-                                                <form action="{{ url_for('kategori.hapus_subkategori', subkategori_id=sub.id) }}"
-                                                      method="POST"
-                                                      style="display:inline"
-                                                      onsubmit="return confirm('Apakah kamu yakin ingin menghapus sub-kategori ini?');">
-                                                    <button type="submit" class="btn-hapus">Hapus</button>
-                                                </form>
-                                            </div>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% else %}
-                                <span class="text-muted">Tidak Ada Sub-Kategori</span>
-                            {% endif %}
-                        </td>
+                        <th>Kategori</th>
+                        <th>Jenis</th>
+                        <th>Aksi Kategori</th>
+                        <th>Sub-Kategori & Aksi</th>
                     </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="4" style="text-align: center;">Belum ada data kategori.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div id="modal-kategori" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Tambah Kategori Baru</h2>
-            <form action="/dropdown/kategori/tambah" method="POST">
-                <label for="nama_kategori">Nama Kategori:</label>
-                <input type="text"
-                       id="nama_kategori"
-                       name="nama"
-                       required
-                       placeholder="Misal: Makanan, Gaji">
-                <label for="tipe_kategori">Jenis:</label>
-                <select id="tipe_kategori"
-                        name="type"
-                        class="form-select"
-                        required
-                        style="width: 100%;
-                               padding: 10px;
-                               border: 1px solid var(--border-color);
-                               border-radius: 6px;
-                               margin-top: 5px">
-                    <option value="expense">Pengeluaran</option>
-                    <option value="income">Pemasukan</option>
-                </select>
-                <button type="submit" class="btn btn-success">Simpan</button>
-            </form>
-        </div>
-    </div>
-    <div id="modal-subkategori" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Tambah Sub-Kategori Baru</h2>
-            <form action="/dropdown/subkategori/tambah" method="POST">
-                <label for="parent_kategori">Kategori Induk:</label>
-                <select id="parent_kategori"
-                        name="category_id"
-                        class="form-select"
-                        required
-                        style="width: 100%;
-                               padding: 10px;
-                               border: 1px solid var(--border-color);
-                               border-radius: 6px;
-                               margin-top: 5px">
-                    <option value="" disabled selected>-- Pilih Kategori Induk --</option>
-                    {% for kat in categories %}
-                        <option value="{{ kat.id }}">{{ kat.nama }}</option>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                        <tr>
+                            <td>{{ category.nama }}</td>
+                            <td>
+                                {% if category.type == 'income' %}
+                                    <span class="teks-pemasukan">Pemasukan</span>
+                                {% elif category.type == 'expense' %}
+                                    <span class="teks-pengeluaran">Pengeluaran</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn-edit"
+                                        onclick="document.getElementById('modal-edit-kategori-{{ category.id }}').style.display='block'">
+                                    Edit
+                                </button>
+                                <form action="{{ url_for('kategori.hapus_kategori', kategori_id=category.id) }}"
+                                      method="POST"
+                                      style="display:inline"
+                                      onsubmit="return confirm('Apakah kamu yakin ingin menghapus kategori ini?');">
+                                    <button type="submit" class="btn-hapus">Hapus</button>
+                                </form>
+                            </td>
+                            <td>
+                                {% if category.subcategories %}
+                                    <ul class="subkategori-list">
+                                        {% for sub in category.subcategories %}
+                                            <li class="subkategori-item">
+                                                <span>{{ sub.nama }}</span>
+                                                <div class="action-buttons">
+                                                    <button class="btn-edit"
+                                                            onclick="document.getElementById('modal-edit-subkategori-{{ sub.id }}').style.display='block'">
+                                                        Edit
+                                                    </button>
+                                                    <form action="{{ url_for('kategori.hapus_subkategori', subkategori_id=sub.id) }}"
+                                                          method="POST"
+                                                          style="display:inline"
+                                                          onsubmit="return confirm('Apakah kamu yakin ingin menghapus sub-kategori ini?');">
+                                                        <button type="submit" class="btn-hapus">Hapus</button>
+                                                    </form>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <span class="text-muted">Tidak Ada Sub-Kategori</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" style="text-align: center;">Belum ada data kategori.</td>
+                        </tr>
                     {% endfor %}
-                </select>
-                <label for="nama_subkategori">Nama Sub-Kategori:</label>
-                <input type="text"
-                       id="nama_subkategori"
-                       name="nama"
-                       required
-                       placeholder="Misal: Restoran, Bensin">
-                <button type="submit" class="btn btn-success">Simpan</button>
-            </form>
+                </tbody>
+            </table>
         </div>
-    </div>
-    {% for category in categories %}
-        <div id="modal-edit-kategori-{{ category.id }}"
-             class="modal"
-             style="display:none">
+        <div id="modal-kategori" class="modal">
             <div class="modal-content">
-                <span class="close-btn"
-                      onclick="document.getElementById('modal-edit-kategori-{{ category.id }}').style.display='none'">&times;</span>
-                <h2>Edit Kategori</h2>
-                <form method="POST"
-                      action="{{ url_for('kategori.edit_kategori', kategori_id=category.id) }}">
-                    <div>
-                        <label>Nama Kategori:</label>
-                        <br>
-                        <input type="text" name="nama" value="{{ category.nama }}" required>
-                    </div>
-                    <br>
-                    <div>
-                        <label>Jenis:</label>
-                        <br>
-                        <select name="type" required>
-                            <option value="income" {% if category.type == 'income' %}selected{% endif %}>Pemasukan</option>
-                            <option value="expense"
-                                    {% if category.type == 'expense' %}selected{% endif %}>Pengeluaran</option>
-                        </select>
-                    </div>
-                    <br>
-                    <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+                <span class="close-btn">&times;</span>
+                <h2>Tambah Kategori Baru</h2>
+                <form action="/dropdown/kategori/tambah" method="POST">
+                    <label for="nama_kategori">Nama Kategori:</label>
+                    <input type="text"
+                           id="nama_kategori"
+                           name="nama"
+                           required
+                           placeholder="Misal: Makanan, Gaji">
+                    <label for="tipe_kategori">Jenis:</label>
+                    <select id="tipe_kategori"
+                            name="type"
+                            class="form-select"
+                            required
+                            style="width: 100%;
+                                   padding: 10px;
+                                   border: 1px solid var(--border-color);
+                                   border-radius: 6px;
+                                   margin-top: 5px">
+                        <option value="expense">Pengeluaran</option>
+                        <option value="income">Pemasukan</option>
+                    </select>
+                    <button type="submit" class="btn btn-success">Simpan</button>
                 </form>
             </div>
         </div>
-        {% for sub in category.subcategories %}
-            <div id="modal-edit-subkategori-{{ sub.id }}"
+        <div id="modal-subkategori" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Tambah Sub-Kategori Baru</h2>
+                <form action="/dropdown/subkategori/tambah" method="POST">
+                    <label for="parent_kategori">Kategori Induk:</label>
+                    <select id="parent_kategori"
+                            name="category_id"
+                            class="form-select"
+                            required
+                            style="width: 100%;
+                                   padding: 10px;
+                                   border: 1px solid var(--border-color);
+                                   border-radius: 6px;
+                                   margin-top: 5px">
+                        <option value="" disabled selected>-- Pilih Kategori Induk --</option>
+                        {% for kat in categories %}
+                            <option value="{{ kat.id }}">{{ kat.nama }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="nama_subkategori">Nama Sub-Kategori:</label>
+                    <input type="text"
+                           id="nama_subkategori"
+                           name="nama"
+                           required
+                           placeholder="Misal: Restoran, Bensin">
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                </form>
+            </div>
+        </div>
+        {% for category in categories %}
+            <div id="modal-edit-kategori-{{ category.id }}"
                  class="modal"
                  style="display:none">
                 <div class="modal-content">
                     <span class="close-btn"
-                          onclick="document.getElementById('modal-edit-subkategori-{{ sub.id }}').style.display='none'">&times;</span>
-                    <h2>Edit Sub-Kategori</h2>
+                          onclick="document.getElementById('modal-edit-kategori-{{ category.id }}').style.display='none'">&times;</span>
+                    <h2>Edit Kategori</h2>
                     <form method="POST"
-                          action="{{ url_for('kategori.edit_subkategori', subkategori_id=sub.id) }}">
+                          action="{{ url_for('kategori.edit_kategori', kategori_id=category.id) }}">
                         <div>
-                            <label>Nama Sub-Kategori:</label>
+                            <label>Nama Kategori:</label>
                             <br>
-                            <input type="text" name="nama" value="{{ sub.nama }}" required>
+                            <input type="text" name="nama" value="{{ category.nama }}" required>
                         </div>
                         <br>
                         <div>
-                            <label>Pindah Kategori Induk:</label>
+                            <label>Jenis:</label>
                             <br>
-                            <select name="category_id" required>
-                                {% for cat in categories %}
-                                    <option value="{{ cat.id }}"
-                                            {% if sub.category_id == cat.id %}selected{% endif %}>
-                                        {{ cat.nama }}
-                                    </option>
-                                {% endfor %}
+                            <select name="type" required>
+                                <option value="income" {% if category.type == 'income' %}selected{% endif %}>Pemasukan</option>
+                                <option value="expense"
+                                        {% if category.type == 'expense' %}selected{% endif %}>Pengeluaran</option>
                             </select>
                         </div>
                         <br>
@@ -209,8 +180,42 @@
                     </form>
                 </div>
             </div>
+            {% for sub in category.subcategories %}
+                <div id="modal-edit-subkategori-{{ sub.id }}"
+                     class="modal"
+                     style="display:none">
+                    <div class="modal-content">
+                        <span class="close-btn"
+                              onclick="document.getElementById('modal-edit-subkategori-{{ sub.id }}').style.display='none'">&times;</span>
+                        <h2>Edit Sub-Kategori</h2>
+                        <form method="POST"
+                              action="{{ url_for('kategori.edit_subkategori', subkategori_id=sub.id) }}">
+                            <div>
+                                <label>Nama Sub-Kategori:</label>
+                                <br>
+                                <input type="text" name="nama" value="{{ sub.nama }}" required>
+                            </div>
+                            <br>
+                            <div>
+                                <label>Pindah Kategori Induk:</label>
+                                <br>
+                                <select name="category_id" required>
+                                    {% for cat in categories %}
+                                        <option value="{{ cat.id }}"
+                                                {% if sub.category_id == cat.id %}selected{% endif %}>
+                                            {{ cat.nama }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
-{% endblock %}
-{# 4. Menambah JS khusus halaman transaksi saja #}
-{% block extra_js %}<script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>{% endblock %}
+    {% endblock %}
+
+    {# 4. Menambah JS khusus halaman transaksi saja #}
+    {% block extra_js %}<script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>{% endblock %}

@@ -48,7 +48,9 @@ def laporan_hasil():
         end_date_str = end_date_obj.strftime("%Y-%m-%d")
 
     # 3. Panggil fungsi pembantu tunggal untuk data agregasi
-    expense_by_category, expense_by_subcategory = ambil_data_agregasi(start_date_obj, end_date_obj)
+    expense_by_category, expense_by_subcategory = ambil_data_agregasi(
+        start_date_obj, end_date_obj
+    )
 
     return render_template(
         "laporan.html",
@@ -65,7 +67,9 @@ def ambil_data_agregasi(start_date, end_date):
     if isinstance(start_date, str) and start_date:
         start_date = datetime.strptime(start_date, "%Y-%m-%d")
     if isinstance(end_date, str) and end_date:
-        end_date = datetime.strptime(end_date, "%Y-%m-%d").replace(hour=23, minute=59, second=59)
+        end_date = datetime.strptime(end_date, "%Y-%m-%d").replace(
+            hour=23, minute=59, second=59
+        )
 
     # Query 1: Total berdasarkan Kategori Utama
     query = (
@@ -99,7 +103,11 @@ def ambil_data_agregasi(start_date, end_date):
         query_sub = query_sub.filter(Transaction.date <= end_date)
 
     # Eksekusi query dengan pengelompokan dan pengurutan yang konsisten
-    categories = query.group_by(Category.id, Category.nama).order_by(func.sum(Transaction.amount).desc()).all()
+    categories = (
+        query.group_by(Category.id, Category.nama)
+        .order_by(func.sum(Transaction.amount).desc())
+        .all()
+    )
     subcategories = (
         query_sub.group_by(Category.id, Category.nama, SubCategory.id, SubCategory.nama)
         .order_by(Category.nama, func.sum(Transaction.amount).desc())
