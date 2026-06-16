@@ -1,0 +1,72 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check Python Formatting (Black)
+        run: black --check run.py app/
+
+      - name: Lint Python Code (Flake8)
+        run: flake8 run.py app/
+
+      - name: Lint Python Code (Pylint)
+        run: pylint run.py app/ --disable=C0114,C0115,C0116 --fail-under=9.0
+
+  lint-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Node.js Dependencies
+        run: npm ci
+
+      - name: Set up Python (for djlint)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install djLint
+        run: pip install djlint
+
+      - name: Check HTML/Jinja Formatting & Linting (djLint)
+        run: npm run djlint:check
+
+      - name: Check JavaScript Formatting (Prettier)
+        run: npm run format:js:check
+
+      - name: Lint JavaScript Code (ESLint)
+        run: npm run lint:js
+
+      - name: Lint CSS Code (Stylelint)
+        run: npm run lint:css

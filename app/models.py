@@ -53,7 +53,9 @@ class Transaction(db.Model):
         db.Integer, db.ForeignKey("subcategories.id"), nullable=False
     )
     amount = db.Column(db.Numeric(10, 2), nullable=False)
-    date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
+    date = db.Column(
+        db.DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None)
+    )
     note = db.Column(db.Text)
 
     # Tambahkan 2 baris ini agar mudah diakses via Jinja2:
@@ -71,7 +73,9 @@ class Transfer(db.Model):
     to_account_id = db.Column(db.Integer, db.ForeignKey("accounts.id"), nullable=False)
     amount = db.Column(db.Numeric(10, 2), nullable=False)
     fee = db.Column(db.Numeric(10, 2), default=0.00)
-    date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
+    date = db.Column(
+        db.DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None)
+    )
     note = db.Column(db.Text)
 
     # Fix 2: explicit foreign_keys to resolve ambiguity on self-referencing table

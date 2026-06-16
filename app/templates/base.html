@@ -11,11 +11,15 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}MyFinance{% endblock %}</title>
-        <link rel="stylesheet"
-              href="{{ url_for('static', filename='css/style.css') }}">
-        {% block extra_css %}{% endblock %}
-        <script>
+        <title>
+            {% block title %}MyFinance{% endblock %}
+
+            </title>
+            <link rel="stylesheet"
+                  href="{{ url_for('static', filename='css/style.css') }}">
+            {% block extra_css %}{% endblock %}
+
+            <script>
         (function() {
             const savedTheme = localStorage.getItem('theme');
             const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -25,78 +29,79 @@
                 document.documentElement.setAttribute('data-theme', 'light');
             }
         })();
-        </script>
-    </head>
-    <body>
-        <div class="app-container">
-            <aside class="sidebar" id="sidebar">
-                <div class="sidebar-header">
-                    <h2>MyFinance</h2>
-                    <div class="header-buttons">
-                        <button id="theme-toggle" class="toggle-btn" title="Ubah Tema">🌙</button>
-                        <button id="toggle-btn" class="toggle-btn" title="Menu">☰</button>
-                    </div>
-                </div>
-                <nav class="sidebar-nav">
-                    <ul>
-                        <li>
-                            <a href="{{ url_for("main.dashboard") }}">
-                                <span class="nav-icon">📊</span>
-                                <span class="nav-text">Dashboard</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for("main.transaksi") }}">
-                                <span class="nav-icon">💸</span>
-                                <span class="nav-text">Transaksi</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for("main.akun") }}">
-                                <span class="nav-icon">🏦</span>
-                                <span class="nav-text">Akun</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for("main.laporan") }}">
-                                <span class="nav-icon">📈</span>
-                                <span class="nav-text">Laporan</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for("main.dropdown") }}">
-                                <span class="nav-icon">⚙️</span>
-                                <span class="nav-text">Dropdown Menu</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for("main.halaman_analisa") }}">
-                                <span class="nav-icon"></span>
-                                <span class="nav-text">Analisa</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" id="backup-btn" onclick="triggerBackup()">
-                                <span class="nav-icon" id="backup-icon">💾</span>
-                                <span class="nav-text" id="backup-text">Backup DB</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </aside>
-            <main class="main-content">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        <div class="flash-messages">
-                            {% for category, message in messages %}<div class="flash-message flash-{{ category }}">{{ message }}</div>{% endfor %}
+            </script>
+        </head>
+        <body>
+            <div class="app-container">
+                <aside class="sidebar" id="sidebar">
+                    <div class="sidebar-header">
+                        <h2>MyFinance</h2>
+                        <div class="header-buttons">
+                            <button id="theme-toggle" class="toggle-btn" title="Ubah Tema">🌙</button>
+                            <button id="toggle-btn" class="toggle-btn" title="Menu">☰</button>
                         </div>
-                    {% endif %}
-                {% endwith %}
-                {% block content %}{% endblock %}
-            </main>
-        </div>
-        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-        <script>
+                    </div>
+                    <nav class="sidebar-nav">
+                        <ul>
+                            <li>
+                                <a href="{{ url_for('main.dashboard') }}">
+                                    <span class="nav-icon">📊</span>
+                                    <span class="nav-text">Dashboard</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('main.transaksi') }}">
+                                    <span class="nav-icon">💸</span>
+                                    <span class="nav-text">Transaksi</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('main.akun') }}">
+                                    <span class="nav-icon">🏦</span>
+                                    <span class="nav-text">Akun</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('main.laporan') }}">
+                                    <span class="nav-icon">📈</span>
+                                    <span class="nav-text">Laporan</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('main.dropdown') }}">
+                                    <span class="nav-icon">⚙️</span>
+                                    <span class="nav-text">Dropdown Menu</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('main.halaman_analisa') }}">
+                                    <span class="nav-icon"></span>
+                                    <span class="nav-text">Analisa</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" id="backup-btn" onclick="triggerBackup()">
+                                    <span class="nav-icon" id="backup-icon">💾</span>
+                                    <span class="nav-text" id="backup-text">Backup DB</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </aside>
+                <main class="main-content">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="flash-messages">
+                                {% for category, message in messages %}<div class="flash-message flash-{{ category }}">{{ message }}</div>{% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    {% block content %}{% endblock %}
+
+                </main>
+            </div>
+            <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+            <script>
         const themeToggle = document.getElementById('theme-toggle');
         const updateToggleIcon = (theme) => {
             themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
@@ -148,7 +153,8 @@
                 backupText.innerText = "Backup DB";
             });
         }
-        </script>
-        {% block extra_js %}{% endblock %}
-    </body>
-</html>
+            </script>
+            {% block extra_js %}{% endblock %}
+
+        </body>
+    </html>

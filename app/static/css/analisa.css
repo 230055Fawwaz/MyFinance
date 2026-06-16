@@ -40,7 +40,7 @@
 .header-analisa h1 {
     font-size: 2rem;
     margin-bottom: 5px;
-    color: #ffffff;
+    color: #fff;
 }
 
 .header-analisa p {
@@ -63,7 +63,7 @@
     border: 1px solid #1f2937;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 30%);
     transition: transform 0.2s ease;
 }
 
@@ -106,20 +106,21 @@
     font-weight: bold;
     margin-top: 10px;
 }
+
 .status-success .skor-badge {
-    background-color: rgba(16, 185, 129, 0.2); color: #10b981;
+    background-color: rgb(16 185 129 / 20%); color: #10b981;
 }
 
 .status-warning .skor-badge {
-    background-color: rgba(245, 158, 11, 0.2); color: #f59e0b;
+    background-color: rgb(245 158 11 / 20%); color: #f59e0b;
 }
 
 .status-danger .skor-badge {
-    background-color: rgba(239, 68, 68, 0.2); color: #ef4444;
+    background-color: rgb(239 68 68 / 20%); color: #ef4444;
 }
 
 .status-neutral .skor-badge {
-    background-color: rgba(107, 114, 128, 0.2); color: #9ca3af;
+    background-color: rgb(107 114 128 / 20%); color: #9ca3af;
 }
 
 
@@ -132,7 +133,7 @@
     font-size: 2rem;
     font-weight: bold;
     color: #3b82f6;
-    margin: 15px 0 5px 0;
+    margin: 15px 0 5px;
 }
 
 /* Pola Kebiasaan (Association Mining) Card */
@@ -144,7 +145,7 @@
 .pola-list {
     list-style: none;
     padding: 0;
-    margin: 10px 0 0 0;
+    margin: 10px 0 0;
 }
 
 .pola-list li {
@@ -209,8 +210,8 @@
 
 /* Alert Box untuk Kondisi Kosong */
 .alert-aman {
-    background-color: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.2);
+    background-color: rgb(16 185 129 / 10%);
+    border: 1px solid rgb(16 185 129 / 20%);
     color: #34d399;
     padding: 15px;
     border-radius: 8px;

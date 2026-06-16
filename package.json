@@ -4,7 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint:js": "eslint app/static/js/",
+    "lint:css": "stylelint app/static/css/**/*.css",
+    "format:js:check": "prettier --check app/static/js/",
+    "format:js:write": "prettier --write app/static/js/",
+    "djlint:check": "djlint app/templates/ --check",
+    "djlint:format": "djlint app/templates/ --reformat",
+    "lint:all": "npm run lint:js && npm run lint:css && npm run format:js:check && npm run djlint:check"
   },
   "repository": {
     "type": "git",
