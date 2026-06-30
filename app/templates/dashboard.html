@@ -15,33 +15,45 @@
 {% block content %}
     <div class="dashboard-container">
         <h2 class="dashboard-title">Dashboard Keuangan</h2>
-        <!-- 1. BARIS KARTU KPI (STATISTIK UTAMA) -->
+        
         <div class="kpi-grid">
-            <!-- Total Pemasukan -->
             <div class="kpi-card card-income">
                 <div class="kpi-body">
                     <div class="kpi-label">Total Pemasukan (30 Hari)</div>
                     <div class="kpi-value">Rp {{ "{:,.0f}".format(cf_income|sum) }}</div>
                 </div>
             </div>
-            <!-- Total Pengeluaran -->
+            
             <div class="kpi-card card-expense">
                 <div class="kpi-body">
                     <div class="kpi-label">Total Pengeluaran (30 Hari)</div>
                     <div class="kpi-value">Rp {{ "{:,.0f}".format(exp_values|sum) }}</div>
                 </div>
             </div>
-            <!-- Total Saldo Saat Ini -->
-            <div class="kpi-card card-balance">
+
+            <div class="kpi-card card-ready-to-use" style="border-left: 4px solid #ff9800;">
                 <div class="kpi-body">
-                    <div class="kpi-label">Total Saldo Akun</div>
-                    <div class="kpi-value">Rp {{ "{:,.0f}".format(acc_values|sum) }}</div>
+                    <div class="kpi-label">🟢 Uang Siap Pakai (Operasional)</div>
+                    <div class="kpi-value">Rp {{ "{:,.0f}".format(uang_panas) }}</div>
                 </div>
             </div>
-        </div>
-        <!-- 2. BARIS GRAFIK UTAMA -->
+
+            <div class="kpi-card card-cold-cash" style="border-left: 4px solid #00bcd4;">
+                <div class="kpi-body">
+                    <div class="kpi-label">❄️ Uang Dingin / Tabungan</div>
+                    <div class="kpi-value">Rp {{ "{:,.0f}".format(uang_dingin) }}</div>
+                </div>
+            </div>
+
+            <div class="kpi-card card-balance">
+                <div class="kpi-body">
+                    <div class="kpi-label">Total Saldo Akun (Gabungan)</div>
+                    <div class="kpi-value">Rp {{ "{:,.0f}".format(total_saldo_riil) }}</div>
+                </div>
+            </div>
+            </div>
+
         <div class="chart-row-full">
-            <!-- Grafik 1: Tren Arus Kas -->
             <div class="chart-card">
                 <div class="chart-header">
                     <h3>Tren Arus Kas (30 Hari Terakhir)</h3>
@@ -56,7 +68,6 @@
             </div>
         </div>
         <div class="chart-grid-split">
-            <!-- Grafik 2: Alokasi Pengeluaran -->
             <div class="chart-card">
                 <div class="chart-header">
                     <h3>Alokasi Pengeluaran per Kategori</h3>
@@ -68,7 +79,6 @@
                     </canvas>
                 </div>
             </div>
-            <!-- Grafik 3: Saldo Akun -->
             <div class="chart-card">
                 <div class="chart-header">
                     <h3>Saldo Akun Saat Ini</h3>
