@@ -42,6 +42,9 @@ class Account(db.Model):
     nama = db.Column(db.String(20), nullable=False)
     type = db.Column(db.String(10), nullable=False)
     balance = db.Column(db.Numeric(10, 2), default=0.00)
+    
+    # Menggunakan default='operasional' agar tidak merusak data yang sudah ada
+    kategori_dana = db.Column(db.String(15), nullable=False, default='operasional')
 
 
 class Transaction(db.Model):
