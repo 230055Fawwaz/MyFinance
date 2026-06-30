@@ -36,7 +36,12 @@
                     </form>
                 </div>
                 <div class="card-body">
-                    <p class="account-type">{{ account.type }}</p>
+                    <p class="account-type">
+                        {{ account.type }} 
+                        <span class="badge" style="margin-left: 5px; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; background-color: {{ '#ffe0b2' if account.kategori_dana == 'operasional' else '#e0f7fa' }}; color: {{ '#e65100' if account.kategori_dana == 'operasional' else '#006064' }};">
+                            {{ '🔥 Operasional' if account.kategori_dana == 'operasional' else '❄️ Tabungan' }}
+                        </span>
+                    </p>
                     <h2 class="account-balance">Rp {{ "{:,.0f}".format(account.balance | float).replace(',', '.') }}</h2>
                 </div>
             </div>
@@ -46,6 +51,7 @@
             </div>
         {% endfor %}
     </div>
+
     <div id="modal-akun" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
@@ -63,6 +69,13 @@
                        name="type"
                        required
                        placeholder="Misal: Bank, E-Wallet">
+                
+                <label for="kategori_dana">Kategori Dana:</label>
+                <select id="kategori_dana" name="kategori_dana" required style="width: 100%; padding: 8px; margin-bottom: 15px;">
+                    <option value="operasional" selected>🔥 Uang Panas / Operasional</option>
+                    <option value="tabungan">❄️ Uang Dingin / Tabungan</option>
+                </select>
+
                 <label for="saldo">Saldo Awal:</label>
                 <input type="number"
                        id="saldo"
@@ -74,6 +87,7 @@
             </form>
         </div>
     </div>
+
     {% for account in accounts %}
         <div id="modal-edit-{{ account.id }}" class="modal" style="display:none;">
             <div class="modal-content">
@@ -94,6 +108,17 @@
                         <input type="text" name="type" value="{{ account.type }}" required>
                     </div>
                     <br>
+                    
+                    <div>
+                        <label>Kategori Dana:</label>
+                        <br>
+                        <select name="kategori_dana" required style="width: 100%; padding: 8px;">
+                            <option value="operasional" {{ 'selected' if account.kategori_dana == 'operasional' }}>🔥 Uang Panas / Operasional</option>
+                            <option value="tabungan" {{ 'selected' if account.kategori_dana == 'tabungan' }}>❄️ Uang Dingin / Tabungan</option>
+                        </select>
+                    </div>
+                    <br>
+
                     <div>
                         <label>Saldo Awal:</label>
                         <br>
@@ -109,6 +134,7 @@
             </div>
         </div>
     {% endfor %}
+
     <div id="modal-transfer" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
@@ -145,7 +171,6 @@
         </div>
     </div>
 {% endblock %}
-{# 4. Menambah JS khusus halaman transaksi saja #}
 {% block extra_js %}
     <script src="{{ url_for('static', filename='js/akun.js') }}"></script>
 {% endblock %}

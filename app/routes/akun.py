@@ -20,6 +20,8 @@ def tambah_akun():
     nama_akun = request.form.get("nama")
     tipe_akun = request.form.get("type")
     saldo_awal_str = request.form.get("balance")
+    # 1. TANGKAP INPUT KATEGORI DANA BARU DI SINI
+    kategori_dana = request.form.get("kategori_dana")
 
     # Validasi Input Kosong
     if not nama_akun or not nama_akun.strip():
@@ -27,6 +29,10 @@ def tambah_akun():
         return redirect(url_for("main.akun"))
     if not tipe_akun or not tipe_akun.strip():
         flash("Tipe akun tidak boleh kosong!", "danger")
+        return redirect(url_for("main.akun"))
+    # Validasi Kategori Dana
+    if not kategori_dana or kategori_dana.strip() not in ["operasional", "tabungan"]:
+        flash("Kategori dana tidak valid!", "danger")
         return redirect(url_for("main.akun"))
 
     # Validasi Saldo
@@ -40,8 +46,12 @@ def tambah_akun():
 
     # Simpan ke Database
     try:
+        # 2. MASUKKAN KATEGORI DANA KE DALAM INSTANCE MODEL ACCOUNT
         akun_baru = Account(
-            nama=nama_akun.strip(), type=tipe_akun.strip(), balance=saldo_awal
+            nama=nama_akun.strip(), 
+            type=tipe_akun.strip(), 
+            balance=saldo_awal,
+            kategori_dana=kategori_dana.strip()
         )
         db.session.add(akun_baru)
         db.session.commit()
@@ -95,6 +105,8 @@ def edit_akun(akun_id):
     nama_akun = request.form.get("nama")
     tipe_akun = request.form.get("type")
     saldo_str = request.form.get("balance")
+    # 3. TANGKAP INPUT KATEGORI DANA SAAT EDIT DI SINI
+    kategori_dana = request.form.get("kategori_dana")
 
     # Validasi Input Kosong
     if not nama_akun or not nama_akun.strip():
@@ -102,6 +114,10 @@ def edit_akun(akun_id):
         return redirect(url_for("main.akun"))
     if not tipe_akun or not tipe_akun.strip():
         flash("Tipe akun tidak boleh kosong!", "danger")
+        return redirect(url_for("main.akun"))
+    # Validasi Kategori Dana Saat Edit
+    if not kategori_dana or kategori_dana.strip() not in ["operasional", "tabungan"]:
+        flash("Kategori dana tidak valid!", "danger")
         return redirect(url_for("main.akun"))
 
     # Validasi Saldo
@@ -114,9 +130,12 @@ def edit_akun(akun_id):
         return redirect(url_for("main.akun"))
 
     try:
+        # 4. UPDATE VALUE KATEGORI DANA PADA AKUN YANG DIEDIT
         akun.nama = nama_akun.strip()
         akun.type = tipe_akun.strip()
         akun.balance = saldo
+        akun.kategori_dana = kategori_dana.strip()
+        
         db.session.commit()
         flash(f"Perubahan pada akun '{akun.nama}' berhasil disimpan!", "success")
     except SQLAlchemyError as e:
