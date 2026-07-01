@@ -1,132 +1,138 @@
 # MyFinance - Personal Finance Tracker
 
-Aplikasi pencatat keuangan pribadi berbasis web yang dikembangkan menggunakan **Python (Flask)** untuk backend, **SQLite** untuk database, serta **HTML**, **Vanilla CSS**, dan **Vanilla JS** untuk frontend. Aplikasi ini dilengkapi dengan visualisasi grafik menggunakan **Chart.js** dan algoritma **Machine Learning** sederhana untuk analisis keuangan yang lebih mendalam.
+Aplikasi pencatat keuangan pribadi berbasis web yang membantu pengguna melacak, menganalisis, dan mengelola arus keuangan mereka secara mandiri dan terstruktur.
 
 ---
 
-## 🚀 Fitur Utama
+## 📝 Latar Belakang Proyek
 
-1. **Dashboard Dinamis**:
-   - Visualisasi arus kas (pemasukan vs pengeluaran) harian dalam 30 hari terakhir.
-   - Grafik alokasi pengeluaran berdasarkan kategori utama.
-   - Grafik distribusi saldo di berbagai akun keuangan.
-
-2. **Manajemen Transaksi**:
-   - Pencatatan transaksi pemasukan dan pengeluaran secara terperinci.
-   - Edit dan hapus transaksi dengan mekanisme *reversal saldo* otomatis (saldo akun disesuaikan kembali saat transaksi diubah/dihapus).
-
-3. **Manajemen Akun & Transfer**:
-   - Mendukung banyak akun keuangan (misalnya: Dompet, Rekening Bank, E-Wallet).
-   - Fitur transfer saldo antar akun dengan opsi biaya admin (*transfer fee*).
-
-4. **Kategori & Subkategori**:
-   - Pengelompokan transaksi yang fleksibel menggunakan relasi satu-ke-banyak (Kategori utama ke Subkategori).
-
-5. **Laporan & Export Data**:
-   - Filter laporan berdasarkan rentang tanggal.
-   - Export laporan keuangan teragregasi ke dalam format **CSV** dan **PDF** (menggunakan ReportLab).
-
-6. **Analisis Keuangan Cerdas (DSS & Data Mining)**:
-   - **DSS Rule-Based**: Evaluasi rasio menabung bulanan disertai status kesehatan keuangan ("SANGAT SEHAT", "AMAN", "WASPADA/BOROS") dan rekomendasi finansial.
-   - **Deteksi Anomali**: Menggunakan algoritma **Isolation Forest** (scikit-learn) untuk mendeteksi transaksi pengeluaran yang tidak wajar (outlier).
-   - **Prediksi Pengeluaran**: Menggunakan **Linear Regression** untuk memproyeksikan total pengeluaran pada bulan berikutnya berdasarkan tren historis.
-   - **Analisis Pola Hubungan**: Menggunakan algoritma **Apriori** (mlxtend) untuk menemukan pola hubungan transaksi subkategori yang sering terjadi pada hari yang sama.
-
----
-
-## 🛠️ Arsitektur & Struktur Proyek
-
-```text
-MyFinance/
-├── app/
-│   ├── routes/              # Controller / Endpoint Blueprint Flask
-│   │   ├── akun.py          # Manajemen akun & saldo
-│   │   ├── dropdown.py      # Kategori dan subkategori
-│   │   ├── laporan.py       # Pembuatan laporan CSV & PDF
-│   │   ├── main.py          # Halaman dashboard & halaman utama
-│   │   └── transaksi.py     # Transaksi & transfer saldo
-│   ├── static/              # Asset frontend (CSS & JS)
-│   │   ├── css/             # Stylesheet vanilla CSS per halaman
-│   │   └── js/              # Script logic vanilla JS per halaman
-│   ├── templates/           # Layout HTML dengan template engine Jinja2
-│   ├── utils/               # Logika pemrosesan data
-│   │   ├── analisa.py       # DSS & algoritma data mining (sklearn, mlxtend)
-│   │   └── dashgraph.py     # Penyiapan dataset grafik dashboard
-│   ├── __init__.py          # Inisialisasi Flask, database SQLite, & Blueprint
-│   └── backup.bat           # Script batch untuk backup database manual
-├── backups/                 # Folder penyimpanan riwayat database backup
-├── notes/                   # Laporan otomatis hasil pembersihan python/web
-├── clean_python.bat         # Script otomatisasi linting/formatting Python
-├── clean_web.bat            # Script otomatisasi linting/formatting Frontend
-├── myfinance.db             # File database SQLite
-├── requirements.txt         # Daftar dependensi Python
-├── run.py                   # Entry point aplikasi Flask
-└── run_server.bat           # Script otomatisasi penyalaan server & backup
-```
+Pencatatan keuangan secara manual sering kali merepotkan dan tidak terstruktur. Proyek **MyFinance** lahir dari:
+- **Kesulitan mencatat keuangan keluar masuk** secara konsisten dan terperinci secara manual.
+- Keinginan untuk **membangun sebuah program mandiri** yang praktis, cepat, dan memiliki analisis keuangan cerdas guna memberikan gambaran kesehatan finansial pribadi.
 
 ---
 
 ## 💻 Tech Stack
 
-- **Backend**: Python 3, Flask, Flask-SQLAlchemy (ORM)
-- **Database**: SQLite
-- **Frontend**: HTML5, Vanilla CSS, Vanilla JS, Jinja2
-- **Data Analytics & ML**: Pandas, NumPy, Scikit-learn, Mlxtend
-- **Reporting**: ReportLab (PDF Generator)
-- **Visualisasi**: Chart.js (v2/v3)
-- **Automation/DevOps**: Windows Batch (.bat), PowerShell
+Aplikasi ini menggunakan teknologi yang ringan namun tangguh untuk menjamin performa lokal yang maksimal:
+
+- **Backend**: [Python](https://www.python.org/) & [Flask](https://flask.palletsprojects.com/) (Vanilla Python / Flask-SQLAlchemy)
+- **Database**: [SQLite](https://www.sqlite.org/) (dilengkapi constraint integritas data dan optimasi konkurensi)
+- **Frontend**: HTML5, Vanilla CSS, Vanilla JS
+- **Visualisasi**: [Chart.js](https://www.chartjs.org/) (untuk representasi grafis interaktif)
+- **Analisis & Data Mining**: Pandas, NumPy, Scikit-learn, Mlxtend
+- **Reporting**: ReportLab (untuk dokumen PDF)
+- **Otomatisasi**: Windows Batch File (`.bat`) & PowerShell
 
 ---
 
-## 🏁 Cara Menjalankan Aplikasi
+## 🔍 Pembersih Kode dan Linting (Code Quality & Style Guides)
 
-Aplikasi ini telah dioptimalkan untuk berjalan di lingkungan Windows menggunakan script batch otomatis (`run_server.bat`).
+Untuk menjaga konsistensi gaya penulisan dan kualitas kode (clean code), proyek ini didukung oleh berbagai tools linting dan formatting:
 
-### Prasyarat
-1. Pastikan **Python 3** sudah terinstal dan berada dalam sistem `PATH`.
-2. Pastikan file database (`myfinance.db`) dan dependensi di `requirements.txt` sudah siap.
+### Python Stack:
+- **Vulture**: Mendeteksi kode mati (*dead code*) yang tidak digunakan.
+- **Flake8**: Memeriksa kepatuhan terhadap standar gaya penulisan PEP 8.
+- **Black**: Melakukan pemformatan kode (*code formatting*) secara otomatis agar seragam.
+- **Pylint**: Menganalisis bug potensial, kualitas kode, dan memberikan skor kualitas.
 
-### Langkah-langkah:
-1. Hubungkan terminal ke folder proyek dan buat virtual environment (jika belum ada):
-   ```bash
+### Web Frontend Stack:
+- **djLint**: Memformat dan melakukan linting pada template HTML (Jinja2).
+- **Prettier**: Melakukan pemformatan otomatis pada file JavaScript dan CSS.
+- **ESLint**: Melakukan analisis statis untuk mendeteksi pola bermasalah pada JavaScript.
+- **Stylelint**: Memeriksa kesalahan dan merapikan file stylesheet CSS.
+
+---
+
+## 🖥️ Halaman Web & Fitur Aplikasi
+
+Aplikasi MyFinance terdiri dari beberapa halaman utama dengan fungsi spesifik:
+
+1. **Dashboard (Visualisasi Keuangan)**
+   - Menampilkan ringkasan saldo total dari seluruh akun.
+   - Grafik distribusi saldo antar akun yang dimiliki.
+   - Grafik pengeluaran berdasarkan kategori utama.
+   - Grafik tren harian untuk membandingkan total pemasukan dan pengeluaran dalam 30 hari terakhir.
+
+2. **Transaksi (Pencatatan Finansial)**
+   - Pencatatan transaksi pemasukan dan pengeluaran.
+   - **Modal Form**: Pengisian data transaksi dilakukan menggunakan form modal yang interaktif tanpa perlu berpindah halaman.
+   - Fitur edit dan hapus transaksi dengan kalkulasi *reversal* saldo akun otomatis.
+
+3. **Akun (Manajemen Dompet)**
+   - Menampilkan daftar akun keuangan yang terdaftar (misalnya: Rekening Bank, Dompet Fisik, E-Wallet) beserta rincian jumlah uang di dalamnya.
+   - Mendukung pencatatan transfer saldo antar akun dengan opsi biaya admin (*transfer fee*).
+
+4. **Laporan (Eksport Data)**
+   - Menyediakan filter waktu yang fleksibel untuk melihat riwayat transaksi: **Hari Ini**, **7 Hari Terakhir**, **Bulan Ini**, serta rentang tanggal **Custom**.
+   - Fitur ekspor laporan transaksi langsung ke dalam format **CSV** dan **PDF**.
+
+5. **Dropdown Menu (Pengaturan Kategori)**
+   - Halaman khusus untuk mengatur opsi kategori dan subkategori yang akan digunakan dalam dropdown form modal transaksi.
+   - Mempermudah kustomisasi struktur pengeluaran dan pemasukan sesuai kebutuhan pribadi.
+
+6. **Analisa (Decision Support System & Data Mining)**
+   - **DSS Rule-Based**: Memberikan penilaian terhadap rasio tabungan bulanan (Finansial Sehat/Aman/Boros) serta rekomendasi langkah keuangan.
+   - **Deteksi Anomali**: Menggunakan algoritma *Isolation Forest* untuk mendeteksi transaksi dengan nominal tidak wajar (outliers).
+   - **Prediksi Tren**: Menggunakan *Linear Regression* untuk memproyeksikan total pengeluaran di bulan berikutnya.
+   - **Pola Pembelian (Association Rules)**: Menggunakan algoritma *Apriori* untuk menemukan hubungan subkategori transaksi yang sering dibeli bersamaan pada hari yang sama.
+
+7. **Backup Database**
+   - Fasilitas untuk memicu backup database SQLite secara manual demi keamanan data.
+
+---
+
+## 🛡️ Fitur Sistem & Keamanan Database
+
+- **SQLite Foreign Key Constraint**: Secara ketat mencegah adanya data transaksi yatim-piatu (*orphan data*) yang diakibatkan oleh penghapusan akun keuangan, kategori, atau subkategori secara tidak sengaja.
+- **Write-Ahead Logging (WAL) SQLite**: Mode WAL diaktifkan untuk mendukung paralelisasi proses membaca (read) dan menulis (write) pada database, meminimalkan resiko database terkunci (*locked database*) saat diakses bersamaan.
+- **Flash Message**: Memberikan umpan balik instan berupa pesan sukses (hijau) atau pesan peringatan (merah/kuning) pada bagian atas halaman setelah melakukan operasi CRUD database.
+
+---
+
+## ⚙️ Fungsi Batch File (`.bat`)
+
+Dua file batch disediakan untuk mempermudah operasional harian tanpa perlu mengetik command terminal yang rumit:
+
+### 1. Mempermudah Menjalankan Server (`run_server.bat`)
+Dengan cukup melakukan **klik dua kali (double click)** pada file ini, proses berikut berjalan otomatis:
+- Memeriksa apakah server Flask sudah menyala di port terkait (mencegah konflik port).
+- Melakukan **backup database otomatis** sebelum server menyala, disimpan ke folder `backups/` dengan nama berformat timestamp presisi (`backup_YYYYMMDD_HHMin.db`).
+- Mengelola kebijakan retensi database (menyimpan maksimal 10 file backup terakhir dan menghapus backup yang berumur lebih dari 30 hari).
+- Menjalankan virtual environment (`.venv`) dan menyalakan server Flask di latar belakang.
+- Secara otomatis **membuka browser default** mengarah ke alamat `http://127.0.0.1:5000` ketika server siap menerima request.
+
+### 2. Pembersihan Kode & Linting Otomatis
+- **`clean_python.bat`**: Menjalankan *Black, Flake8, Pylint, dan Vulture* pada seluruh file Python. Hasil analisanya disimpan secara otomatis ke dalam folder `notes/`.
+- **`clean_web.bat`**: Menjalankan *djLint, Prettier, ESLint, dan Stylelint* pada file HTML/Jinja, JavaScript, dan CSS. Hasil analisanya disimpan di folder `notes/web/`.
+
+---
+
+## 🚀 Cara Memulai
+
+### Prasyarat:
+- [Python 3.x](https://www.python.org/downloads/) terinstal di komputer Anda.
+
+### Cara Menjalankan:
+1. Kloning atau unduh repositori ini ke komputer lokal Anda.
+2. Buka terminal di direktori proyek dan buat virtual environment:
+   ```powershell
    python -m venv .venv
    ```
-2. Aktifkan virtual environment dan instal dependensi:
-   ```bash
-   .venv\Scripts\activate
+3. Aktifkan virtual environment:
+   ```powershell
+   # Windows PowerShell
+   .venv\Scripts\Activate.ps1
+   
+   # Windows CMD
+   .venv\Scripts\activate.bat
+   ```
+4. Instal seluruh dependensi yang dibutuhkan:
+   ```powershell
    pip install -r requirements.txt
    ```
-3. Cukup jalankan file **`run_server.bat`** dengan melakukan klik dua kali (double click) atau via terminal:
-   ```cmd
-   run_server.bat
+5. Jalankan aplikasi dengan melakukan **double click** pada file **`run_server.bat`**, atau jalankan lewat terminal:
+   ```powershell
+   .\run_server.bat
    ```
-
-**Apa saja yang dilakukan `run_server.bat` secara otomatis?**
-- Memeriksa apakah ada proses server Python yang sedang berjalan untuk menghindari konflik port.
-- Melakukan **backup database otomatis** ke dalam folder `backups/` dengan format nama berdasarkan waktu presisi (`backup_YYYYMMDD_HHMin.db`).
-- Menjalankan kebijakan **retensi backup** via PowerShell (menyimpan 10 backup terakhir dan menghapus backup yang lebih tua dari 30 hari).
-- Menyalakan server Flask secara latar belakang (background process).
-- Memeriksa kesiapan port server Flask menggunakan `curl`, lalu secara otomatis **membuka browser** ke alamat `http://127.0.0.1:5000`.
-
----
-
-## 🧹 Script Otomatisasi Developer
-
-Untuk menjaga kualitas dan kerapihan penulisan kode, disediakan dua batch file pembersih kode:
-
-### 1. Pembersihan Kode Python (`clean_python.bat`)
-Script ini mengotomatiskan proses penataan kode python menggunakan 4 alat analisis:
-- **Vulture**: Mencari kode mati (*dead code*) yang tidak pernah terpanggil.
-- **Black**: Melakukan formatting otomatis agar kode konsisten sesuai standar PEP 8.
-- **Flake8**: Menganalisis *syntax error* dan pelanggaran gaya penulisan kode.
-- **Pylint**: Menganalisis kualitas kode secara menyeluruh dan memberikan skor.
-
-Hasil analisis dan log pembersihan akan disimpan secara otomatis di folder `notes/laporan_pembersihan_XXX.txt`.
-
-### 2. Pembersihan Kode Frontend/Web (`clean_web.bat`)
-Script ini merapikan file HTML (Jinja), JS, dan CSS menggunakan:
-- **djLint**: Memformat dan memeriksa kebersihan struktur HTML yang berada di template Jinja.
-- **Prettier & ESLint**: Merapikan dan menganalisis kualitas kode JavaScript (tanpa menyentuh pustaka vendor seperti `chart.min.js`).
-- **Stylelint**: Memformat file CSS secara otomatis.
-
-Hasil analisis dan log pembersihan web akan disimpan di `notes/web/laporan_pembersihan_XXX.txt`.
+6. Aplikasi akan terbuka secara otomatis di browser Anda di alamat `http://127.0.0.1:5000`.
