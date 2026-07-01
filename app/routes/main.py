@@ -12,6 +12,8 @@ import subprocess
 from datetime import datetime, timedelta, timezone
 from flask import render_template, Blueprint, jsonify, current_app
 from app.models import db, Category, SubCategory, Account, Transaction
+from sqlalchemy import func
+from decimal import Decimal
 from app.utils.analisa import (
     deteksi_anomali_pengeluaran,
     hitung_kesehatan_keuangan,
@@ -29,16 +31,28 @@ main_bp = Blueprint("main", __name__)
 
 @main_bp.route("/")
 @main_bp.route("/dashboard")
-# (Asumsi ada decorator @main_bp.route di sini)
 def dashboard():
     # Rentang waktu: 30 hari terakhir
     hari_ini = datetime.now(timezone.utc).replace(tzinfo=None)
     tiga_puluh_hari_lalu = hari_ini - timedelta(days=30)
 
-    # Memanggil fungsi bantuan untuk masing-masing data
     cf_labels, cf_income, cf_expense = get_cash_flow_data(tiga_puluh_hari_lalu)
     exp_labels, exp_values = get_expense_allocation(tiga_puluh_hari_lalu)
     acc_labels, acc_values = get_account_distribution()
+
+    # --- PERBAIKAN DI SINI (Menggunakan Decimal) ---
+    # 1. Hitung Uang Siap Pakai (Operasional)
+    uang_panas = db.session.query(func.sum(Account.balance)).filter(
+        Account.kategori_dana == 'operasional'
+    ).scalar() or Decimal('0.00')
+
+    # 2. Hitung Uang Dingin (Tabungan)
+    uang_dingin = db.session.query(func.sum(Account.balance)).filter(
+        Account.kategori_dana == 'tabungan'
+    ).scalar() or Decimal('0.00')
+
+    # Sekarang keduanya bertipe Decimal, sehingga aman untuk dijumlahkan
+    total_saldo_riil = uang_panas + uang_dingin
 
     return render_template(
         "dashboard.html",
@@ -49,6 +63,9 @@ def dashboard():
         exp_values=exp_values,
         acc_labels=acc_labels,
         acc_values=acc_values,
+        uang_panas=uang_panas,
+        uang_dingin=uang_dingin,
+        total_saldo_riil=total_saldo_riil
     )
 
 
