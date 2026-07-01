@@ -30,7 +30,7 @@ Aplikasi pencatat keuangan pribadi berbasis web yang membantu pengguna melacak, 
 
 ---
 
-## 📝 Latar Belakang Proyek
+## ✨ Fitur Utama
 
 Pencatatan keuangan secara manual sering kali merepotkan dan tidak terstruktur. Proyek **MyFinance** lahir dari:
 - **Kesulitan mencatat keuangan keluar masuk** secara konsisten dan terperinci secara manual.
