@@ -8,92 +8,92 @@
 -->
 {% extends "base.html" %}
 {% block title %}Dashboard - MyFinance{% endblock %}
-{% block extra_css %}
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/dashboard.css') }}">
-{% endblock %}
-{% block content %}
-    <div class="dashboard-container">
-        <h2 class="dashboard-title">Dashboard Keuangan</h2>
-        
-        <div class="kpi-grid">
-            <div class="kpi-card card-income">
-                <div class="kpi-body">
-                    <div class="kpi-label">Total Pemasukan (30 Hari)</div>
-                    <div class="kpi-value">Rp {{ "{:,.0f}".format(cf_income|sum) }}</div>
-                </div>
-            </div>
-            
-            <div class="kpi-card card-expense">
-                <div class="kpi-body">
-                    <div class="kpi-label">Total Pengeluaran (30 Hari)</div>
-                    <div class="kpi-value">Rp {{ "{:,.0f}".format(exp_values|sum) }}</div>
-                </div>
-            </div>
 
-            <div class="kpi-card card-ready-to-use" style="border-left: 4px solid #ff9800;">
-                <div class="kpi-body">
-                    <div class="kpi-label">🟢 Uang Siap Pakai (Operasional)</div>
-                    <div class="kpi-value">Rp {{ "{:,.0f}".format(uang_panas) }}</div>
-                </div>
-            </div>
+    {% block extra_css %}
 
-            <div class="kpi-card card-cold-cash" style="border-left: 4px solid #00bcd4;">
-                <div class="kpi-body">
-                    <div class="kpi-label">❄️ Uang Dingin / Tabungan</div>
-                    <div class="kpi-value">Rp {{ "{:,.0f}".format(uang_dingin) }}</div>
-                </div>
-            </div>
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/dashboard.css') }}">
+    {% endblock %}
 
-            <div class="kpi-card card-balance">
-                <div class="kpi-body">
-                    <div class="kpi-label">Total Saldo Akun (Gabungan)</div>
-                    <div class="kpi-value">Rp {{ "{:,.0f}".format(total_saldo_riil) }}</div>
-                </div>
-            </div>
-            </div>
+    {% block content %}
 
-        <div class="chart-row-full">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3>Tren Arus Kas (30 Hari Terakhir)</h3>
+        <div class="dashboard-container">
+            <h2 class="dashboard-title">Dashboard Keuangan</h2>
+            <div class="kpi-grid">
+                <div class="kpi-card card-income">
+                    <div class="kpi-body">
+                        <div class="kpi-label">Total Pemasukan (30 Hari)</div>
+                        <div class="kpi-value">Rp {{ "{:,.0f}".format(cf_income|sum) }}</div>
+                    </div>
                 </div>
-                <div class="chart-body trend-chart-wrapper">
-                    <canvas id="cashFlowChart"
-                            data-labels='{{ cf_labels | tojson }}'
-                            data-income='{{ cf_income | tojson }}'
-                            data-expense='{{ cf_expense | tojson }}'>
-                    </canvas>
+                <div class="kpi-card card-expense">
+                    <div class="kpi-body">
+                        <div class="kpi-label">Total Pengeluaran (30 Hari)</div>
+                        <div class="kpi-value">Rp {{ "{:,.0f}".format(exp_values|sum) }}</div>
+                    </div>
+                </div>
+                <div class="kpi-card card-ready-to-use">
+                    <div class="kpi-body">
+                        <div class="kpi-label">🟢 Uang Siap Pakai (Operasional)</div>
+                        <div class="kpi-value">Rp {{ "{:,.0f}".format(uang_panas) }}</div>
+                    </div>
+                </div>
+                <div class="kpi-card card-cold-cash">
+                    <div class="kpi-body">
+                        <div class="kpi-label">❄️ Uang Dingin / Tabungan</div>
+                        <div class="kpi-value">Rp {{ "{:,.0f}".format(uang_dingin) }}</div>
+                    </div>
+                </div>
+                <div class="kpi-card card-balance">
+                    <div class="kpi-body">
+                        <div class="kpi-label">Total Saldo Akun (Gabungan)</div>
+                        <div class="kpi-value">Rp {{ "{:,.0f}".format(total_saldo_riil) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-row-full">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Tren Arus Kas (30 Hari Terakhir)</h3>
+                    </div>
+                    <div class="chart-body trend-chart-wrapper">
+                        <canvas id="cashFlowChart"
+                                data-labels='{{ cf_labels | tojson }}'
+                                data-income='{{ cf_income | tojson }}'
+                                data-expense='{{ cf_expense | tojson }}'>
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-grid-split">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Alokasi Pengeluaran per Kategori</h3>
+                    </div>
+                    <div class="chart-body split-chart-wrapper">
+                        <canvas id="expenseChart"
+                                data-labels='{{ exp_labels | tojson }}'
+                                data-values='{{ exp_values | tojson }}'>
+                        </canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Saldo Akun Saat Ini</h3>
+                    </div>
+                    <div class="chart-body split-chart-wrapper">
+                        <canvas id="accountChart"
+                                data-labels='{{ acc_labels | tojson }}'
+                                data-values='{{ acc_values | tojson }}'>
+                        </canvas>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="chart-grid-split">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3>Alokasi Pengeluaran per Kategori</h3>
-                </div>
-                <div class="chart-body split-chart-wrapper">
-                    <canvas id="expenseChart"
-                            data-labels='{{ exp_labels | tojson }}'
-                            data-values='{{ exp_values | tojson }}'>
-                    </canvas>
-                </div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3>Saldo Akun Saat Ini</h3>
-                </div>
-                <div class="chart-body split-chart-wrapper">
-                    <canvas id="accountChart"
-                            data-labels='{{ acc_labels | tojson }}'
-                            data-values='{{ acc_values | tojson }}'>
-                    </canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-{% block extra_js %}
-    <script src="{{ url_for('static', filename='js/vendor/chart.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-{% endblock %}
+    {% endblock %}
+
+    {% block extra_js %}
+
+        <script src="{{ url_for('static', filename='js/vendor/chart.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    {% endblock %}

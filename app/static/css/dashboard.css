@@ -35,19 +35,20 @@
 }
 
 .kpi-card {
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 1.5rem;
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 10px -2px rgb(0 0 0 / 5%), 0 2px 4px -1px rgb(0 0 0 / 3%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, border-color 0.3s ease;
     position: relative;
     overflow: hidden;
 }
 
 .kpi-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px -8px rgb(0 0 0 / 8%), 0 4px 8px -2px rgb(0 0 0 / 4%);
+    border-color: var(--primary-color);
 }
 
 /* Optimasi Warna: Menggunakan aksen border kiri tebal dan teks berwarna lembut.
@@ -56,6 +57,7 @@
 .card-income {
     border-left: 5px solid var(--success-color);
 }
+
 .card-income .kpi-value {
     color: var(--success-color);
 }
@@ -63,6 +65,7 @@
 .card-expense {
     border-left: 5px solid var(--danger-color);
 }
+
 .card-expense .kpi-value {
     color: var(--danger-color);
 }
@@ -70,8 +73,25 @@
 .card-balance {
     border-left: 5px solid var(--primary-color);
 }
+
 .card-balance .kpi-value {
     color: var(--primary-color);
+}
+
+.card-ready-to-use {
+    border-left: 5px solid var(--warning-color);
+}
+
+.card-ready-to-use .kpi-value {
+    color: var(--warning-color);
+}
+
+.card-cold-cash {
+    border-left: 5px solid #0ea5e9;
+}
+
+.card-cold-cash .kpi-value {
+    color: #0ea5e9;
 }
 
 /* Label & Nilai di dalam KPI */
@@ -97,21 +117,21 @@
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 2%);
     margin-bottom: 1.5rem;
     overflow: hidden;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .chart-header {
-    background-color: rgba(0, 0, 0, 0.01); /* Mengikuti warna dasar secara dinamis */
+    background-color: rgb(0 0 0 / 1%); /* Mengikuti warna dasar secara dinamis */
     padding: 1.25rem 1.5rem;
     border-bottom: 1px solid var(--border-color);
 }
 
 /* Sinkronisasi warna header dengan tema aktif */
 [data-theme="dark"] .chart-header {
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgb(255 255 255 / 2%);
 }
 
 .chart-header h3 {
