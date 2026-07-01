@@ -9,168 +9,176 @@
 -->
 {% extends "base.html" %}
 {% block title %}Akun - MyFinance{% endblock %}
-{% block extra_css %}
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/akun.css') }}">
-{% endblock %}
-{% block content %}
-    <div class="content-header">
-        <h1>Daftar Akun</h1>
-        <button class="btn btn-primary" id="btn-tambah-akun">+ Tambah Akun</button>
-        <button class="btn btn-secondary" id="btn-transfer">+ Transfer</button>
-    </div>
-    <div class="cards-container">
-        {% for account in accounts %}
-            <div class="card account-card">
-                <div class="card-header">
-                    <h3>{{ account.nama }}</h3>
-                    <button class="btn-edit"
-                            onclick="document.getElementById('modal-edit-{{ account.id }}').style.display='block'">
-                        Edit
-                    </button>
-                    <form action="{{ url_for('akun.hapus_akun', akun_id=account.id) }}"
-                          method="POST"
-                          style="display:inline"
-                          onsubmit="return confirm('Apakah kamu yakin ingin menghapus akun ini?');">
-                        <button type="submit" class="btn-hapus">Hapus</button>
-                    </form>
-                </div>
-                <div class="card-body">
-                    <p class="account-type">
-                        {{ account.type }} 
-                        <span class="badge" style="margin-left: 5px; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; background-color: {{ '#ffe0b2' if account.kategori_dana == 'operasional' else '#e0f7fa' }}; color: {{ '#e65100' if account.kategori_dana == 'operasional' else '#006064' }};">
-                            {{ '🔥 Operasional' if account.kategori_dana == 'operasional' else '❄️ Tabungan' }}
-                        </span>
-                    </p>
-                    <h2 class="account-balance">Rp {{ "{:,.0f}".format(account.balance | float).replace(',', '.') }}</h2>
-                </div>
-            </div>
-        {% else %}
-            <div class="empty-state">
-                <p>Belum ada akun. Silakan tambah akun baru.</p>
-            </div>
-        {% endfor %}
-    </div>
 
-    <div id="modal-akun" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Tambah Akun Baru</h2>
-            <form action="/akun/tambah" method="POST">
-                <label for="nama_akun">Nama Akun:</label>
-                <input type="text"
-                       id="nama_akun"
-                       name="nama"
-                       required
-                       placeholder="Misal: BCA, Gopay">
-                <label for="tipe_akun">Tipe Akun:</label>
-                <input type="text"
-                       id="tipe_akun"
-                       name="type"
-                       required
-                       placeholder="Misal: Bank, E-Wallet">
-                
-                <label for="kategori_dana">Kategori Dana:</label>
-                <select id="kategori_dana" name="kategori_dana" required style="width: 100%; padding: 8px; margin-bottom: 15px;">
-                    <option value="operasional" selected>🔥 Uang Panas / Operasional</option>
-                    <option value="tabungan">❄️ Uang Dingin / Tabungan</option>
-                </select>
+    {% block extra_css %}
 
-                <label for="saldo">Saldo Awal:</label>
-                <input type="number"
-                       id="saldo"
-                       name="balance"
-                       required
-                       value="0"
-                       step="0.01">
-                <button type="submit" class="btn btn-success">Simpan</button>
-            </form>
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/akun.css') }}">
+    {% endblock %}
+
+    {% block content %}
+
+        <div class="content-header">
+            <h1>Daftar Akun</h1>
+            <button class="btn btn-primary" id="btn-tambah-akun">+ Tambah Akun</button>
+            <button class="btn btn-secondary" id="btn-transfer">+ Transfer</button>
         </div>
-    </div>
-
-    {% for account in accounts %}
-        <div id="modal-edit-{{ account.id }}" class="modal" style="display:none;">
+        <div class="cards-container">
+            {% for account in accounts %}
+                <div class="card account-card">
+                    <div class="card-header">
+                        <h3>{{ account.nama }}</h3>
+                        <button class="btn-edit"
+                                onclick="document.getElementById('modal-edit-{{ account.id }}').style.display='block'">
+                            Edit
+                        </button>
+                        <form action="{{ url_for('akun.hapus_akun', akun_id=account.id) }}"
+                              method="POST"
+                              style="display:inline"
+                              onsubmit="return confirm('Apakah kamu yakin ingin menghapus akun ini?');">
+                            <button type="submit" class="btn-hapus">Hapus</button>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <p class="account-type">
+                            {{ account.type }}
+                            <span class="badge badge-{{ account.kategori_dana }}">
+                                {{ '🔥 Operasional' if account.kategori_dana == 'operasional' else '❄️ Tabungan' }}
+                            </span>
+                        </p>
+                        <h2 class="account-balance">Rp {{ "{:,.0f}".format(account.balance | float).replace(',', '.') }}</h2>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>Belum ada akun. Silakan tambah akun baru.</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="modal-akun" class="modal">
             <div class="modal-content">
-                <span class="close-btn"
-                      onclick="document.getElementById('modal-edit-{{ account.id }}').style.display='none'">&times;</span>
-                <h2>Edit Akun</h2>
-                <form method="POST"
-                      action="{{ url_for('akun.edit_akun', akun_id=account.id) }}">
-                    <div>
-                        <label>Nama Akun:</label>
-                        <br>
-                        <input type="text" name="nama" value="{{ account.nama }}" required>
-                    </div>
-                    <br>
-                    <div>
-                        <label>Tipe Akun:</label>
-                        <br>
-                        <input type="text" name="type" value="{{ account.type }}" required>
-                    </div>
-                    <br>
-                    
-                    <div>
-                        <label>Kategori Dana:</label>
-                        <br>
-                        <select name="kategori_dana" required style="width: 100%; padding: 8px;">
-                            <option value="operasional" {{ 'selected' if account.kategori_dana == 'operasional' }}>🔥 Uang Panas / Operasional</option>
-                            <option value="tabungan" {{ 'selected' if account.kategori_dana == 'tabungan' }}>❄️ Uang Dingin / Tabungan</option>
-                        </select>
-                    </div>
-                    <br>
-
-                    <div>
-                        <label>Saldo Awal:</label>
-                        <br>
-                        <input type="number"
-                               step="any"
-                               name="balance"
-                               value="{{ account.balance }}"
-                               required>
-                    </div>
-                    <br>
-                    <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+                <span class="close-btn">&times;</span>
+                <h2>Tambah Akun Baru</h2>
+                <form action="/akun/tambah" method="POST">
+                    <label for="nama_akun">Nama Akun:</label>
+                    <input type="text"
+                           id="nama_akun"
+                           name="nama"
+                           required
+                           placeholder="Misal: BCA, Gopay">
+                    <label for="tipe_akun">Tipe Akun:</label>
+                    <input type="text"
+                           id="tipe_akun"
+                           name="type"
+                           required
+                           placeholder="Misal: Bank, E-Wallet">
+                    <label for="kategori_dana">Kategori Dana:</label>
+                    <select id="kategori_dana"
+                            name="kategori_dana"
+                            required
+                            style="width: 100%;
+                                   padding: 8px;
+                                   margin-bottom: 15px">
+                        <option value="operasional" selected>🔥 Uang Panas / Operasional</option>
+                        <option value="tabungan">❄️ Uang Dingin / Tabungan</option>
+                    </select>
+                    <label for="saldo">Saldo Awal:</label>
+                    <input type="number"
+                           id="saldo"
+                           name="balance"
+                           required
+                           value="0"
+                           step="0.01">
+                    <button type="submit" class="btn btn-success">Simpan</button>
                 </form>
             </div>
         </div>
-    {% endfor %}
-
-    <div id="modal-transfer" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Transfer Antar Akun</h2>
-            <form action="{{ url_for("transaksi.proses_transfer") }}" method="POST">
-                <label for="from_account_id">Dari Akun:</label>
-                <select id="from_account_id" name="from_account_id" required>
-                    <option value="" disabled selected>Pilih akun asal...</option>
-                    {% for akun in accounts %}
-                        <option value="{{ akun.id }}">{{ akun.nama }} (Saldo: {{ akun.balance }})</option>
-                    {% endfor %}
-                </select>
-                <label for="to_account_id">Ke Akun:</label>
-                <select id="to_account_id" name="to_account_id" required>
-                    <option value="" disabled selected>Pilih akun tujuan...</option>
-                    {% for akun in accounts %}
-                        <option value="{{ akun.id }}">{{ akun.nama }}</option>
-                    {% endfor %}
-                </select>
-                <label for="amount">Jumlah Transfer:</label>
-                <input type="number"
-                       id="amount"
-                       name="amount"
-                       required
-                       step="0.01"
-                       min="1"
-                       placeholder="0.00">
-                <label for="fee">Biaya Admin (Opsional):</label>
-                <input type="number" id="fee" name="fee" value="0.00" step="0.01" min="0">
-                <label for="note">Catatan:</label>
-                <textarea id="note" name="note" rows="2" placeholder="Misal: Tarik tunai ATM"></textarea>
-                <button type="submit" class="btn btn-success" style="margin-top: 15px;">Kirim</button>
-            </form>
+        {% for account in accounts %}
+            <div id="modal-edit-{{ account.id }}" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close-btn"
+                          onclick="document.getElementById('modal-edit-{{ account.id }}').style.display='none'">&times;</span>
+                    <h2>Edit Akun</h2>
+                    <form method="POST"
+                          action="{{ url_for('akun.edit_akun', akun_id=account.id) }}">
+                        <div>
+                            <label>Nama Akun:</label>
+                            <br>
+                            <input type="text" name="nama" value="{{ account.nama }}" required>
+                        </div>
+                        <br>
+                        <div>
+                            <label>Tipe Akun:</label>
+                            <br>
+                            <input type="text" name="type" value="{{ account.type }}" required>
+                        </div>
+                        <br>
+                        <div>
+                            <label>Kategori Dana:</label>
+                            <br>
+                            <select name="kategori_dana" required style="width: 100%; padding: 8px;">
+                                <option value="operasional"
+                                        {{ 'selected' if account.kategori_dana == 'operasional' }}>🔥 Uang Panas / Operasional
+                                </option>
+                                <option value="tabungan"
+                                        {{ 'selected' if account.kategori_dana == 'tabungan' }}>❄️ Uang Dingin / Tabungan
+                                </option>
+                            </select>
+                        </div>
+                        <br>
+                        <div>
+                            <label>Saldo Awal:</label>
+                            <br>
+                            <input type="number"
+                                   step="any"
+                                   name="balance"
+                                   value="{{ account.balance }}"
+                                   required>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+        <div id="modal-transfer" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Transfer Antar Akun</h2>
+                <form action="{{ url_for('transaksi.proses_transfer') }}" method="POST">
+                    <label for="from_account_id">Dari Akun:</label>
+                    <select id="from_account_id" name="from_account_id" required>
+                        <option value="" disabled selected>Pilih akun asal...</option>
+                        {% for akun in accounts %}
+                            <option value="{{ akun.id }}">{{ akun.nama }} (Saldo: {{ akun.balance }})</option>
+                        {% endfor %}
+                    </select>
+                    <label for="to_account_id">Ke Akun:</label>
+                    <select id="to_account_id" name="to_account_id" required>
+                        <option value="" disabled selected>Pilih akun tujuan...</option>
+                        {% for akun in accounts %}
+                            <option value="{{ akun.id }}">{{ akun.nama }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="amount">Jumlah Transfer:</label>
+                    <input type="number"
+                           id="amount"
+                           name="amount"
+                           required
+                           step="0.01"
+                           min="1"
+                           placeholder="0.00">
+                    <label for="fee">Biaya Admin (Opsional):</label>
+                    <input type="number" id="fee" name="fee" value="0.00" step="0.01" min="0">
+                    <label for="note">Catatan:</label>
+                    <textarea id="note" name="note" rows="2" placeholder="Misal: Tarik tunai ATM"></textarea>
+                    <button type="submit" class="btn btn-success" style="margin-top: 15px;">Kirim</button>
+                </form>
+            </div>
         </div>
-    </div>
-{% endblock %}
-{% block extra_js %}
-    <script src="{{ url_for('static', filename='js/akun.js') }}"></script>
-{% endblock %}
+    {% endblock %}
+
+    {% block extra_js %}
+
+        <script src="{{ url_for('static', filename='js/akun.js') }}"></script>
+    {% endblock %}

@@ -9,10 +9,13 @@
 -->
 {% extends 'base.html' %}
 {% block extra_css %}
+
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/analisa.css') }}">
 {% endblock %}
+
 {% block content %}
+
     <div class="container-analisa">
         <div class="header-analisa">
             <h1>📊 Analisis AI/BI Keuangan</h1>
@@ -26,12 +29,14 @@
                     <br>
                     <span class="skor-badge">{{ dss.skor }}</span>
                 </div>
-                <p style="margin: 15px 0 5px 0; font-size: 0.95rem; color: #d1d5db;">
+                <p style="margin: 15px 0 5px 0;
+                          font-size: 0.95rem;
+                          color: var(--text-main)">
                     Rasio Uang Tersisa: <strong>{{ dss.rasio_menabung }}%</strong>
                 </p>
                 <div style="margin-top: 15px;
                             font-size: 0.9rem;
-                            color: #9ca3af;
+                            color: var(--text-muted);
                             line-height: 1.4">
                     <strong>Rekomendasi Sistem:</strong> {{ dss.rekomendasi }}
                 </div>
@@ -83,10 +88,10 @@
                         <tbody>
                             {% for item in data_anomali %}
                                 <tr>
-                                    <td style="color: #9ca3af;">{{ item.date }}</td>
+                                    <td style="color: var(--text-muted);">{{ item.date }}</td>
                                     <td><span class="badge-kategori">{{ item.kategori }}</span></td>
                                     <td class="text-danger">Rp {{ "{:,.0f}".format(item.amount) }}</td>
-                                    <td style="color: #d1d5db;
+                                    <td style="color: var(--text-main);
                                                max-width: 300px;
                                                white-space: nowrap;
                                                overflow: hidden;
@@ -104,6 +109,8 @@
         </div>
     </div>
 {% endblock %}
+
 {% block extra_js %}
+
     <script src="{{ url_for('static', filename='js/analisa.js') }}"></script>
 {% endblock %}
