@@ -120,9 +120,9 @@ MyFinance/
 - **Database**: SQLite (Integritas data & optimasi konkurensi)
 - **Frontend**: HTML5, Vanilla CSS, Vanilla JS
 - **Visualisasi**: Chart.js (Grafik interaktif)
-- **Data Science**: Pandas, NumPy, Scikit-learn, Mlxtend
+- **Data Science**: Pandas, Scikit-learn, Mlxtend
 - **Reporting**: ReportLab (Ekspor PDF)
-- **Otomatisasi**: Windows Batch File (`.bat`) & PowerShell
+- **Otomatisasi**: Windows Batch File (`.bat`)
 
 ### Pengontrol Kualitas Kode (Linting & Formatting)
 Proyek ini mengadopsi standar penulisan kode bersih (*clean code*) dengan integrasi perkakas berikut:
